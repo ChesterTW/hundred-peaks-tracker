@@ -1,5 +1,11 @@
 <script setup lang="ts"></script>
 
 <template>
-  <h1 class="text-3xl font-bold text-green-600 p-8">百岳追蹤器</h1>
+  <nav class="flex gap-4 p-4 border-b">
+    <router-link to="/">首頁</router-link>
+    <router-link to="/peaks">山峰清單</router-link>
+    <router-link to="/add">新增行程</router-link>
+  </nav>
+
+  <router-view />
 </template>
