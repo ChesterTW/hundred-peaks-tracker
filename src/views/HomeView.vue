@@ -10,6 +10,6 @@ const { completedCount } = storeToRefs(store);
   <h1 class="text-2xl font-bold p-4">首頁進度</h1>
 
   <div class="flex flex-col p-4">
-    <text>百岳進度：{{ completedCount }} / 100</text>
+    <p>百岳進度：{{ completedCount }} / 100</p>
   </div>
 </template>
