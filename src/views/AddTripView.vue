@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { useTripStore } from "../stores/tripStore";
 
-const { trips, completedCount, addTrip, loadTrips } = useTripStore();
+const { addTrip } = useTripStore();
 
 const date = ref<string>("");
 const peakIds = ref<number[]>([]);
