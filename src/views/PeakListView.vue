@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { storeToRefs } from "pinia";
 import { peaks } from "../data/peaks";
+import { useTripStore } from "../stores/tripStore";
+
+const store = useTripStore();
+const { completedPeakIds } = storeToRefs(store);
 
 const keyword = ref<string>("");
 const filteredPeaks = computed(() => {
@@ -22,6 +27,7 @@ const filteredPeaks = computed(() => {
       <table class="w-full text-left">
         <thead class="bg-gray-100 text-gray-700">
           <tr>
+            <th class="px-4 py-3">狀態</th>
             <th class="px-4 py-3">排名</th>
             <th class="px-4 py-3">山名</th>
             <th class="px-4 py-3">高度</th>
@@ -35,6 +41,9 @@ const filteredPeaks = computed(() => {
             :key="peak.id"
             class="hover:bg-gray-50"
           >
+            <td class="px-4 py-3">
+              {{ completedPeakIds.has(peak.id) ? "已登頂" : "-" }}
+            </td>
             <td class="px-4 py-3">{{ peak.id }}</td>
             <td class="px-4 py-3">{{ peak.name }}</td>
             <td class="px-4 py-3">{{ peak.elevation }}</td>

@@ -9,7 +9,11 @@ export const useTripStore = defineStore("trip", () => {
 
   // getter：完成的山峰數量
   const completedCount = computed(() => {
-    return new Set(trips.value.flatMap((trip) => trip.peakIds)).size;
+    return completedPeakIds.value.size;
+  });
+
+  const completedPeakIds = computed(() => {
+    return new Set(trips.value.flatMap((trip) => trip.peakIds));
   });
 
   function loadTrips(): Trip[] {
@@ -39,5 +43,5 @@ export const useTripStore = defineStore("trip", () => {
     { deep: true },
   );
 
-  return { trips, completedCount, addTrip, loadTrips };
+  return { trips, completedCount, completedPeakIds, addTrip, loadTrips };
 });
