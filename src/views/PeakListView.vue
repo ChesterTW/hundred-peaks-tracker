@@ -8,6 +8,11 @@ const store = useTripStore();
 const { completedPeakIds } = storeToRefs(store);
 
 const filterStatus = ref<"all" | "completed" | "incomplete">("all");
+const filters = [
+  { value: "all", label: "全部" },
+  { value: "completed", label: "已登頂" },
+  { value: "incomplete", label: "未登頂" },
+] as const;
 
 const keyword = ref<string>("");
 const filteredPeaks = computed(() => {
@@ -41,25 +46,13 @@ const filteredPeaks = computed(() => {
       />
 
       <button
-        @click="filterStatus = 'all'"
+        v-for="filter in filters"
+        :key="filter.value"
+        @click="filterStatus = filter.value"
         class="border border-gray-200 rounded-lg px-3 py-2"
-        :class="{ active: filterStatus === 'all' }"
+        :class="{ active: filterStatus === filter.value }"
       >
-        全部
-      </button>
-      <button
-        @click="filterStatus = 'completed'"
-        class="border border-gray-200 rounded-lg px-3 py-2"
-        :class="{ active: filterStatus === 'completed' }"
-      >
-        已登頂
-      </button>
-      <button
-        @click="filterStatus = 'incomplete'"
-        class="border border-gray-200 rounded-lg px-3 py-2"
-        :class="{ active: filterStatus === 'incomplete' }"
-      >
-        未登頂
+        {{ filter.label }}
       </button>
     </div>
 
