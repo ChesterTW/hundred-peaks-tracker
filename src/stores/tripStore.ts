@@ -16,6 +16,12 @@ export const useTripStore = defineStore("trip", () => {
     return new Set(trips.value.flatMap((trip) => trip.peakIds));
   });
 
+  const recentTrips = computed(() => {
+    return [...trips.value]
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 5);
+  });
+
   function loadTrips(): Trip[] {
     const raw = localStorage.getItem(STORAGE_KEY);
 
@@ -43,5 +49,11 @@ export const useTripStore = defineStore("trip", () => {
     { deep: true },
   );
 
-  return { trips, completedCount, completedPeakIds, addTrip, loadTrips };
+  return {
+    trips,
+    completedCount,
+    completedPeakIds,
+    recentTrips,
+    addTrip,
+  };
 });

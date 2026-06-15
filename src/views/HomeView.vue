@@ -3,7 +3,7 @@ import { storeToRefs } from "pinia";
 import { useTripStore } from "../stores/tripStore";
 
 const store = useTripStore();
-const { trips, completedCount } = storeToRefs(store);
+const { completedCount, recentTrips } = storeToRefs(store);
 </script>
 
 <template>
@@ -15,7 +15,7 @@ const { trips, completedCount } = storeToRefs(store);
 
   <div class="flex flex-col p-4">
     <ul>
-      <li v-for="trip in trips" :key="trip.id">
+      <li v-for="trip in recentTrips" :key="trip.id">
         於 {{ trip.date }} 爬 {{ trip.peakIds }} 等山峰。備註：{{ trip.note }}
       </li>
     </ul>
