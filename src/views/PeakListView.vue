@@ -7,10 +7,25 @@ import { useTripStore } from "../stores/tripStore";
 const store = useTripStore();
 const { completedPeakIds } = storeToRefs(store);
 
+const filterStatus = ref<"all" | "completed" | "incomplete">("all");
+
 const keyword = ref<string>("");
 const filteredPeaks = computed(() => {
-  if (!keyword.value) return peaks;
-  return peaks.filter((item) => item.name.includes(keyword.value));
+  let result = peaks;
+
+  // 1. 關鍵字篩選
+  if (keyword.value) {
+    result = peaks.filter((item) => item.name.includes(keyword.value));
+  }
+
+  // 2. 根據狀態篩選
+  if (filterStatus.value === "completed") {
+    result = result.filter((item) => completedPeakIds.value.has(item.id));
+  } else if (filterStatus.value === "incomplete") {
+    result = result.filter((item) => !completedPeakIds.value.has(item.id));
+  }
+
+  return result;
 });
 </script>
 
@@ -18,11 +33,36 @@ const filteredPeaks = computed(() => {
   <h1 class="text-2xl font-bold p-4">百岳列表</h1>
 
   <div class="p-4">
-    <input
-      v-model="keyword"
-      placeholder="搜尋山名"
-      class="border border-gray-200 px-3 py-2 rounded-lg mb-4"
-    />
+    <div class="flex gap-2 mb-4">
+      <input
+        v-model="keyword"
+        placeholder="搜尋山名"
+        class="border border-gray-200 px-3 py-2 rounded-lg"
+      />
+
+      <button
+        @click="filterStatus = 'all'"
+        class="border border-gray-200 rounded-lg px-3 py-2"
+        :class="{ active: filterStatus === 'all' }"
+      >
+        全部
+      </button>
+      <button
+        @click="filterStatus = 'completed'"
+        class="border border-gray-200 rounded-lg px-3 py-2"
+        :class="{ active: filterStatus === 'completed' }"
+      >
+        已登頂
+      </button>
+      <button
+        @click="filterStatus = 'incomplete'"
+        class="border border-gray-200 rounded-lg px-3 py-2"
+        :class="{ active: filterStatus === 'incomplete' }"
+      >
+        未登頂
+      </button>
+    </div>
+
     <div class="overflow-hidden rounded-lg border border-gray-200">
       <table class="w-full text-left">
         <thead class="bg-gray-100 text-gray-700">
@@ -54,3 +94,10 @@ const filteredPeaks = computed(() => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.active {
+  background-color: #42b883;
+  color: white;
+}
+</style>
