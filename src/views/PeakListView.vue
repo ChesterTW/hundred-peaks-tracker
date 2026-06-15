@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
 import { useTripStore } from "../stores/tripStore";
 
-const { trips, completedCount, addTrip, loadTrips } = useTripStore();
+const store = useTripStore();
+const { trips } = storeToRefs(store);
 </script>
 
 <template>
