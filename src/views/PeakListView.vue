@@ -1,19 +1,31 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { useTripStore } from "../stores/tripStore";
-
-const store = useTripStore();
-const { trips } = storeToRefs(store);
+import { peaks } from "../data/peaks";
 </script>
 
 <template>
   <h1 class="text-2xl font-bold p-4">百岳列表</h1>
 
-  <div class="flex flex-col p-4">
-    <ul>
-      <li v-for="trip in trips" :key="trip.id">
-        於 {{ trip.date }} 爬 {{ trip.peakIds }} 等山峰。備註：{{ trip.note }}
-      </li>
-    </ul>
+  <div class="p-4">
+    <div class="overflow-hidden rounded-lg border border-gray-200">
+      <table class="w-full text-left">
+        <thead class="bg-gray-100 text-gray-700">
+          <tr>
+            <th class="px-4 py-3">排名</th>
+            <th class="px-4 py-3">山名</th>
+            <th class="px-4 py-3">高度</th>
+            <th class="px-4 py-3">行政區</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-gray-200">
+          <tr v-for="peak in peaks" :key="peak.id" class="hover:bg-gray-50">
+            <td class="px-4 py-3">{{ peak.id }}</td>
+            <td class="px-4 py-3">{{ peak.name }}</td>
+            <td class="px-4 py-3">{{ peak.elevation }}</td>
+            <td class="px-4 py-3">{{ peak.region }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
