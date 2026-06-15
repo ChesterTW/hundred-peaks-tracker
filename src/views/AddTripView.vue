@@ -5,8 +5,18 @@ import { useTripStore } from "../stores/tripStore";
 const { addTrip } = useTripStore();
 
 const date = ref<string>("");
-const peakIds = ref<number[]>([]);
-const note = ref<string>();
+const peakIdsInput = ref<string>("");
+const note = ref<string>("");
+
+function handleAddTrip() {
+  const peakIds = peakIdsInput.value.split(",").map(Number);
+
+  addTrip(date.value, peakIds, note.value);
+
+  date.value = "";
+  peakIdsInput.value = "";
+  note.value = "";
+}
 </script>
 
 <template>
@@ -19,7 +29,7 @@ const note = ref<string>();
       placeholder="日期"
     />
     <input
-      v-model="peakIds"
+      v-model="peakIdsInput"
       class="border border-gray-300 rounded px-3 py-2"
       placeholder="山峰ID"
     />
@@ -30,7 +40,7 @@ const note = ref<string>();
     />
 
     <button
-      @click="addTrip(date, peakIds, note)"
+      @click="handleAddTrip()"
       class="border border-gray-300 rounded px-3 py-2"
     >
       新增
