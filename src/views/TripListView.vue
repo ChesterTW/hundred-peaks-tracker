@@ -11,6 +11,12 @@ const peakMap = new Map(peaks.map((p) => [p.id, p.name]));
 function peakNames(peakIds: number[]): string {
   return peakIds.map((id) => peakMap.get(id)).join("、");
 }
+
+function handleDelete(id: string) {
+  if (confirm("確定刪除這筆行程？")) {
+    deleteTrip(id);
+  }
+}
 </script>
 
 <template>
@@ -22,7 +28,7 @@ function peakNames(peakIds: number[]): string {
         於 {{ trip.date }} 爬 {{ peakNames(trip.peakIds) }} 等山峰。備註：{{
           trip.note
         }}
-        <button @click="deleteTrip(trip.id)">刪除</button>
+        <button @click="handleDelete(trip.id)">刪除</button>
       </li>
     </ul>
   </div>
