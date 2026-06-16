@@ -14,7 +14,7 @@ const selectedPeakIds = ref<number[]>([]);
 function handleAddTrip() {
   addTrip(date.value, selectedPeakIds.value, note.value);
 
-  date.value = "";
+  date.value = new Date().toISOString().slice(0, 10);
   selectedPeakIds.value = [];
   note.value = "";
 }
