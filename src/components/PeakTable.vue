@@ -60,7 +60,7 @@ const filteredPeaks = computed(() => {
       :key="filter.value"
       @click="filterStatus = filter.value"
       class="border border-gray-200 rounded-lg px-3 py-2"
-      :class="{ active: filterStatus === filter.value }"
+      :class="filterStatus === filter.value ? 'bg-[#42b883] text-white' : ''"
     >
       {{ filter.label }}
     </button>
@@ -109,10 +109,3 @@ const filteredPeaks = computed(() => {
     </table>
   </div>
 </template>
-
-<style scoped>
-.active {
-  background-color: #42b883;
-  color: white;
-}
-</style>
