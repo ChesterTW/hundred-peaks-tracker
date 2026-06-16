@@ -41,6 +41,10 @@ export const useTripStore = defineStore("trip", () => {
     });
   }
 
+  function deleteTrip(id: string) {
+    trips.value = trips.value.filter((trip) => trip.id != id);
+  }
+
   watch(
     trips,
     () => {
@@ -55,5 +59,6 @@ export const useTripStore = defineStore("trip", () => {
     completedPeakIds,
     recentTrips,
     addTrip,
+    deleteTrip,
   };
 });
