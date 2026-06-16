@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useTripStore } from "../stores/tripStore";
-import { peaks } from "../data/peaks";
+import { usePeakNames } from "../composables/usePeakNames";
 
 const store = useTripStore();
 const { completedCount, recentTrips } = storeToRefs(store);
-
-const peakMap = new Map(peaks.map((p) => [p.id, p.name]));
-function peakNames(peakIds: number[]): string {
-  return peakIds.map((id) => peakMap.get(id)).join("、");
-}
+const { peakNames } = usePeakNames();
 </script>
 
 <template>

@@ -1,16 +1,12 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useTripStore } from "../stores/tripStore";
-import { peaks } from "../data/peaks";
+import { usePeakNames } from "../composables/usePeakNames";
 
 const store = useTripStore();
 const { trips } = storeToRefs(store);
 const { deleteTrip } = store;
-
-const peakMap = new Map(peaks.map((p) => [p.id, p.name]));
-function peakNames(peakIds: number[]): string {
-  return peakIds.map((id) => peakMap.get(id)).join("、");
-}
+const { peakNames } = usePeakNames();
 
 function handleDelete(id: string) {
   if (confirm("確定刪除這筆行程？")) {
