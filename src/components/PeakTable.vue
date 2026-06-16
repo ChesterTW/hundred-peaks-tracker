@@ -48,7 +48,7 @@ const filteredPeaks = computed(() => {
 </script>
 
 <template>
-  <div class="flex gap-2 mb-2 mt-8">
+  <div class="flex gap-2 mb-4">
     <input
       v-model="keyword"
       placeholder="搜尋山名"
