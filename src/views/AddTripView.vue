@@ -8,7 +8,7 @@ const store = useTripStore();
 const { completedPeakIds } = storeToRefs(store);
 const { addTrip } = store;
 
-const date = ref<string>("");
+const date = ref<string>(new Date().toISOString().slice(0, 10));
 const note = ref<string>("");
 
 const keyword = ref<string>("");
@@ -53,6 +53,7 @@ function handleAddTrip() {
 
   <div class="flex flex-col gap-2 p-4">
     <input
+      type="date"
       v-model="date"
       class="border border-gray-300 rounded px-3 py-2"
       placeholder="日期"
