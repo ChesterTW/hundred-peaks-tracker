@@ -1,27 +1,18 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useTripStore } from "../stores/tripStore";
-import { usePeakNames } from "../composables/usePeakNames";
+import TripTable from "../components/TripTable.vue";
 
 const store = useTripStore();
 const { completedCount, recentTrips } = storeToRefs(store);
-const { peakNames } = usePeakNames();
 </script>
 
 <template>
-  <h1 class="text-2xl font-bold p-4">首頁進度</h1>
+  <div class="p-4">
+    <h1 class="text-2xl font-bold mb-8">首頁進度</h1>
 
-  <div class="flex flex-col p-4">
-    <p>百岳進度：{{ completedCount }} / 100</p>
-  </div>
+    <p class="mb-4">百岳進度：{{ completedCount }} / 100</p>
 
-  <div class="flex flex-col p-4">
-    <ul>
-      <li v-for="trip in recentTrips" :key="trip.id">
-        於 {{ trip.date }} 爬 {{ peakNames(trip.peakIds) }} 等山峰。備註：{{
-          trip.note
-        }}
-      </li>
-    </ul>
+    <TripTable :trips="recentTrips"></TripTable>
   </div>
 </template>
