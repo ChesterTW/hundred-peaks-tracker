@@ -1,61 +1,11 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { useTripStore } from "../stores/tripStore";
-import { usePeakNames } from "../composables/usePeakNames";
-
-const store = useTripStore();
-const { trips } = storeToRefs(store);
-const { deleteTrip } = store;
-const { peakNames } = usePeakNames();
-
-function handleDelete(id: string) {
-  if (confirm("確定刪除這筆行程？")) {
-    deleteTrip(id);
-  }
-}
+import TripTable from "../components/TripTable.vue";
 </script>
 
 <template>
   <div class="p-4">
     <h1 class="text-2xl font-bold mb-8">行程紀錄</h1>
 
-    <div class="overflow-hidden rounded-lg border border-gray-200">
-      <table class="w-full text-left">
-        <thead class="bg-gray-100 text-gray-700">
-          <tr>
-            <th class="px-4 py-3">日期</th>
-            <th class="px-4 py-3">山峰</th>
-            <th class="px-4 py-3">備註</th>
-            <th class="px-4 py-3">操作</th>
-          </tr>
-        </thead>
-
-        <tbody class="divide-y divide-gray-200">
-          <tr
-            v-for="trip in trips"
-            :key="trip.id"
-            class="hover:bg-gray-50"
-          >
-            <td class="px-4 py-3 whitespace-nowrap">{{ trip.date }}</td>
-            <td class="px-4 py-3">{{ peakNames(trip.peakIds) }}</td>
-            <td class="px-4 py-3 text-gray-500">{{ trip.note || "—" }}</td>
-            <td class="px-4 py-3">
-              <button
-                @click="handleDelete(trip.id)"
-                class="text-red-600 hover:text-red-800 hover:underline"
-              >
-                刪除
-              </button>
-            </td>
-          </tr>
-
-          <tr v-if="trips.length === 0">
-            <td colspan="4" class="px-4 py-8 text-center text-gray-400">
-              還沒有任何行程紀錄
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <TripTable :deletable="true"></TripTable>
   </div>
 </template>
