@@ -16,16 +16,46 @@ function handleDelete(id: string) {
 </script>
 
 <template>
-  <h1 class="text-2xl font-bold p-4">行程紀錄</h1>
+  <div class="p-4">
+    <h1 class="text-2xl font-bold mb-8">行程紀錄</h1>
 
-  <div class="flex flex-col p-4">
-    <ul>
-      <li v-for="trip in trips" :key="trip.id">
-        於 {{ trip.date }} 爬 {{ peakNames(trip.peakIds) }} 等山峰。備註：{{
-          trip.note
-        }}
-        <button @click="handleDelete(trip.id)">刪除</button>
-      </li>
-    </ul>
+    <div class="overflow-hidden rounded-lg border border-gray-200">
+      <table class="w-full text-left">
+        <thead class="bg-gray-100 text-gray-700">
+          <tr>
+            <th class="px-4 py-3">日期</th>
+            <th class="px-4 py-3">山峰</th>
+            <th class="px-4 py-3">備註</th>
+            <th class="px-4 py-3">操作</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-gray-200">
+          <tr
+            v-for="trip in trips"
+            :key="trip.id"
+            class="hover:bg-gray-50"
+          >
+            <td class="px-4 py-3 whitespace-nowrap">{{ trip.date }}</td>
+            <td class="px-4 py-3">{{ peakNames(trip.peakIds) }}</td>
+            <td class="px-4 py-3 text-gray-500">{{ trip.note || "—" }}</td>
+            <td class="px-4 py-3">
+              <button
+                @click="handleDelete(trip.id)"
+                class="text-red-600 hover:text-red-800 hover:underline"
+              >
+                刪除
+              </button>
+            </td>
+          </tr>
+
+          <tr v-if="trips.length === 0">
+            <td colspan="4" class="px-4 py-8 text-center text-gray-400">
+              還沒有任何行程紀錄
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
