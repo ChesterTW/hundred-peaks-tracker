@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
 import { useTripStore } from "../stores/tripStore";
 import { usePeakNames } from "../composables/usePeakNames";
+import type { Trip } from "../types";
 
 const store = useTripStore();
-const { trips } = storeToRefs(store);
 const { deleteTrip } = store;
 const { peakNames } = usePeakNames();
 
 const props = withDefaults(
   defineProps<{
     deletable?: boolean;
+    trips: Trip[];
   }>(),
   {
     deletable: false,
