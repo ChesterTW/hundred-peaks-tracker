@@ -61,7 +61,9 @@ function handleDelete(id: string) {
       v-model="dateRange"
       range
       model-type="yyyy-MM-dd"
-      :enable-time-picker="false"
+      :formats="{ input: 'yyyy/MM/dd' }"
+      :time-config="{ enableTimePicker: false }"
+      placeholder="選擇日期區間"
     />
   </div>
 
