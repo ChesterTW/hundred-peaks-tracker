@@ -95,9 +95,13 @@ function handleDelete(id: string) {
           </td>
         </tr>
 
-        <tr v-if="trips.length === 0">
+        <tr v-if="filteredTrips.length === 0">
           <td colspan="4" class="px-4 py-8 text-center text-gray-400">
-            還沒有任何行程紀錄
+            {{
+              trips.length === 0
+                ? "還沒有任何行程紀錄"
+                : "沒有符合條件的行程紀錄"
+            }}
           </td>
         </tr>
       </tbody>
