@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref, computed } from "vue";
 import { useTripStore } from "../stores/tripStore";
 import { usePeakNames } from "../composables/usePeakNames";
 import type { Trip } from "../types";
@@ -10,12 +11,27 @@ const { peakNames } = usePeakNames();
 const props = withDefaults(
   defineProps<{
     deletable?: boolean;
+    searchable?: boolean;
     trips: Trip[];
   }>(),
   {
     deletable: false,
+    searchable: false,
   },
 );
+
+const keyword = ref("");
+const filtedTrips = computed(() => {
+  let result = props.trips;
+
+  if (keyword.value) {
+    result = result.filter((item) =>
+      peakNames(item.peakIds).includes(keyword.value),
+    );
+  }
+
+  return result;
+});
 
 function handleDelete(id: string) {
   if (confirm("確定刪除這筆行程？")) {
@@ -25,6 +41,14 @@ function handleDelete(id: string) {
 </script>
 
 <template>
+  <div class="flex gap-2 mb-4">
+    <input
+      v-model="keyword"
+      placeholder="搜尋山名"
+      class="border border-gray-200 px-3 py-2 rounded-lg"
+    />
+  </div>
+
   <div class="overflow-hidden rounded-lg border border-gray-200">
     <table class="w-full text-left">
       <thead class="bg-gray-100 text-gray-700">
@@ -37,7 +61,7 @@ function handleDelete(id: string) {
       </thead>
 
       <tbody class="divide-y divide-gray-200">
-        <tr v-for="trip in trips" :key="trip.id" class="hover:bg-gray-50">
+        <tr v-for="trip in filtedTrips" :key="trip.id" class="hover:bg-gray-50">
           <td class="px-4 py-3 whitespace-nowrap">{{ trip.date }}</td>
           <td class="px-4 py-3">{{ peakNames(trip.peakIds) }}</td>
           <td class="px-4 py-3 text-gray-500">{{ trip.note || "—" }}</td>
