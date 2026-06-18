@@ -23,7 +23,7 @@ const props = withDefaults(
 
 const keyword = ref("");
 const dateRange = ref();
-const filtedTrips = computed(() => {
+const filteredTrips = computed(() => {
   let result = props.trips;
 
   if (keyword.value) {
@@ -77,7 +77,11 @@ function handleDelete(id: string) {
       </thead>
 
       <tbody class="divide-y divide-gray-200">
-        <tr v-for="trip in filtedTrips" :key="trip.id" class="hover:bg-gray-50">
+        <tr
+          v-for="trip in filteredTrips"
+          :key="trip.id"
+          class="hover:bg-gray-50"
+        >
           <td class="px-4 py-3 whitespace-nowrap">{{ trip.date }}</td>
           <td class="px-4 py-3">{{ peakNames(trip.peakIds) }}</td>
           <td class="px-4 py-3 text-gray-500">{{ trip.note || "—" }}</td>
