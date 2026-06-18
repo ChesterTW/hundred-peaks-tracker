@@ -2,6 +2,7 @@
 import { ref, computed } from "vue";
 import { useTripStore } from "../stores/tripStore";
 import { usePeakNames } from "../composables/usePeakNames";
+import { VueDatePicker } from "@vuepic/vue-datepicker";
 import type { Trip } from "../types";
 
 const store = useTripStore();
@@ -21,6 +22,7 @@ const props = withDefaults(
 );
 
 const keyword = ref("");
+const dateRange = ref();
 const filtedTrips = computed(() => {
   let result = props.trips;
 
@@ -28,6 +30,14 @@ const filtedTrips = computed(() => {
     result = result.filter((item) =>
       peakNames(item.peakIds).includes(keyword.value),
     );
+  }
+
+  // 依日期區間（起、迄各自獨立判斷）
+  if (dateRange.value?.[0]) {
+    result = result.filter((trip) => trip.date >= dateRange.value[0]);
+  }
+  if (dateRange.value?.[1]) {
+    result = result.filter((trip) => trip.date <= dateRange.value[1]);
   }
 
   return result;
@@ -41,11 +51,17 @@ function handleDelete(id: string) {
 </script>
 
 <template>
-  <div class="flex gap-2 mb-4">
+  <div class="flex gap-2 mb-4" v-if="searchable">
     <input
       v-model="keyword"
       placeholder="搜尋山名"
       class="border border-gray-200 px-3 py-2 rounded-lg"
+    />
+    <VueDatePicker
+      v-model="dateRange"
+      range
+      model-type="yyyy-MM-dd"
+      :enable-time-picker="false"
     />
   </div>
 
