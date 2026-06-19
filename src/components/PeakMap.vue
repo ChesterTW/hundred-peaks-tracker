@@ -2,6 +2,11 @@
 import { onMounted, onUnmounted, ref } from "vue";
 import L from "leaflet";
 import { peaks } from "../data/peaks";
+import { storeToRefs } from "pinia";
+import { useTripStore } from "../stores/tripStore";
+
+const store = useTripStore();
+const { completedPeakIds } = storeToRefs(store);
 
 const mapEl = ref<HTMLElement>();
 let map: L.Map;
@@ -32,8 +37,14 @@ onMounted(() => {
 
   // 添加
   peaks.forEach((peak) => {
+    const done = completedPeakIds.value.has(peak.id);
+
     L.circleMarker([peak.lat, peak.lng], {
-      radius: 5,
+      radius: done ? 7 : 5,
+      fillColor: done ? "#16a34a" : "#9ca3af",
+      fillOpacity: 1,
+      color: done ? "#d0ecda" : "#fff",
+      weight: done ? 5 : 1,
     })
       .bindTooltip(peak.name, { permanent: true, direction: "top" })
       .addTo(map);
@@ -46,5 +57,5 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="mapEl" class="h-[1000px] w-full rounded-lg"></div>
+  <div ref="mapEl" class="h-[500px] w-full rounded-lg"></div>
 </template>
