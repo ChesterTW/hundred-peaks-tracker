@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 import L from "leaflet";
 import { peaks } from "../data/peaks";
 import { storeToRefs } from "pinia";
@@ -7,9 +7,14 @@ import { useTripStore } from "../stores/tripStore";
 
 const store = useTripStore();
 const { completedPeakIds } = storeToRefs(store);
+const markerGroup = L.layerGroup();
 
 const mapEl = ref<HTMLElement>();
 let map: L.Map;
+
+watch(completedPeakIds, () => {
+  drawmarkers();
+});
 
 onMounted(() => {
   if (!mapEl.value) return;
@@ -35,7 +40,17 @@ onMounted(() => {
     },
   ).addTo(map);
 
-  // 添加
+  markerGroup.addTo(map);
+  drawmarkers();
+});
+
+onUnmounted(() => {
+  map?.remove();
+});
+
+function drawmarkers() {
+  markerGroup.clearLayers();
+
   peaks.forEach((peak) => {
     const done = completedPeakIds.value.has(peak.id);
 
@@ -47,13 +62,9 @@ onMounted(() => {
       weight: done ? 5 : 1,
     })
       .bindTooltip(peak.name, { permanent: true, direction: "top" })
-      .addTo(map);
+      .addTo(markerGroup);
   });
-});
-
-onUnmounted(() => {
-  map?.remove();
-});
+}
 </script>
 
 <template>
