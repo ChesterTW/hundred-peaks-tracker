@@ -2,6 +2,7 @@
 import { storeToRefs } from "pinia";
 import { useTripStore } from "../stores/tripStore";
 import TripTable from "../components/TripTable.vue";
+import PeakMap from "../components/PeakMap.vue";
 
 const store = useTripStore();
 const { completedCount, recentTrips } = storeToRefs(store);
@@ -15,4 +16,6 @@ const { completedCount, recentTrips } = storeToRefs(store);
 
     <TripTable :trips="recentTrips"></TripTable>
   </div>
+
+  <PeakMap></PeakMap>
 </template>
