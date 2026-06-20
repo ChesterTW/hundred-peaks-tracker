@@ -31,6 +31,8 @@ const difficultyLabel = computed(() =>
 
 const markerGroup = L.layerGroup();
 
+const filterEl = ref<HTMLElement>();
+
 const mapEl = ref<HTMLElement>();
 let map: L.Map;
 
@@ -66,6 +68,11 @@ onMounted(() => {
 
   markerGroup.addTo(map);
   drawmarkers();
+
+  if (filterEl.value) {
+    L.DomEvent.disableClickPropagation(filterEl.value);
+    L.DomEvent.disableScrollPropagation(filterEl.value);
+  }
 });
 
 onUnmounted(() => {
@@ -94,7 +101,7 @@ function drawmarkers() {
 <template>
   <div class="relative">
     <div ref="mapEl" class="h-screen w-full"></div>
-    <div class="absolute top-4 left-4 z-[1000] flex gap-2">
+    <div ref="filterEl" class="absolute top-4 left-4 z-[1000] flex gap-2">
       <div class="relative">
         <button
           @click="openCompletion = !openCompletion"
