@@ -101,11 +101,11 @@ function handleCompletionClick(input: string) {
   openCompletion.value = !openCompletion.value;
 
   if (input === "all") {
-    completion.value = "completed";
-  } else if (input === "completed") {
-    completion.value = "incomplete";
-  } else {
     completion.value = "all";
+  } else if (input === "completed") {
+    completion.value = "completed";
+  } else {
+    completion.value = "incomplete";
   }
 }
 </script>
