@@ -10,13 +10,14 @@ const { completedCount, recentTrips } = storeToRefs(store);
 </script>
 
 <template>
-  <div class="p-4">
-    <h1 class="text-2xl font-bold mb-8">首頁進度</h1>
+  <div class="flex h-screen overflow-hidden">
+    <aside class="w-1/3 overflow-y-auto p-4 space-y-4 shadow-4">
+      <ProgressBar :value="completedCount" :total="100"></ProgressBar>
+      <TripTable :trips="recentTrips"></TripTable>
+    </aside>
 
-    <ProgressBar :value="completedCount" :total="100"></ProgressBar>
-
-    <TripTable :trips="recentTrips"></TripTable>
+    <main class="flex-1">
+      <PeakMap></PeakMap>
+    </main>
   </div>
-
-  <PeakMap></PeakMap>
 </template>

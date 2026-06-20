@@ -68,5 +68,5 @@ function drawmarkers() {
 </script>
 
 <template>
-  <div ref="mapEl" class="h-[500px] w-full rounded-lg"></div>
+  <div ref="mapEl" class="h-screen w-full"></div>
 </template>
