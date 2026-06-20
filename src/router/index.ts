@@ -7,10 +7,16 @@ import TripListView from "../views/TripListView.vue";
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
-    { path: "/", name: "home", component: HomeView },
-    { path: "/peaks", name: "peaks", component: PeakListView },
-    { path: "/add", name: "adds", component: AddTripView },
-    { path: "/trips", name: "trips", component: TripListView },
+    {
+      path: "/",
+      component: HomeView,
+      children: [
+        { path: "", redirect: { name: "trips" } },
+        { path: "peaks", name: "peaks", component: PeakListView },
+        { path: "add", name: "adds", component: AddTripView },
+        { path: "trips", name: "trips", component: TripListView },
+      ],
+    },
   ],
 });
 

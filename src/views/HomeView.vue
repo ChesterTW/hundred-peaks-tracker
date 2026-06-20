@@ -1,19 +1,27 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useTripStore } from "../stores/tripStore";
-import TripTable from "../components/TripTable.vue";
 import PeakMap from "../components/PeakMap.vue";
 import ProgressBar from "../components/ProgressBar.vue";
+import { RouterView } from "vue-router";
 
 const store = useTripStore();
-const { completedCount, recentTrips } = storeToRefs(store);
+const { completedCount } = storeToRefs(store);
 </script>
 
 <template>
   <div class="flex h-screen overflow-hidden">
-    <aside class="w-1/3 overflow-y-auto p-4 space-y-4 shadow-4">
+    <aside class="w-1/3 overflow-y-auto p-4 space-y-4 shadow-lg">
       <ProgressBar :value="completedCount" :total="100"></ProgressBar>
-      <TripTable :trips="recentTrips"></TripTable>
+
+      <nav class="flex gap-4 p-4 border-b">
+        <router-link to="/">首頁</router-link>
+        <router-link to="/peaks">山峰清單</router-link>
+        <router-link to="/trips">行程紀錄</router-link>
+        <router-link to="/add">新增行程</router-link>
+      </nav>
+
+      <router-view />
     </aside>
 
     <main class="flex-1">
