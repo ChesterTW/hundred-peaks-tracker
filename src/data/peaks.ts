@@ -8,6 +8,7 @@ export const peaks: Peak[] = [
     region: "南投縣、嘉義縣、高雄市",
     lat: 23.470002,
     lng: 120.957274,
+    difficulty: 3,
   },
   {
     id: 2,
@@ -16,6 +17,7 @@ export const peaks: Peak[] = [
     region: "苗栗縣、臺中市",
     lat: 24.383401,
     lng: 121.231754,
+    difficulty: 3,
   },
   {
     id: 3,
@@ -24,6 +26,7 @@ export const peaks: Peak[] = [
     region: "南投縣、高雄市",
     lat: 23.470775,
     lng: 120.965668,
+    difficulty: 3,
   },
   {
     id: 4,
@@ -32,6 +35,7 @@ export const peaks: Peak[] = [
     region: "高雄市",
     lat: 23.446581,
     lng: 120.958784,
+    difficulty: 4,
   },
   {
     id: 5,
@@ -40,6 +44,7 @@ export const peaks: Peak[] = [
     region: "南投縣",
     lat: 23.487452,
     lng: 120.959672,
+    difficulty: 3,
   },
   {
     id: 6,
@@ -48,6 +53,7 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 23.496791,
     lng: 121.05744,
+    difficulty: 4,
   },
   {
     id: 7,
@@ -56,6 +62,7 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 23.52034,
     lng: 121.067236,
+    difficulty: 5,
   },
   {
     id: 8,
@@ -64,6 +71,7 @@ export const peaks: Peak[] = [
     region: "臺中市",
     lat: 24.361805,
     lng: 121.439359,
+    difficulty: 4,
   },
   {
     id: 9,
@@ -72,6 +80,7 @@ export const peaks: Peak[] = [
     region: "高雄市",
     lat: 23.439036,
     lng: 120.963411,
+    difficulty: 5,
   },
   {
     id: 10,
@@ -80,6 +89,7 @@ export const peaks: Peak[] = [
     region: "苗栗縣、臺中市",
     lat: 24.414724,
     lng: 121.240396,
+    difficulty: 4,
   },
   {
     id: 11,
@@ -88,6 +98,7 @@ export const peaks: Peak[] = [
     region: "臺中市、花蓮縣",
     lat: 24.310226,
     lng: 121.416203,
+    difficulty: 5,
   },
   {
     id: 12,
@@ -96,6 +107,7 @@ export const peaks: Peak[] = [
     region: "高雄市、臺東縣",
     lat: 23.228086,
     lng: 120.911717,
+    difficulty: 5,
   },
   {
     id: 13,
@@ -104,14 +116,16 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 23.473853,
     lng: 121.038618,
+    difficulty: 4,
   },
   {
     id: 14,
-    name: "大南湖大山東峰水窟山",
+    name: "南湖大山東峰",
     elevation: 3639,
     region: "臺中市、宜蘭縣、花蓮縣",
     lat: 24.365894,
     lng: 121.450661,
+    difficulty: 4,
   },
   {
     id: 15,
@@ -120,6 +134,7 @@ export const peaks: Peak[] = [
     region: "南投縣",
     lat: 23.626735,
     lng: 121.092082,
+    difficulty: 5,
   },
   {
     id: 16,
@@ -128,6 +143,7 @@ export const peaks: Peak[] = [
     region: "花蓮縣",
     lat: 24.118339,
     lng: 121.334539,
+    difficulty: 5,
   },
   {
     id: 17,
@@ -136,6 +152,7 @@ export const peaks: Peak[] = [
     region: "高雄市、臺東縣",
     lat: 23.284291,
     lng: 120.992423,
+    difficulty: 3,
   },
   {
     id: 18,
@@ -144,6 +161,7 @@ export const peaks: Peak[] = [
     region: "臺中市",
     lat: 24.340941,
     lng: 121.200492,
+    difficulty: 4,
   },
   {
     id: 19,
@@ -152,6 +170,7 @@ export const peaks: Peak[] = [
     region: "高雄市",
     lat: 23.353743,
     lng: 120.975757,
+    difficulty: 5,
   },
   {
     id: 20,
@@ -160,6 +179,7 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 23.521592,
     lng: 121.117171,
+    difficulty: 5,
   },
   {
     id: 21,
@@ -168,6 +188,7 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 24.085997,
     lng: 121.323234,
+    difficulty: 5,
   },
   {
     id: 22,
@@ -176,6 +197,7 @@ export const peaks: Peak[] = [
     region: "臺中市、宜蘭縣",
     lat: 24.383669,
     lng: 121.437171,
+    difficulty: 4,
   },
   {
     id: 23,
@@ -184,6 +206,7 @@ export const peaks: Peak[] = [
     region: "苗栗縣、臺中市",
     lat: 24.330751,
     lng: 121.121182,
+    difficulty: 5,
   },
   {
     id: 24,
@@ -192,6 +215,7 @@ export const peaks: Peak[] = [
     region: "新竹縣、臺中市",
     lat: 24.428214,
     lng: 121.266816,
+    difficulty: 4,
   },
   {
     id: 25,
@@ -200,6 +224,7 @@ export const peaks: Peak[] = [
     region: "南投縣、嘉義縣",
     lat: 23.472426,
     lng: 120.934205,
+    difficulty: 3,
   },
   {
     id: 26,
@@ -208,6 +233,7 @@ export const peaks: Peak[] = [
     region: "苗栗縣、臺中市",
     lat: 24.359607,
     lng: 121.140723,
+    difficulty: 5,
   },
   {
     id: 27,
@@ -216,6 +242,7 @@ export const peaks: Peak[] = [
     region: "臺中市、花蓮縣",
     lat: 24.347784,
     lng: 121.434582,
+    difficulty: 5,
   },
   {
     id: 28,
@@ -224,6 +251,7 @@ export const peaks: Peak[] = [
     region: "高雄市、花蓮縣、臺東縣",
     lat: 23.297183,
     lng: 121.028671,
+    difficulty: 3,
   },
   {
     id: 29,
@@ -232,6 +260,7 @@ export const peaks: Peak[] = [
     region: "新竹縣、苗栗縣",
     lat: 24.457743,
     lng: 121.258031,
+    difficulty: 3,
   },
   {
     id: 30,
@@ -240,6 +269,7 @@ export const peaks: Peak[] = [
     region: "南投縣",
     lat: 23.648667,
     lng: 121.081564,
+    difficulty: 5,
   },
   {
     id: 31,
@@ -248,6 +278,7 @@ export const peaks: Peak[] = [
     region: "臺中市、花蓮縣",
     lat: 24.255559,
     lng: 121.384663,
+    difficulty: 5,
   },
   {
     id: 32,
@@ -256,6 +287,7 @@ export const peaks: Peak[] = [
     region: "臺中市、花蓮縣",
     lat: 24.342411,
     lng: 121.43782,
+    difficulty: 5,
   },
   {
     id: 33,
@@ -264,6 +296,7 @@ export const peaks: Peak[] = [
     region: "花蓮縣",
     lat: 23.483755,
     lng: 121.173967,
+    difficulty: 5,
   },
   {
     id: 34,
@@ -272,6 +305,7 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 24.181496,
     lng: 121.281587,
+    difficulty: 3,
   },
   {
     id: 35,
@@ -280,6 +314,7 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 24.135671,
     lng: 121.281033,
+    difficulty: 2,
   },
   {
     id: 36,
@@ -288,6 +323,7 @@ export const peaks: Peak[] = [
     region: "苗栗縣",
     lat: 24.45557,
     lng: 121.252049,
+    difficulty: 3,
   },
   {
     id: 37,
@@ -296,6 +332,7 @@ export const peaks: Peak[] = [
     region: "南投縣",
     lat: 24.142632,
     lng: 121.271166,
+    difficulty: 1,
   },
   {
     id: 38,
@@ -304,6 +341,7 @@ export const peaks: Peak[] = [
     region: "高雄市",
     lat: 23.429276,
     lng: 120.92491,
+    difficulty: 5,
   },
   {
     id: 39,
@@ -312,6 +350,7 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 24.213579,
     lng: 121.347162,
+    difficulty: 4,
   },
   {
     id: 40,
@@ -320,6 +359,7 @@ export const peaks: Peak[] = [
     region: "南投縣",
     lat: 23.834571,
     lng: 121.115822,
+    difficulty: 5,
   },
   {
     id: 41,
@@ -328,6 +368,7 @@ export const peaks: Peak[] = [
     region: "高雄市、花蓮縣",
     lat: 23.346062,
     lng: 121.010532,
+    difficulty: 5,
   },
   {
     id: 42,
@@ -336,6 +377,7 @@ export const peaks: Peak[] = [
     region: "南投縣",
     lat: 24.061219,
     lng: 121.279809,
+    difficulty: 3,
   },
   {
     id: 43,
@@ -344,6 +386,7 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 23.965374,
     lng: 121.278083,
+    difficulty: 5,
   },
   {
     id: 44,
@@ -352,6 +395,7 @@ export const peaks: Peak[] = [
     region: "臺中市、南投縣",
     lat: 24.202683,
     lng: 121.108962,
+    difficulty: 4,
   },
   {
     id: 45,
@@ -360,6 +404,7 @@ export const peaks: Peak[] = [
     region: "花蓮縣",
     lat: 23.316418,
     lng: 121.127384,
+    difficulty: 5,
   },
   {
     id: 46,
@@ -368,6 +413,7 @@ export const peaks: Peak[] = [
     region: "南投縣",
     lat: 23.490196,
     lng: 121.009592,
+    difficulty: 3,
   },
   {
     id: 47,
@@ -376,6 +422,7 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 23.600421,
     lng: 121.213543,
+    difficulty: 5,
   },
   {
     id: 48,
@@ -384,6 +431,7 @@ export const peaks: Peak[] = [
     region: "新竹縣、臺中市",
     lat: 24.432621,
     lng: 121.304898,
+    difficulty: 3,
   },
   {
     id: 49,
@@ -392,6 +440,7 @@ export const peaks: Peak[] = [
     region: "臺中市",
     lat: 24.306633,
     lng: 121.187996,
+    difficulty: 4,
   },
   {
     id: 50,
@@ -400,6 +449,7 @@ export const peaks: Peak[] = [
     region: "苗栗縣、臺中市",
     lat: 24.381922,
     lng: 121.175055,
+    difficulty: 5,
   },
   {
     id: 51,
@@ -408,6 +458,7 @@ export const peaks: Peak[] = [
     region: "新竹縣、臺中市",
     lat: 24.431102,
     lng: 121.28814,
+    difficulty: 3,
   },
   {
     id: 52,
@@ -416,6 +467,7 @@ export const peaks: Peak[] = [
     region: "新竹縣、苗栗縣",
     lat: 24.469989,
     lng: 121.243603,
+    difficulty: 3,
   },
   {
     id: 53,
@@ -424,6 +476,7 @@ export const peaks: Peak[] = [
     region: "高雄市、臺東縣",
     lat: 23.051181,
     lng: 120.874204,
+    difficulty: 5,
   },
   {
     id: 54,
@@ -432,6 +485,7 @@ export const peaks: Peak[] = [
     region: "臺中市",
     lat: 24.357779,
     lng: 121.251324,
+    difficulty: 3,
   },
   {
     id: 55,
@@ -440,6 +494,7 @@ export const peaks: Peak[] = [
     region: "花蓮縣",
     lat: 24.079077,
     lng: 121.420976,
+    difficulty: 5,
   },
   {
     id: 56,
@@ -448,6 +503,7 @@ export const peaks: Peak[] = [
     region: "南投縣",
     lat: 23.876045,
     lng: 121.138989,
+    difficulty: 5,
   },
   {
     id: 57,
@@ -456,6 +512,7 @@ export const peaks: Peak[] = [
     region: "高雄市",
     lat: 23.391362,
     lng: 120.99808,
+    difficulty: 5,
   },
   {
     id: 58,
@@ -464,6 +521,7 @@ export const peaks: Peak[] = [
     region: "花蓮縣",
     lat: 23.579269,
     lng: 121.19605,
+    difficulty: 5,
   },
   {
     id: 59,
@@ -472,6 +530,7 @@ export const peaks: Peak[] = [
     region: "南投縣",
     lat: 23.577365,
     lng: 120.962368,
+    difficulty: 3,
   },
   {
     id: 60,
@@ -480,6 +539,7 @@ export const peaks: Peak[] = [
     region: "花蓮縣",
     lat: 23.468634,
     lng: 121.195221,
+    difficulty: 5,
   },
   {
     id: 61,
@@ -488,6 +548,7 @@ export const peaks: Peak[] = [
     region: "臺中市、花蓮縣",
     lat: 24.24438,
     lng: 121.351647,
+    difficulty: 4,
   },
   {
     id: 62,
@@ -496,6 +557,7 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 23.992334,
     lng: 121.260253,
+    difficulty: 5,
   },
   {
     id: 63,
@@ -504,6 +566,7 @@ export const peaks: Peak[] = [
     region: "南投縣",
     lat: 23.851873,
     lng: 121.185522,
+    difficulty: 5,
   },
   {
     id: 64,
@@ -512,6 +575,7 @@ export const peaks: Peak[] = [
     region: "臺中市",
     lat: 24.295572,
     lng: 121.170202,
+    difficulty: 5,
   },
   {
     id: 65,
@@ -520,6 +584,7 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 23.58646,
     lng: 121.153265,
+    difficulty: 5,
   },
   {
     id: 66,
@@ -528,6 +593,7 @@ export const peaks: Peak[] = [
     region: "高雄市、臺東縣",
     lat: 23.151654,
     lng: 120.87612,
+    difficulty: 5,
   },
   {
     id: 67,
@@ -536,6 +602,7 @@ export const peaks: Peak[] = [
     region: "花蓮縣",
     lat: 24.149275,
     lng: 121.342934,
+    difficulty: 4,
   },
   {
     id: 68,
@@ -544,6 +611,7 @@ export const peaks: Peak[] = [
     region: "南投縣",
     lat: 23.59157,
     lng: 121.05432,
+    difficulty: 5,
   },
   {
     id: 69,
@@ -552,6 +620,7 @@ export const peaks: Peak[] = [
     region: "南投縣",
     lat: 23.862896,
     lng: 121.160214,
+    difficulty: 5,
   },
   {
     id: 70,
@@ -560,6 +629,7 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 24.152435,
     lng: 121.284587,
+    difficulty: 1,
   },
   {
     id: 71,
@@ -568,6 +638,7 @@ export const peaks: Peak[] = [
     region: "南投縣、嘉義縣",
     lat: 23.475605,
     lng: 120.917662,
+    difficulty: 3,
   },
   {
     id: 72,
@@ -576,6 +647,7 @@ export const peaks: Peak[] = [
     region: "高雄市、臺東縣",
     lat: 23.251966,
     lng: 120.94222,
+    difficulty: 3,
   },
   {
     id: 73,
@@ -584,6 +656,7 @@ export const peaks: Peak[] = [
     region: "宜蘭縣、花蓮縣",
     lat: 24.348325,
     lng: 121.485633,
+    difficulty: 5,
   },
   {
     id: 74,
@@ -592,6 +665,7 @@ export const peaks: Peak[] = [
     region: "南投縣、高雄市、花蓮縣",
     lat: 23.43296,
     lng: 121.01322,
+    difficulty: 5,
   },
   {
     id: 75,
@@ -600,6 +674,7 @@ export const peaks: Peak[] = [
     region: "臺中市",
     lat: 24.388687,
     lng: 121.272073,
+    difficulty: 3,
   },
   {
     id: 76,
@@ -608,6 +683,7 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 24.039337,
     lng: 121.285918,
+    difficulty: 3,
   },
   {
     id: 77,
@@ -616,6 +692,7 @@ export const peaks: Peak[] = [
     region: "高雄市、臺東縣",
     lat: 23.270996,
     lng: 120.959457,
+    difficulty: 3,
   },
   {
     id: 78,
@@ -624,6 +701,7 @@ export const peaks: Peak[] = [
     region: "高雄市、臺東縣",
     lat: 23.185598,
     lng: 120.911328,
+    difficulty: 5,
   },
   {
     id: 79,
@@ -632,6 +710,7 @@ export const peaks: Peak[] = [
     region: "苗栗縣",
     lat: 24.336476,
     lng: 121.078059,
+    difficulty: 4,
   },
   {
     id: 80,
@@ -640,6 +719,7 @@ export const peaks: Peak[] = [
     region: "臺中市",
     lat: 24.258708,
     lng: 121.309867,
+    difficulty: 3,
   },
   {
     id: 81,
@@ -648,6 +728,7 @@ export const peaks: Peak[] = [
     region: "臺中市、花蓮縣",
     lat: 24.290393,
     lng: 121.389819,
+    difficulty: 5,
   },
   {
     id: 82,
@@ -656,6 +737,7 @@ export const peaks: Peak[] = [
     region: "南投縣",
     lat: 24.17761,
     lng: 121.244525,
+    difficulty: 4,
   },
   {
     id: 83,
@@ -664,6 +746,7 @@ export const peaks: Peak[] = [
     region: "臺中市、宜蘭縣",
     lat: 24.380209,
     lng: 121.417448,
+    difficulty: 3,
   },
   {
     id: 84,
@@ -672,6 +755,7 @@ export const peaks: Peak[] = [
     region: "新竹縣、宜蘭縣",
     lat: 24.44996,
     lng: 121.321288,
+    difficulty: 3,
   },
   {
     id: 85,
@@ -680,6 +764,7 @@ export const peaks: Peak[] = [
     region: "高雄市",
     lat: 23.262774,
     lng: 120.900042,
+    difficulty: 3,
   },
   {
     id: 86,
@@ -688,6 +773,7 @@ export const peaks: Peak[] = [
     region: "苗栗縣",
     lat: 24.4595,
     lng: 121.216197,
+    difficulty: 3,
   },
   {
     id: 87,
@@ -696,6 +782,7 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 23.907542,
     lng: 121.274785,
+    difficulty: 5,
   },
   {
     id: 88,
@@ -704,6 +791,7 @@ export const peaks: Peak[] = [
     region: "花蓮縣",
     lat: 24.104728,
     lng: 121.388298,
+    difficulty: 5,
   },
   {
     id: 89,
@@ -712,6 +800,7 @@ export const peaks: Peak[] = [
     region: "花蓮縣",
     lat: 24.099441,
     lng: 121.466602,
+    difficulty: 5,
   },
   {
     id: 90,
@@ -720,6 +809,7 @@ export const peaks: Peak[] = [
     region: "屏東縣、臺東縣",
     lat: 22.627075,
     lng: 120.76141,
+    difficulty: 3,
   },
   {
     id: 91,
@@ -728,6 +818,7 @@ export const peaks: Peak[] = [
     region: "南投縣",
     lat: 23.694019,
     lng: 120.947166,
+    difficulty: 3,
   },
   {
     id: 92,
@@ -736,6 +827,7 @@ export const peaks: Peak[] = [
     region: "花蓮縣",
     lat: 24.124914,
     lng: 121.445703,
+    difficulty: 5,
   },
   {
     id: 93,
@@ -744,6 +836,7 @@ export const peaks: Peak[] = [
     region: "高雄市、花蓮縣",
     lat: 23.406038,
     lng: 121.026793,
+    difficulty: 5,
   },
   {
     id: 94,
@@ -752,6 +845,7 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 23.937997,
     lng: 121.271952,
+    difficulty: 5,
   },
   {
     id: 95,
@@ -760,6 +854,7 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 23.872712,
     lng: 121.266118,
+    difficulty: 5,
   },
   {
     id: 96,
@@ -768,6 +863,7 @@ export const peaks: Peak[] = [
     region: "花蓮縣",
     lat: 24.208264,
     lng: 121.379765,
+    difficulty: 3,
   },
   {
     id: 97,
@@ -776,6 +872,7 @@ export const peaks: Peak[] = [
     region: "南投縣",
     lat: 23.548389,
     lng: 121.032528,
+    difficulty: 5,
   },
   {
     id: 98,
@@ -784,6 +881,7 @@ export const peaks: Peak[] = [
     region: "花蓮縣、臺東縣",
     lat: 23.232838,
     lng: 121.0787,
+    difficulty: 5,
   },
   {
     id: 99,
@@ -792,6 +890,7 @@ export const peaks: Peak[] = [
     region: "南投縣、花蓮縣",
     lat: 23.724508,
     lng: 121.239549,
+    difficulty: 4,
   },
   {
     id: 100,
@@ -800,5 +899,6 @@ export const peaks: Peak[] = [
     region: "高雄市",
     lat: 23.45065,
     lng: 120.988479,
+    difficulty: 5,
   },
 ];
