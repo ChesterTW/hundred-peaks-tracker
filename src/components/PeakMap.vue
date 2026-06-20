@@ -1,18 +1,40 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watch, computed } from "vue";
 import L from "leaflet";
-import { peaks } from "../data/peaks";
 import { storeToRefs } from "pinia";
 import { useTripStore } from "../stores/tripStore";
+import { usePeakFilter } from "../composables/usePeakFilter";
 
 const store = useTripStore();
 const { completedPeakIds } = storeToRefs(store);
+const {
+  completion,
+  difficulties,
+  filteredPeaks,
+  difficultyLevels,
+  toggleDifficulty,
+} = usePeakFilter();
+
+const openCompletion = ref(false);
+
+// 按鈕上要顯示目前選了什麼
+const completionLabel = computed(() => {
+  if (completion.value === "completed") return "已登頂";
+  if (completion.value === "incomplete") return "未登頂";
+  return "全部";
+});
+
+const openDifficulty = ref(false);
+const difficultyLabel = computed(() =>
+  difficulties.value.length === 0 ? "全部" : difficulties.value.join("、"),
+);
+
 const markerGroup = L.layerGroup();
 
 const mapEl = ref<HTMLElement>();
 let map: L.Map;
 
-watch(completedPeakIds, () => {
+watch(filteredPeaks, () => {
   drawmarkers();
 });
 
@@ -53,7 +75,7 @@ onUnmounted(() => {
 function drawmarkers() {
   markerGroup.clearLayers();
 
-  peaks.forEach((peak) => {
+  filteredPeaks.value.forEach((peak) => {
     const done = completedPeakIds.value.has(peak.id);
 
     L.circleMarker([peak.lat, peak.lng], {
@@ -70,5 +92,76 @@ function drawmarkers() {
 </script>
 
 <template>
-  <div ref="mapEl" class="h-screen w-full"></div>
+  <div class="relative">
+    <div ref="mapEl" class="h-screen w-full"></div>
+    <div class="absolute top-4 left-4 z-[1000] flex gap-2">
+      <div class="relative">
+        <button
+          @click="openCompletion = !openCompletion"
+          class="bg-white shadow rounded px-3 py-2 text-sm"
+        >
+          完成狀態：{{ completionLabel }}
+        </button>
+
+        <div
+          v-if="openCompletion"
+          class="absolute mt-1 bg-white shadow rounded p-1 text-sm"
+        >
+          <button
+            class="block w-full text-left px-2 py-1"
+            @click="((completion = 'all'), (openCompletion = !openCompletion))"
+          >
+            全部
+          </button>
+          <button
+            class="block w-full text-left px-2 py-1"
+            @click="
+              ((completion = 'completed'), (openCompletion = !openCompletion))
+            "
+          >
+            已登頂
+          </button>
+          <button
+            class="block w-full text-left px-2 py-1"
+            @click="
+              ((completion = 'incomplete'), (openCompletion = !openCompletion))
+            "
+          >
+            未登頂
+          </button>
+        </div>
+      </div>
+
+      <div class="relative">
+        <button
+          @click="openDifficulty = !openDifficulty"
+          class="bg-white shadow rounded px-3 py-2 text-sm"
+        >
+          難度：{{ difficultyLabel }}
+        </button>
+
+        <div
+          v-if="openDifficulty"
+          class="absolute mt-1 bg-white shadow rounded p-1 text-sm"
+        >
+          <button
+            class="block w-full text-left px-2 py-1"
+            @click="difficulties = []"
+          >
+            全部
+          </button>
+
+          <button
+            v-for="level in difficultyLevels"
+            :key="level"
+            class="block w-full text-left px-2 py-1"
+            :class="{ 'bg-green-100': difficulties.includes(level) }"
+            @click="toggleDifficulty(level)"
+          >
+            {{ difficulties.includes(level) ? "✓" : "　" }} 難度 {{ level }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
