@@ -32,6 +32,8 @@ onMounted(() => {
     minZoom: 7,
   }).setView([23.8, 121], 7); // 中心放台灣
 
+  map.zoomControl.setPosition("bottomright");
+
   // 加 OSM 圖磚當底圖
   L.tileLayer(
     "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
