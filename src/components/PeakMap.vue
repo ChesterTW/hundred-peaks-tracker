@@ -96,6 +96,18 @@ function drawmarkers() {
       .addTo(markerGroup);
   });
 }
+
+function handleCompletionClick(input: string) {
+  openCompletion.value = !openCompletion.value;
+
+  if (input === "all") {
+    completion.value = "completed";
+  } else if (input === "completed") {
+    completion.value = "incomplete";
+  } else {
+    completion.value = "all";
+  }
+}
 </script>
 
 <template>
@@ -116,23 +128,19 @@ function drawmarkers() {
         >
           <button
             class="block w-full text-left px-2 py-1"
-            @click="((completion = 'all'), (openCompletion = !openCompletion))"
+            @click="handleCompletionClick('all')"
           >
             全部
           </button>
           <button
             class="block w-full text-left px-2 py-1"
-            @click="
-              ((completion = 'completed'), (openCompletion = !openCompletion))
-            "
+            @click="handleCompletionClick('completed')"
           >
             已登頂
           </button>
           <button
             class="block w-full text-left px-2 py-1"
-            @click="
-              ((completion = 'incomplete'), (openCompletion = !openCompletion))
-            "
+            @click="handleCompletionClick('incomplete')"
           >
             未登頂
           </button>
