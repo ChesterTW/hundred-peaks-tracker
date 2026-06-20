@@ -117,7 +117,7 @@ function handleCompletionClick(input: string) {
       <div class="relative">
         <button
           @click="openCompletion = !openCompletion"
-          class="bg-white shadow rounded px-3 py-2 text-sm"
+          class="hover:bg-gray-100 active:bg-gray-200 transition-colors bg-white shadow rounded px-3 py-2 text-sm"
         >
           完成狀態：{{ completionLabel }}
         </button>
@@ -127,19 +127,19 @@ function handleCompletionClick(input: string) {
           class="absolute mt-1 bg-white shadow rounded p-1 text-sm"
         >
           <button
-            class="block w-full text-left px-2 py-1"
+            class="hover:bg-gray-100 active:bg-gray-100 block w-full text-left px-2 py-1"
             @click="handleCompletionClick('all')"
           >
             全部
           </button>
           <button
-            class="block w-full text-left px-2 py-1"
+            class="hover:bg-gray-100 active:bg-gray-100 block w-full text-left px-2 py-1"
             @click="handleCompletionClick('completed')"
           >
             已登頂
           </button>
           <button
-            class="block w-full text-left px-2 py-1"
+            class="hover:bg-gray-100 active:bg-gray-100 block w-full text-left px-2 py-1"
             @click="handleCompletionClick('incomplete')"
           >
             未登頂
@@ -150,7 +150,7 @@ function handleCompletionClick(input: string) {
       <div class="relative">
         <button
           @click="openDifficulty = !openDifficulty"
-          class="bg-white shadow rounded px-3 py-2 text-sm"
+          class="hover:bg-gray-100 active:bg-gray-200 transition-colors bg-white shadow rounded px-3 py-2 text-sm"
         >
           難度：{{ difficultyLabel }}
         </button>
@@ -160,7 +160,7 @@ function handleCompletionClick(input: string) {
           class="absolute mt-1 bg-white shadow rounded p-1 text-sm"
         >
           <button
-            class="block w-full text-left px-2 py-1"
+            class="hover:bg-gray-100 active:bg-gray-100 block w-full text-left px-2 py-1"
             @click="difficulties = []"
           >
             全部
@@ -169,7 +169,7 @@ function handleCompletionClick(input: string) {
           <button
             v-for="level in difficultyLevels"
             :key="level"
-            class="block w-full text-left px-2 py-1"
+            class="hover:bg-gray-100 active:bg-gray-100 block w-full text-left px-2 py-1"
             :class="{ 'bg-green-100': difficulties.includes(level) }"
             @click="toggleDifficulty(level)"
           >
