@@ -4,6 +4,7 @@ import L from "leaflet";
 import { storeToRefs } from "pinia";
 import { useTripStore } from "../stores/tripStore";
 import { usePeakFilter } from "../composables/usePeakFilter";
+import router from "../router";
 
 const store = useTripStore();
 const { completedPeakIds } = storeToRefs(store);
@@ -93,6 +94,9 @@ function drawmarkers() {
       weight: done ? 5 : 1,
     })
       .bindTooltip(peak.name, { permanent: true, direction: "top" })
+      .on("click", () => {
+        router.push({ name: "peak-detail", params: { id: peak.id } });
+      })
       .addTo(markerGroup);
   });
 }

@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { peaks } from "../data/peaks";
 import { useWeather } from "../composables/useWeather";
 
 const route = useRoute();
-const id = Number(route.params.id);
-const peak = peaks.find((p) => p.id === id);
+const peak = computed(() =>
+  peaks.find((p) => p.id === Number(route.params.id)),
+);
 
 const { weather, loading, error, fetchWeather } = useWeather(
-  peak?.lat,
-  peak?.lng,
+  () => peak.value?.lat,
+  () => peak.value?.lng,
 );
 
 onMounted(fetchWeather);
