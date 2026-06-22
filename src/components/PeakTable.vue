@@ -3,6 +3,7 @@ import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 import { useTripStore } from "../stores/tripStore";
 import { peaks } from "../data/peaks";
+import { useRouter } from "vue-router";
 
 const props = withDefaults(
   defineProps<{
@@ -15,6 +16,7 @@ const props = withDefaults(
 
 const store = useTripStore();
 const { completedPeakIds } = storeToRefs(store);
+const router = useRouter();
 
 const keyword = ref<string>("");
 const filterStatus = ref<"all" | "completed" | "incomplete">("all");
@@ -45,6 +47,13 @@ const filteredPeaks = computed(() => {
 
   return result;
 });
+
+function goToDetail(peakId: number) {
+  if (props.selectable) {
+    return;
+  }
+  router.push({ name: "peak-detail", params: { id: peakId } });
+}
 </script>
 
 <template>
@@ -83,11 +92,13 @@ const filteredPeaks = computed(() => {
         <tr
           v-for="peak in filteredPeaks"
           :key="peak.id"
-          :class="
+          :class="[
+            props.selectable ? '' : 'cursor-pointer',
             selectedPeakIds.includes(peak.id)
               ? 'bg-green-100'
-              : 'hover:bg-gray-50'
-          "
+              : 'hover:bg-gray-50',
+          ]"
+          @click="goToDetail(peak.id)"
         >
           <td class="px-4 py-3" v-if="selectable">
             <input
