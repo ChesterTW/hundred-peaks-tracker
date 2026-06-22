@@ -8,19 +8,33 @@ const id = Number(route.params.id);
 const peak = peaks.find((p) => p.id === id);
 
 const weather = ref<any>(null);
+const loading = ref(false);
+const error = ref<string | null>(null);
 
-onMounted(async () => {
+async function fetchWeather() {
   if (!peak) return;
 
-  const url =
-    `https://api.open-meteo.com/v1/forecast` +
-    `?latitude=${peak.lat}&longitude=${peak.lng}` +
-    `&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max` +
-    `&timezone=Asia/Taipei&forecast_days=3`;
+  loading.value = true;
+  error.value = null;
 
-  const res = await fetch(url);
-  weather.value = await res.json();
-});
+  try {
+    const url =
+      `https://api.open-meteo.com/v1/forecast` +
+      `?latitude=${peak.lat}&longitude=${peak.lng}` +
+      `&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max` +
+      `&timezone=Asia/Taipei&forecast_days=3`;
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("天氣服務回應異常");
+    weather.value = await res.json();
+  } catch (e) {
+    error.value = "無法取得天氣資料";
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(fetchWeather);
 </script>
 
 <template>
@@ -30,7 +44,15 @@ onMounted(async () => {
     <p>{{ peak.region }}</p>
 
     <h2>未來三天天氣</h2>
-    <div v-if="weather">
+
+    <div v-if="loading">天氣資料載入中...</div>
+
+    <div v-else-if="error">
+      {{ error }}
+      <button @click="fetchWeather">重試</button>
+    </div>
+
+    <div v-else-if="weather">
       <div v-for="(day, index) in weather.daily.time" :key="day">
         {{ day }}： {{ weather.daily.temperature_2m_min[index] }}° ～
         {{ weather.daily.temperature_2m_max[index] }}°， 降雨
