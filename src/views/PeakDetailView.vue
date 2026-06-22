@@ -1,38 +1,17 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { peaks } from "../data/peaks";
+import { useWeather } from "../composables/useWeather";
 
 const route = useRoute();
 const id = Number(route.params.id);
 const peak = peaks.find((p) => p.id === id);
 
-const weather = ref<any>(null);
-const loading = ref(false);
-const error = ref<string | null>(null);
-
-async function fetchWeather() {
-  if (!peak) return;
-
-  loading.value = true;
-  error.value = null;
-
-  try {
-    const url =
-      `https://api.open-meteo.com/v1/forecast` +
-      `?latitude=${peak.lat}&longitude=${peak.lng}` +
-      `&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max` +
-      `&timezone=Asia/Taipei&forecast_days=3`;
-
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("天氣服務回應異常");
-    weather.value = await res.json();
-  } catch (e) {
-    error.value = "無法取得天氣資料";
-  } finally {
-    loading.value = false;
-  }
-}
+const { weather, loading, error, fetchWeather } = useWeather(
+  peak?.lat,
+  peak?.lng,
+);
 
 onMounted(fetchWeather);
 </script>
