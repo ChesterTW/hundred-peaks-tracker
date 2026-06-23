@@ -21,7 +21,7 @@ export function useWeather(
       const url =
         `https://api.open-meteo.com/v1/forecast` +
         `?latitude=${latVal}&longitude=${lngVal}` +
-        `&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max` +
+        `&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code` +
         `&timezone=Asia/Taipei&forecast_days=3`;
 
       const res = await fetch(url);

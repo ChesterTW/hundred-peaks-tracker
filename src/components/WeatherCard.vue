@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useWeather } from "../composables/useWeather";
 import type { Peak } from "../types";
+import { getWeatherInfo } from "../data/weatherCode";
 
 const props = defineProps<{
   peak: Peak | undefined;
@@ -23,6 +24,8 @@ const { weather, loading, error, fetchWeather } = useWeather(
       {{ day }}： {{ weather.daily.temperature_2m_min[index] }}° ～
       {{ weather.daily.temperature_2m_max[index] }}°， 降雨
       {{ weather.daily.precipitation_probability_max[index] }}%
+      {{ getWeatherInfo(weather.daily.weather_code[index]).icon }}
+      {{ getWeatherInfo(weather.daily.weather_code[index]).label }}
     </div>
   </div>
   <div v-else>天氣資料載入中...</div>

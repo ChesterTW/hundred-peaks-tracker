@@ -17,3 +17,9 @@ export interface Trip {
   peakIds: number[]; // 可以登多座 Peak
   note?: string;
 }
+
+// 天氣資訊
+export interface WeatherInfo {
+  label: string; // 中文描述
+  icon: string; // emoji
+}
