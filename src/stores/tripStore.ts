@@ -41,6 +41,19 @@ export const useTripStore = defineStore("trip", () => {
     });
   }
 
+  function updateTrip(
+    id: string,
+    date: string,
+    peakIds: number[],
+    note?: string,
+  ) {
+    const index = trips.value.findIndex((trip) => trip.id === id);
+
+    if (index !== -1) {
+      trips.value[index] = { ...trips.value[index], date, peakIds, note };
+    }
+  }
+
   function deleteTrip(id: string) {
     trips.value = trips.value.filter((trip) => trip.id != id);
   }
@@ -59,6 +72,7 @@ export const useTripStore = defineStore("trip", () => {
     completedPeakIds,
     recentTrips,
     addTrip,
+    updateTrip,
     deleteTrip,
   };
 });

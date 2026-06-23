@@ -4,10 +4,13 @@ import { useTripStore } from "../stores/tripStore";
 import { usePeakNames } from "../composables/usePeakNames";
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 import type { Trip } from "../types";
+import { useRouter } from "vue-router";
 
 const store = useTripStore();
 const { deleteTrip } = store;
 const { peakNames } = usePeakNames();
+
+const router = useRouter();
 
 const props = withDefaults(
   defineProps<{
@@ -47,6 +50,10 @@ function handleDelete(id: string) {
   if (confirm("確定刪除這筆行程？")) {
     deleteTrip(id);
   }
+}
+
+function goToEditTrip(id: string) {
+  router.push({ name: "edit-trip", params: { id } });
 }
 </script>
 
@@ -88,6 +95,12 @@ function handleDelete(id: string) {
           <td class="px-4 py-3">{{ peakNames(trip.peakIds) }}</td>
           <td class="px-4 py-3 text-gray-500">{{ trip.note || "—" }}</td>
           <td class="px-4 py-3" v-if="deletable">
+            <button
+              @click="goToEditTrip(trip.id)"
+              class="text-blue-600 hover:text-blue-800 hover:underline"
+            >
+              編輯
+            </button>
             <button
               @click="handleDelete(trip.id)"
               class="text-red-600 hover:text-red-800 hover:underline"
