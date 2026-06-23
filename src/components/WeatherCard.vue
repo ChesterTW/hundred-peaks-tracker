@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { useWeather } from "../composables/useWeather";
 import type { Peak } from "../types";
 import { getWeatherInfo } from "../data/weatherCode";
@@ -11,6 +12,19 @@ const { weather, loading, error, fetchWeather } = useWeather(
   () => props.peak?.lat,
   () => props.peak?.lng,
 );
+
+const dailyList = computed(() => {
+  const daily = weather.value?.daily;
+  if (!daily) return [];
+
+  return daily.time.map((date: string, index: number) => ({
+    date,
+    weather: getWeatherInfo(daily.weather_code[index]),
+    min: daily.temperature_2m_min[index],
+    max: daily.temperature_2m_max[index],
+    rain: daily.precipitation_probability_max[index],
+  }));
+});
 </script>
 
 <template>
@@ -20,13 +34,11 @@ const { weather, loading, error, fetchWeather } = useWeather(
     <button @click="fetchWeather">重試</button>
   </div>
   <div v-else-if="weather">
-    <div v-for="(day, index) in weather.daily.time" :key="day">
-      {{ day }}： {{ weather.daily.temperature_2m_min[index] }}° ～
-      {{ weather.daily.temperature_2m_max[index] }}°， 降雨
-      {{ weather.daily.precipitation_probability_max[index] }}%
-      {{ getWeatherInfo(weather.daily.weather_code[index]).icon }}
-      {{ getWeatherInfo(weather.daily.weather_code[index]).label }}
+    <div v-for="day in dailyList" :key="day.date">
+      {{ day.date }}： {{ day.min }}° ～ {{ day.max }}°， 降雨 {{ day.rain }}%
+      {{ day.weather.icon }}
+      {{ day.weather.label }}
     </div>
   </div>
-  <div v-else>天氣資料載入中...</div>
+  <div v-else-if="dailyList.length">天氣資料載入中...</div>
 </template>
