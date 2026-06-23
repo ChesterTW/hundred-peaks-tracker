@@ -57,7 +57,7 @@ function goToDetail(peakId: number) {
 </script>
 
 <template>
-  <div class="flex gap-2 mb-4">
+  <div class="flex gap-2 sticky top-0 bg-white z-10 py-4">
     <input
       v-model="keyword"
       placeholder="搜尋山名"

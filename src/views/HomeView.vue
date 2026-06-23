@@ -11,7 +11,7 @@ const { completedCount } = storeToRefs(store);
 
 <template>
   <div class="flex h-screen overflow-hidden">
-    <aside class="w-1/3 overflow-y-auto p-4 space-y-4 shadow-lg">
+    <aside class="w-1/3 overflow-y-auto space-y-4 shadow-lg">
       <ProgressBar :value="completedCount" :total="100"></ProgressBar>
 
       <nav class="flex gap-4 p-4 border-b">

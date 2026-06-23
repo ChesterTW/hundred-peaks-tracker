@@ -3,5 +3,7 @@ import PeakTable from "../components/PeakTable.vue";
 </script>
 
 <template>
-  <PeakTable></PeakTable>
+  <div class="px-4 pb-4 pt-0">
+    <PeakTable></PeakTable>
+  </div>
 </template>
