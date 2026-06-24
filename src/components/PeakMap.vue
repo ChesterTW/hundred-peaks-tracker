@@ -56,8 +56,10 @@ const HIDE_THRESHOLD_PX = 40; // 螢幕像素門檻，用於 decluttering，避�
 
 watch(focusedPeakId, (newId) => {
   const peak = filteredPeaks.value.find((p) => p.id === Number(newId));
+
   if (peak) {
     map.flyTo([peak.lat, peak.lng]);
+    drawmarkers();
   }
 });
 
@@ -114,9 +116,16 @@ function drawmarkers() {
     ? map.project([hoveredPeak.lat, hoveredPeak.lng])
     : null;
 
+  const focusedPeak = filteredPeaks.value.find(
+    (p) => p.id === focusedPeakId.value,
+  );
+  const focusedPoint = focusedPeak
+    ? map.project([focusedPeak.lat, focusedPeak.lng])
+    : null;
+
   filteredPeaks.value.forEach((peak) => {
     // 用戶所 hover 的山峰
-    if (peak.id === hoveredPeakId.value) {
+    if (peak.id === hoveredPeakId.value || peak.id === focusedPeakId.value) {
       L.marker([peak.lat, peak.lng], { icon: pinIcon })
         .bindTooltip(peak.name, { permanent: true, direction: "top" })
         .on("click", () => {
@@ -132,6 +141,11 @@ function drawmarkers() {
       if (hoveredPoint.distanceTo(point) < HIDE_THRESHOLD_PX) return;
     }
 
+    if (focusedPoint) {
+      const point = map.project([peak.lat, peak.lng]);
+      if (focusedPoint.distanceTo(point) < HIDE_THRESHOLD_PX) return;
+    }
+
     const done = completedPeakIds.value.has(peak.id);
 
     L.circleMarker([peak.lat, peak.lng], {
@@ -144,6 +158,7 @@ function drawmarkers() {
       .bindTooltip(peak.name, { permanent: true, direction: "top" })
       .on("click", () => {
         router.push({ name: "peak-detail", params: { id: peak.id } });
+        focusedPeakId.value = peak.id;
       })
       .addTo(markerGroup);
   });

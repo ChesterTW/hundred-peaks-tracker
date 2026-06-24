@@ -1,6 +1,6 @@
 import { ref } from "vue";
 
-const focusedPeakId = ref<string | null>(null);
+const focusedPeakId = ref<number | null>(null);
 const hoveredPeakId = ref<number | null>(null);
 
 export function useMapFocus() {

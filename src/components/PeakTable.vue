@@ -56,7 +56,7 @@ function goToDetail(peakId: number) {
   if (props.selectable) {
     return;
   }
-  focusedPeakId.value = String(peakId);
+  focusedPeakId.value = peakId;
   router.push({ name: "peak-detail", params: { id: peakId } });
 }
 </script>
