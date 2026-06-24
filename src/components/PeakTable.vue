@@ -20,7 +20,7 @@ const { completedPeakIds } = storeToRefs(store);
 
 const router = useRouter();
 
-const { focusedPeakId } = useMapFocus();
+const { focusedPeakId, hoveredPeakId } = useMapFocus();
 
 const keyword = ref<string>("");
 const filterStatus = ref<"all" | "completed" | "incomplete">("all");
@@ -104,6 +104,8 @@ function goToDetail(peakId: number) {
               : 'hover:bg-gray-50',
           ]"
           @click="goToDetail(peak.id)"
+          @mouseenter="hoveredPeakId = peak.id"
+          @mouseleave="hoveredPeakId = null"
         >
           <td class="px-4 py-3" v-if="selectable">
             <input

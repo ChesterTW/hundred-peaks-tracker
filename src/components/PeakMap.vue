@@ -43,13 +43,26 @@ watch(filteredPeaks, () => {
   drawmarkers();
 });
 
-const { focusedPeakId } = useMapFocus();
+const { focusedPeakId, hoveredPeakId } = useMapFocus();
+
+const pinIcon = L.icon({
+  iconUrl,
+  iconSize: [32, 32],
+  iconAnchor: [16, 32], // 釘尖對準座標
+  tooltipAnchor: [0, -32], // y: -32，讓 tooltip 從圖釘頂端往上長，避免遮住圖釘
+});
+
+const HIDE_THRESHOLD_PX = 40; // 螢幕像素門檻，用於 decluttering，避免 marker 重疊。
 
 watch(focusedPeakId, (newId) => {
   const peak = filteredPeaks.value.find((p) => p.id === Number(newId));
   if (peak) {
     map.flyTo([peak.lat, peak.lng]);
   }
+});
+
+watch(hoveredPeakId, () => {
+  drawmarkers();
 });
 
 onMounted(() => {
@@ -94,7 +107,31 @@ onUnmounted(() => {
 function drawmarkers() {
   markerGroup.clearLayers();
 
+  const hoveredPeak = filteredPeaks.value.find(
+    (p) => p.id === hoveredPeakId.value,
+  );
+  const hoveredPoint = hoveredPeak
+    ? map.project([hoveredPeak.lat, hoveredPeak.lng])
+    : null;
+
   filteredPeaks.value.forEach((peak) => {
+    // 用戶所 hover 的山峰
+    if (peak.id === hoveredPeakId.value) {
+      L.marker([peak.lat, peak.lng], { icon: pinIcon })
+        .bindTooltip(peak.name, { permanent: true, direction: "top" })
+        .on("click", () => {
+          router.push({ name: "peak-detail", params: { id: peak.id } });
+        })
+        .addTo(markerGroup);
+      return;
+    }
+
+    // 離 hover 山峰太近的 marker 就跳過不畫（decluttering）
+    if (hoveredPoint) {
+      const point = map.project([peak.lat, peak.lng]);
+      if (hoveredPoint.distanceTo(point) < HIDE_THRESHOLD_PX) return;
+    }
+
     const done = completedPeakIds.value.has(peak.id);
 
     L.circleMarker([peak.lat, peak.lng], {
