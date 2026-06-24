@@ -3,7 +3,7 @@ import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 import { useTripStore } from "../stores/tripStore";
 import { peaks } from "../data/peaks";
-import { useRouter } from "vue-router";
+
 import { useMapFocus } from "../composables/useMapFocus";
 
 const props = withDefaults(
@@ -17,8 +17,6 @@ const props = withDefaults(
 
 const store = useTripStore();
 const { completedPeakIds } = storeToRefs(store);
-
-const router = useRouter();
 
 const { focusedPeakId, hoveredPeakId } = useMapFocus();
 
@@ -57,7 +55,6 @@ function goToDetail(peakId: number) {
     return;
   }
   focusedPeakId.value = peakId;
-  router.push({ name: "peak-detail", params: { id: peakId } });
 }
 </script>
 

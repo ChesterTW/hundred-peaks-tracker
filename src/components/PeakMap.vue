@@ -180,7 +180,7 @@ function handleCompletionClick(input: string) {
 <template>
   <div class="relative">
     <div ref="mapEl" class="h-screen w-full"></div>
-    <div ref="filterEl" class="absolute top-4 left-4 z-[1000] flex gap-2">
+    <div ref="filterEl" class="absolute top-4 left-4 z-1000 flex gap-2">
       <div class="relative">
         <button
           @click="openCompletion = !openCompletion"

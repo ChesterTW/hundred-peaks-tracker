@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useRoute } from "vue-router";
 import { peaks } from "../data/peaks";
 import WeatherCard from "../components/WeatherCard.vue";
 
-const route = useRoute();
-const peak = computed(() =>
-  peaks.find((p) => p.id === Number(route.params.id)),
-);
+const props = defineProps<{
+  peakId: number;
+}>();
+
+const peak = computed(() => peaks.find((p) => p.id === props.peakId));
 </script>
 
 <template>
