@@ -6,6 +6,7 @@ import { useTripStore } from "../stores/tripStore";
 import { usePeakFilter } from "../composables/usePeakFilter";
 import { useMapFocus } from "../composables/useMapFocus";
 import router from "../router";
+import iconUrl from "../assets/location-pin.png";
 
 const store = useTripStore();
 const { completedPeakIds } = storeToRefs(store);
@@ -47,7 +48,7 @@ const { focusedPeakId } = useMapFocus();
 watch(focusedPeakId, (newId) => {
   const peak = filteredPeaks.value.find((p) => p.id === Number(newId));
   if (peak) {
-    map.flyTo([peak.lat, peak.lng], 13);
+    map.flyTo([peak.lat, peak.lng]);
   }
 });
 
@@ -65,7 +66,7 @@ onMounted(() => {
     maxBounds: taiwanBounds,
     maxBoundsViscosity: 1.0,
     minZoom: 7,
-  }).setView([23.8, 121], 7); // 中心放台灣
+  }).setView([23.8, 121], 10); // 中心放台灣
 
   map.zoomControl.setPosition("bottomright");
 
