@@ -4,6 +4,7 @@ import { computed, ref } from "vue";
 import { useTripStore } from "../stores/tripStore";
 import { peaks } from "../data/peaks";
 import { useRouter } from "vue-router";
+import { useMapFocus } from "../composables/useMapFocus";
 
 const props = withDefaults(
   defineProps<{
@@ -16,7 +17,10 @@ const props = withDefaults(
 
 const store = useTripStore();
 const { completedPeakIds } = storeToRefs(store);
+
 const router = useRouter();
+
+const { focusedPeakId } = useMapFocus();
 
 const keyword = ref<string>("");
 const filterStatus = ref<"all" | "completed" | "incomplete">("all");
@@ -52,6 +56,7 @@ function goToDetail(peakId: number) {
   if (props.selectable) {
     return;
   }
+  focusedPeakId.value = String(peakId);
   router.push({ name: "peak-detail", params: { id: peakId } });
 }
 </script>

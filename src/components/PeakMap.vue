@@ -4,6 +4,7 @@ import L from "leaflet";
 import { storeToRefs } from "pinia";
 import { useTripStore } from "../stores/tripStore";
 import { usePeakFilter } from "../composables/usePeakFilter";
+import { useMapFocus } from "../composables/useMapFocus";
 import router from "../router";
 
 const store = useTripStore();
@@ -39,6 +40,15 @@ let map: L.Map;
 
 watch(filteredPeaks, () => {
   drawmarkers();
+});
+
+const { focusedPeakId } = useMapFocus();
+
+watch(focusedPeakId, (newId) => {
+  const peak = filteredPeaks.value.find((p) => p.id === Number(newId));
+  if (peak) {
+    map.flyTo([peak.lat, peak.lng], 13);
+  }
 });
 
 onMounted(() => {
