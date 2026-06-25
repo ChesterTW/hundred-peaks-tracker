@@ -25,6 +25,27 @@ const trailLayer = L.geoJSON(trails as any, {
     weight: 2,
     opacity: 0.6,
   },
+
+  // 過濾掉資料裡夾帶的 Marker
+  filter: (feature) => {
+    // 只顯示有 name 屬性的步道
+    return (
+      feature.geometry.type === "LineString" ||
+      feature.geometry.type === "MultiLineString"
+    );
+  },
+
+  // 綁定步道名稱 tooltip
+  onEachFeature: (feature: any, layer) => {
+    const name = feature.properties?.name;
+    if (name) {
+      layer.bindTooltip(name, {
+        permanent: true,
+        direction: "center", // 線沒有上下尖端，標在線中央比較自然
+        className: "trail-label",
+      });
+    }
+  },
 });
 
 // 3. store / composable
@@ -275,3 +296,21 @@ function handleCompletionClick(input: string) {
     </div>
   </div>
 </template>
+
+<style>
+.trail-label {
+  background: #fff;
+  border: 1px solid #16a34a;
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: #15803d;
+  font-size: 11px;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+/* 拿掉預設的三角箭頭 */
+.trail-label::before {
+  display: none;
+}
+</style>
