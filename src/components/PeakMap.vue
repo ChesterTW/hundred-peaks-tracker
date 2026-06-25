@@ -7,6 +7,15 @@ import { usePeakFilter } from "../composables/usePeakFilter";
 import { useMapFocus } from "../composables/useMapFocus";
 import router from "../router";
 import iconUrl from "../assets/location-pin.png";
+import trails from "../data/trails.json";
+
+const trailLayer = L.geoJSON(trails as any, {
+  style: {
+    color: "#16a34a", // Taro Todo：綠線的綠色可以再調整，讓它更明顯一點。
+    weight: 2,
+    opacity: 0.6,
+  },
+});
 
 const store = useTripStore();
 const { completedPeakIds } = storeToRefs(store);
@@ -25,6 +34,16 @@ const completionLabel = computed(() => {
   if (completion.value === "completed") return "已登頂";
   if (completion.value === "incomplete") return "未登頂";
   return "全部";
+});
+
+const showTrails = ref(false);
+
+watch(showTrails, (newVal) => {
+  if (newVal) {
+    trailLayer.addTo(map);
+  } else {
+    map.removeLayer(trailLayer);
+  }
 });
 
 const openDifficulty = ref(false);
@@ -92,6 +111,8 @@ onMounted(() => {
       attribution: "© OpenStreetMap | © CARTO",
     },
   ).addTo(map);
+
+  trailLayer.addTo(map);
 
   markerGroup.addTo(map);
   drawmarkers();
@@ -243,6 +264,13 @@ function handleCompletionClick(input: string) {
           </button>
         </div>
       </div>
+
+      <button
+        @click="showTrails = !showTrails"
+        class="hover:bg-gray-100 active:bg-gray-200 transition-colors bg-white shadow rounded px-3 py-2 text-sm"
+      >
+        步道：{{ showTrails ? "顯示中" : "隱藏" }}
+      </button>
     </div>
   </div>
 </template>
