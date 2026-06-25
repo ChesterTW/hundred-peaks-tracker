@@ -56,6 +56,11 @@ const trailLayer = L.geoJSON(trails as any, {
       direction: "center",
       className: `trail-label trail-label--${tier}`,
     });
+
+    // 綁定點擊事件
+    layer.on("click", () => {
+      focusedTrailId.value = feature.id;
+    });
   },
 });
 
@@ -69,7 +74,7 @@ const {
   difficultyLevels,
   toggleDifficulty,
 } = usePeakFilter();
-const { focusedPeakId, hoveredPeakId } = useMapFocus();
+const { focusedPeakId, hoveredPeakId, focusedTrailId } = useMapFocus();
 
 // 4. 模板 ref（mapEl、filterEl）+ map 實例
 let map: L.Map;
@@ -116,6 +121,17 @@ watch(focusedPeakId, (newId) => {
 
 watch(hoveredPeakId, () => {
   drawmarkers();
+});
+
+watch(focusedTrailId, (newId) => {
+  trailLayer.eachLayer((layer: any) => {
+    const id = layer.feature.id;
+    if (id === newId) {
+      layer.setStyle({ color: "#f97316", weight: 4, opacity: 1 });
+    } else {
+      trailLayer.resetStyle(layer);
+    }
+  });
 });
 
 // 8. 生命週期（onMounted / onUnmounted）
