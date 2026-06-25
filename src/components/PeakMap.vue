@@ -157,7 +157,6 @@ function drawmarkers() {
     })
       .bindTooltip(peak.name, { permanent: true, direction: "top" })
       .on("click", () => {
-        router.push({ name: "peak-detail", params: { id: peak.id } });
         focusedPeakId.value = peak.id;
       })
       .addTo(markerGroup);
