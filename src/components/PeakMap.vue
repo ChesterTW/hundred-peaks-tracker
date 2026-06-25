@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// 1. imports
 import { onMounted, onUnmounted, ref, watch, computed } from "vue";
 import L from "leaflet";
 import { storeToRefs } from "pinia";
@@ -9,6 +10,15 @@ import router from "../router";
 import iconUrl from "../assets/location-pin.png";
 import trails from "../data/trails.json";
 
+// 2. 常數 / 靜態物件（不會變的：HIDE_THRESHOLD_PX、pinIcon、trailLayer、markerGroup）
+const HIDE_THRESHOLD_PX = 40; // 螢幕像素門檻，用於 decluttering，避免 marker 重疊。
+const markerGroup = L.layerGroup();
+const pinIcon = L.icon({
+  iconUrl,
+  iconSize: [32, 32],
+  iconAnchor: [16, 32], // 釘尖對準座標
+  tooltipAnchor: [0, -32], // y: -32，讓 tooltip 從圖釘頂端往上長，避免遮住圖釘
+});
 const trailLayer = L.geoJSON(trails as any, {
   style: {
     color: "#16a34a", // Taro Todo：綠線的綠色可以再調整，讓它更明顯一點。
@@ -17,6 +27,7 @@ const trailLayer = L.geoJSON(trails as any, {
   },
 });
 
+// 3. store / composable
 const store = useTripStore();
 const { completedPeakIds } = storeToRefs(store);
 const {
@@ -26,18 +37,29 @@ const {
   difficultyLevels,
   toggleDifficulty,
 } = usePeakFilter();
+const { focusedPeakId, hoveredPeakId } = useMapFocus();
 
+// 4. 模板 ref（mapEl、filterEl）+ map 實例
+let map: L.Map;
+const filterEl = ref<HTMLElement>();
+const mapEl = ref<HTMLElement>();
+
+// 5. reactive 狀態（ref）
 const openCompletion = ref(false);
+const showTrails = ref(false);
+const openDifficulty = ref(false);
 
-// 按鈕上要顯示目前選了什麼
+// 6. computed（衍生狀態）
 const completionLabel = computed(() => {
   if (completion.value === "completed") return "已登頂";
   if (completion.value === "incomplete") return "未登頂";
   return "全部";
 });
+const difficultyLabel = computed(() =>
+  difficulties.value.length === 0 ? "全部" : difficulties.value.join("、"),
+);
 
-const showTrails = ref(false);
-
+// 7. watch（副作用）
 watch(showTrails, (newVal) => {
   if (newVal) {
     trailLayer.addTo(map);
@@ -46,32 +68,9 @@ watch(showTrails, (newVal) => {
   }
 });
 
-const openDifficulty = ref(false);
-const difficultyLabel = computed(() =>
-  difficulties.value.length === 0 ? "全部" : difficulties.value.join("、"),
-);
-
-const markerGroup = L.layerGroup();
-
-const filterEl = ref<HTMLElement>();
-
-const mapEl = ref<HTMLElement>();
-let map: L.Map;
-
 watch(filteredPeaks, () => {
   drawmarkers();
 });
-
-const { focusedPeakId, hoveredPeakId } = useMapFocus();
-
-const pinIcon = L.icon({
-  iconUrl,
-  iconSize: [32, 32],
-  iconAnchor: [16, 32], // 釘尖對準座標
-  tooltipAnchor: [0, -32], // y: -32，讓 tooltip 從圖釘頂端往上長，避免遮住圖釘
-});
-
-const HIDE_THRESHOLD_PX = 40; // 螢幕像素門檻，用於 decluttering，避免 marker 重疊。
 
 watch(focusedPeakId, (newId) => {
   const peak = filteredPeaks.value.find((p) => p.id === Number(newId));
@@ -86,6 +85,7 @@ watch(hoveredPeakId, () => {
   drawmarkers();
 });
 
+// 8. 生命週期（onMounted / onUnmounted）
 onMounted(() => {
   if (!mapEl.value) return;
 
@@ -127,6 +127,7 @@ onUnmounted(() => {
   map?.remove();
 });
 
+// 9. function
 function drawmarkers() {
   markerGroup.clearLayers();
 
