@@ -28,7 +28,6 @@ const trailLayer = L.geoJSON(trails as any, {
 
   // 過濾掉資料裡夾帶的 Marker
   filter: (feature) => {
-    // 只顯示有 name 屬性的步道
     return (
       feature.geometry.type === "LineString" ||
       feature.geometry.type === "MultiLineString"
@@ -38,13 +37,25 @@ const trailLayer = L.geoJSON(trails as any, {
   // 綁定步道名稱 tooltip
   onEachFeature: (feature: any, layer) => {
     const name = feature.properties?.name;
-    if (name) {
-      layer.bindTooltip(name, {
-        permanent: true,
-        direction: "center", // 線沒有上下尖端，標在線中央比較自然
-        className: "trail-label",
-      });
+    if (!name) return;
+
+    const network = feature.properties?.network;
+    let tier = "minor"; // 預設重要性為「次要」
+
+    if (network === "iwn" || network === "nwn") {
+      // iwn / nwn 是「國家級」步道，重要性最高。
+      tier = "major";
+    } else if (network === "rwn") {
+      // rwn 是「區域級」步道，重要性中等。
+      tier = "mid";
     }
+
+    // 綁定 tooltip
+    layer.bindTooltip(name, {
+      permanent: true,
+      direction: "center",
+      className: `trail-label trail-label--${tier}`,
+    });
   },
 });
 
@@ -69,6 +80,7 @@ const mapEl = ref<HTMLElement>();
 const openCompletion = ref(false);
 const showTrails = ref(false);
 const openDifficulty = ref(false);
+const zoomLevel = ref(0);
 
 // 6. computed（衍生狀態）
 const completionLabel = computed(() => {
@@ -133,7 +145,10 @@ onMounted(() => {
     },
   ).addTo(map);
 
+  L.control.scale({ imperial: false, position: "bottomright" }).addTo(map);
+
   trailLayer.addTo(map);
+  map.on("zoomend", updateTrailLabels);
 
   markerGroup.addTo(map);
   drawmarkers();
@@ -217,6 +232,16 @@ function handleCompletionClick(input: string) {
     completion.value = "incomplete";
   }
 }
+
+function updateTrailLabels() {
+  zoomLevel.value = map.getZoom();
+
+  const z = map.getZoom();
+  const c = map.getContainer().classList;
+  c.toggle("show-major", z >= 9); // 主線：較早出現
+  c.toggle("show-mid", z >= 11); // 中線：放大一點
+  c.toggle("show-minor", z >= 13); // 次線：放更大才出現
+}
 </script>
 
 <template>
@@ -293,6 +318,10 @@ function handleCompletionClick(input: string) {
       >
         步道：{{ showTrails ? "顯示中" : "隱藏" }}
       </button>
+
+      <p class="bg-white shadow rounded px-3 py-2 text-sm">
+        縮放等級：{{ zoomLevel }}
+      </p>
     </div>
   </div>
 </template>
@@ -312,5 +341,21 @@ function handleCompletionClick(input: string) {
 /* 拿掉預設的三角箭頭 */
 .trail-label::before {
   display: none;
+}
+
+/* 預設全部藏起來 */
+.trail-label {
+  display: none;
+}
+
+/* 容器有對應 class 時，才放出該層級 */
+.show-major .trail-label--major {
+  display: block;
+}
+.show-mid .trail-label--mid {
+  display: block;
+}
+.show-minor .trail-label--minor {
+  display: block;
 }
 </style>
