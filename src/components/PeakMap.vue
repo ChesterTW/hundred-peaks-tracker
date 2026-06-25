@@ -60,6 +60,8 @@ const trailLayer = L.geoJSON(trails as any, {
     // 綁定點擊事件
     layer.on("click", () => {
       focusedTrailId.value = feature.id;
+      // todo: 記得刪 log
+      console.log("Clicked trail:", feature.id, feature.properties?.name);
     });
   },
 });

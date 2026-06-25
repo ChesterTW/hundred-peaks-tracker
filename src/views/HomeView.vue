@@ -6,11 +6,12 @@ import ProgressBar from "../components/ProgressBar.vue";
 import { RouterView } from "vue-router";
 import { useMapFocus } from "../composables/useMapFocus";
 import PeakDetailDrawer from "../components/PeakDetailDrawer.vue";
+import TrailDetailDrawer from "../components/TrailDetailDrawer.vue";
 
 const store = useTripStore();
 const { completedCount } = storeToRefs(store);
 
-const { focusedPeakId } = useMapFocus();
+const { focusedPeakId, focusedTrailId } = useMapFocus();
 </script>
 
 <template>
@@ -38,6 +39,13 @@ const { focusedPeakId } = useMapFocus();
         v-if="focusedPeakId !== null"
         :peakId="focusedPeakId"
         @close="focusedPeakId = null"
+      />
+
+      <!-- 路線詳細資訊 -->
+      <TrailDetailDrawer
+        v-if="focusedTrailId !== null"
+        :trailId="focusedTrailId"
+        @close="focusedTrailId = null"
       />
     </main>
   </div>
