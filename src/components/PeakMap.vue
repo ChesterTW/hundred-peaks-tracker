@@ -327,24 +327,24 @@ function updateTrailLabels() {
 </template>
 
 <style>
-.trail-label {
+.leaflet-tooltip.trail-label {
   background: #fff;
   border: 1px solid #16a34a;
   border-radius: 4px;
   padding: 1px 6px;
   color: #15803d;
-  font-size: 11px;
+  font-size: 8px;
   font-weight: 600;
   box-shadow: none;
 }
 
 /* 拿掉預設的三角箭頭 */
-.trail-label::before {
+.leaflet-tooltip.trail-label::before {
   display: none;
 }
 
 /* 預設全部藏起來 */
-.trail-label {
+.leaflet-tooltip.trail-label {
   display: none;
 }
 
