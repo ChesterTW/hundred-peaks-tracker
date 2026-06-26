@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import trails from "../data/trails.json";
+import { cumulativeDistances, geometryToCoords } from "../utils/geo";
 
 const props = defineProps<{
   trailId: string;
@@ -11,6 +12,12 @@ const trail = computed(() => {
     (feature: any) => feature.id === props.trailId,
   );
 });
+
+const distance = computed(() => {
+  if (!trail.value) return null;
+  const coords = geometryToCoords(trail.value.geometry);
+  return cumulativeDistances(coords);
+});
 </script>
 
 <template>
@@ -20,6 +27,9 @@ const trail = computed(() => {
       <h1 class="text-2xl font-bold text-gray-900">
         {{ trail.properties?.name }}
       </h1>
+      <div class="mt-1 flex items-center gap-3 text-sm text-gray-500">
+        <span>總距離: {{ distance?.totalKm.toFixed(2) }} 公里</span>
+      </div>
     </div>
 
     <!-- More Info -->
