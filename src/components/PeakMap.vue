@@ -237,14 +237,28 @@ function drawmarkers() {
 
     const done = completedPeakIds.value.has(peak.id);
 
-    L.circleMarker([peak.lat, peak.lng], {
-      radius: done ? 7 : 5,
-      fillColor: done ? "#16a34a" : "#9ca3af",
-      fillOpacity: 1,
-      color: done ? "#d0ecda" : "#fff",
-      weight: done ? 5 : 1,
+    L.marker([peak.lat, peak.lng], {
+      icon: L.divIcon({
+        className: "custom-peak-icon",
+        iconSize: [24, 24],
+        iconAnchor: [12, 21],
+        tooltipAnchor: [12, -10], // tooltip 從三角形右側長出來
+        html: `<svg width="24" height="24" viewBox="0 0 24 24">
+                  <polygon
+                    points="12,3 22,21 2,21"
+                    fill="${done ? "#16a34a" : "#9ca3af"}"
+                    stroke="#ffffff"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                  />
+                </svg>`,
+      }),
     })
-      .bindTooltip(peak.name, { permanent: true, direction: "right" })
+      .bindTooltip(peak.name, {
+        permanent: true,
+        direction: "right",
+        className: "peak-label",
+      })
       .on("click", () => {
         focusedPeakId.value = peak.id;
       })
@@ -432,5 +446,23 @@ function applyBaseLayer(layer: BaseLayer) {
 }
 .show-minor .trail-label--minor {
   display: block;
+}
+
+.custom-peak-icon {
+  background: transparent;
+  border: none;
+}
+.leaflet-tooltip.peak-label::before {
+  display: none;
+}
+.leaflet-tooltip.peak-label {
+  /* 框本身 */
+  background: #fff;
+  border-radius: 4px;
+  padding: 1px 6px;
+
+  /* 文字(會 cascade 給裡面的字) */
+  font-size: 12px;
+  font-weight: 600;
 }
 </style>
