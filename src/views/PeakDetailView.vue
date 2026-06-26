@@ -18,6 +18,12 @@ const peak = computed(() => peaks.find((p) => p.id === props.peakId));
       <div class="mt-1 flex items-center gap-3 text-sm text-gray-500">
         <span>📍 {{ peak.region }}</span>
         <span>⛰️ {{ peak.elevation.toLocaleString() }} m</span>
+        <a
+          :href="`https://hiking.biji.co/index.php?q=mountain&act=detail&id=${peak.id}`"
+          target="_blank"
+          rel="noopener noreferrer"
+          >📝 健行筆記連結</a
+        >
       </div>
     </div>
 
