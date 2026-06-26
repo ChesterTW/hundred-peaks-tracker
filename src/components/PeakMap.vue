@@ -88,7 +88,8 @@ let currentTileLayer: L.TileLayer;
 
 // 5. reactive 狀態（ref）
 const openCompletion = ref(false);
-const showTrails = ref(false);
+const showTrails = ref(true);
+const showPeakName = ref(true);
 const openDifficulty = ref(false);
 const openLayer = ref(false);
 const zoomLevel = ref(0);
@@ -110,6 +111,18 @@ watch(showTrails, (newVal) => {
     trailLayer.addTo(map);
   } else {
     map.removeLayer(trailLayer);
+  }
+});
+
+watch(showPeakName, (newVal) => {
+  if (newVal) {
+    markerGroup.eachLayer((layer: any) => {
+      layer.openTooltip();
+    });
+  } else {
+    markerGroup.eachLayer((layer: any) => {
+      layer.closeTooltip();
+    });
   }
 });
 
@@ -151,7 +164,7 @@ onMounted(() => {
   // 台灣的「西南角」與「東北角」經緯度座標，用於建立 Bound，避免用戶滑出台灣區域。
   const taiwanBounds = L.latLngBounds(
     [21.8, 119.3], // 西南
-    [25.4, 122.1], // 東北
+    [25.4, 125.1], // 東北
   );
 
   // 初始化地圖
@@ -377,6 +390,13 @@ function applyBaseLayer(layer: BaseLayer) {
         class="hover:bg-gray-100 active:bg-gray-200 transition-colors bg-white shadow rounded px-3 py-2 text-sm"
       >
         步道：{{ showTrails ? "顯示中" : "隱藏" }}
+      </button>
+
+      <button
+        @click="showPeakName = !showPeakName"
+        class="hover:bg-gray-100 active:bg-gray-200 transition-colors bg-white shadow rounded px-3 py-2 text-sm"
+      >
+        山峰名稱：{{ showPeakName ? "顯示中" : "隱藏" }}
       </button>
 
       <p class="bg-white shadow rounded px-3 py-2 text-sm">
