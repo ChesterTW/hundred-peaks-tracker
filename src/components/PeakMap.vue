@@ -9,6 +9,8 @@ import { useMapFocus } from "../composables/useMapFocus";
 import router from "../router";
 import iconUrl from "../assets/location-pin.png";
 import trails from "../data/trails.json";
+import type { BaseLayer } from "../types";
+import { baseLayers } from "../data/baseLayers";
 
 // 2. 常數 / 靜態物件（不會變的：HIDE_THRESHOLD_PX、pinIcon、trailLayer、markerGroup）
 const HIDE_THRESHOLD_PX = 40; // 螢幕像素門檻，用於 decluttering，避免 marker 重疊。
@@ -82,12 +84,15 @@ const { focusedPeakId, hoveredPeakId, focusedTrailId } = useMapFocus();
 let map: L.Map;
 const filterEl = ref<HTMLElement>();
 const mapEl = ref<HTMLElement>();
+let currentTileLayer: L.TileLayer;
 
 // 5. reactive 狀態（ref）
 const openCompletion = ref(false);
 const showTrails = ref(false);
 const openDifficulty = ref(false);
+const openLayer = ref(false);
 const zoomLevel = ref(0);
+const currentLayer = ref<BaseLayer>(baseLayers[0]); // 預設圖層為 CARTO Light Map
 
 // 6. computed（衍生狀態）
 const completionLabel = computed(() => {
@@ -135,6 +140,9 @@ watch(focusedTrailId, (newId) => {
     }
   });
 });
+watch(currentLayer, (newLayer) => {
+  applyBaseLayer(newLayer);
+});
 
 // 8. 生命週期（onMounted / onUnmounted）
 onMounted(() => {
@@ -155,13 +163,18 @@ onMounted(() => {
 
   map.zoomControl.setPosition("bottomright");
 
-  // 加 OSM 圖磚當底圖
-  L.tileLayer(
-    "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    {
-      attribution: "© OpenStreetMap | © CARTO",
-    },
-  ).addTo(map);
+  applyBaseLayer(currentLayer.value);
+
+  // // 加 OSM 圖磚當底圖
+  // L.tileLayer(
+  //   // "https://wmts.nlsc.gov.tw/wmts/PHOTO2/default/EPSG:3857/{z}/{y}/{x}", // 衛星圖（台灣官方國土測繪中心所拍攝的航照，山區解析度比 Esri 更高）
+  //   // "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", // 衛星圖（Esri World Imagery）
+  //   // "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", // OSM Standard Map
+  //   "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // CARTO Light Map
+  //   {
+  //     attribution: "© OpenStreetMap | © CARTO",
+  //   },
+  // ).addTo(map);
 
   L.control.scale({ imperial: false, position: "bottomright" }).addTo(map);
 
@@ -231,7 +244,7 @@ function drawmarkers() {
       color: done ? "#d0ecda" : "#fff",
       weight: done ? 5 : 1,
     })
-      .bindTooltip(peak.name, { permanent: true, direction: "top" })
+      .bindTooltip(peak.name, { permanent: true, direction: "right" })
       .on("click", () => {
         focusedPeakId.value = peak.id;
       })
@@ -260,6 +273,17 @@ function updateTrailLabels() {
   c.toggle("show-mid", z >= 11); // 中線：放大一點
   c.toggle("show-minor", z >= 13); // 次線：放更大才出現
 }
+
+function applyBaseLayer(layer: BaseLayer) {
+  if (currentTileLayer) {
+    map.removeLayer(currentTileLayer);
+  }
+
+  currentTileLayer = L.tileLayer(layer.url, {
+    attribution: layer.attribution,
+    maxZoom: layer.maxZoom || 19,
+  }).addTo(map);
+}
 </script>
 
 <template>
@@ -280,18 +304,21 @@ function updateTrailLabels() {
         >
           <button
             class="hover:bg-gray-100 active:bg-gray-100 block w-full text-left px-2 py-1"
+            :class="{ 'bg-green-100': completion === 'all' }"
             @click="handleCompletionClick('all')"
           >
             全部
           </button>
           <button
             class="hover:bg-gray-100 active:bg-gray-100 block w-full text-left px-2 py-1"
+            :class="{ 'bg-green-100': completion === 'completed' }"
             @click="handleCompletionClick('completed')"
           >
             已登頂
           </button>
           <button
             class="hover:bg-gray-100 active:bg-gray-100 block w-full text-left px-2 py-1"
+            :class="{ 'bg-green-100': completion === 'incomplete' }"
             @click="handleCompletionClick('incomplete')"
           >
             未登頂
@@ -313,6 +340,7 @@ function updateTrailLabels() {
         >
           <button
             class="hover:bg-gray-100 active:bg-gray-100 block w-full text-left px-2 py-1"
+            :class="{ 'bg-green-100': difficulties.length === 0 }"
             @click="difficulties = []"
           >
             全部
@@ -340,6 +368,35 @@ function updateTrailLabels() {
       <p class="bg-white shadow rounded px-3 py-2 text-sm">
         縮放等級：{{ zoomLevel }}
       </p>
+
+      <div class="relative">
+        <!-- 按鈕：顯示目前圖層名稱 -->
+        <button
+          @click="openLayer = !openLayer"
+          class="hover:bg-gray-100 active:bg-gray-200 transition-colors bg-white shadow rounded px-3 py-2 text-sm"
+        >
+          圖層：{{ currentLayer.name }}
+        </button>
+
+        <div
+          v-if="openLayer"
+          class="absolute mt-1 bg-white shadow rounded p-1 text-sm"
+        >
+          <button
+            v-for="layer in baseLayers"
+            :key="layer.id"
+            class="hover:bg-gray-100 active:bg-gray-100 block w-full text-left px-2 py-1"
+            :class="{ 'bg-green-100': currentLayer.id === layer.id }"
+            @click="
+              applyBaseLayer(layer);
+              openLayer = false;
+              currentLayer = layer;
+            "
+          >
+            {{ layer.name }}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>

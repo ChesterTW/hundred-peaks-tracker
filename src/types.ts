@@ -23,3 +23,12 @@ export interface WeatherInfo {
   label: string; // 中文描述
   icon: string; // emoji
 }
+
+// 地圖圖層
+export interface BaseLayer {
+  id: string; // 'carto' | 'osm' | 'esri' | 'nlsc-photo'
+  name: string; // 圖層名稱，例如「魯地圖」「衛星」
+  url: string; // tile 模板
+  attribution: string;
+  maxZoom?: number;
+}
