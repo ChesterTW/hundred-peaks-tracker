@@ -8,9 +8,9 @@ export function usePeakFilter() {
   const { completedPeakIds } = storeToRefs(store);
   const completion = ref<"all" | "completed" | "incomplete">("all");
 
-  const difficulties = ref<number[]>([]);
+  const difficulties = ref<string[]>([]);
   const difficultyLevels = computed(() =>
-    [...new Set(peaks.map((p) => p.difficulty))].sort((a, b) => a - b),
+    [...new Set(peaks.map((p) => p.difficulty))].sort(),
   );
 
   const filteredPeaks = computed(() => {
@@ -45,7 +45,7 @@ export function usePeakFilter() {
     });
   });
 
-  function toggleDifficulty(level: number) {
+  function toggleDifficulty(level: string) {
     const i = difficulties.value.indexOf(level);
     if (i === -1)
       difficulties.value.push(level); // 不在 → 加入

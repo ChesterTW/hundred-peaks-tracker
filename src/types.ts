@@ -7,7 +7,7 @@ export interface Peak {
   lat: number; // 緯度
   lng: number; // 經度
   aliases?: string[];
-  difficulty: number; // 分級（難度）
+  difficulty: string; // 分級（難度）
 }
 
 // 登山行程
