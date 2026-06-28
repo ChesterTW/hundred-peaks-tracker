@@ -30,6 +30,12 @@ const peak = computed(() => peaks.find((p) => p.id === props.peakId));
           rel="noopener noreferrer"
           >📝 HikingBook 連結</a
         >
+        <a
+          :href="`https://www.windy.com/${peak.lat}/${peak.lng}?rain,${peak.lat},${peak.lng},11,p:cities`"
+          target="_blank"
+          rel="noopener noreferrer"
+          >📝 Windy 連結</a
+        >
       </div>
     </div>
 
