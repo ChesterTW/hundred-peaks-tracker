@@ -24,6 +24,12 @@ const peak = computed(() => peaks.find((p) => p.id === props.peakId));
           rel="noopener noreferrer"
           >📝 健行筆記連結</a
         >
+        <a
+          :href="`https://zh-tw.hikingbook.net/explore/trails?regions=Taiwan&query=${peak.name}&order=latest`"
+          target="_blank"
+          rel="noopener noreferrer"
+          >📝 HikingBook 連結</a
+        >
       </div>
     </div>
 
