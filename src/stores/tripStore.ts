@@ -7,19 +7,18 @@ export const useTripStore = defineStore("trip", () => {
   // state：所有行程
   const trips = ref<Trip[]>(loadTrips());
 
+  // getter：未刪除的行程
+  const activeTrips = computed(() => {
+    return trips.value.filter((trip) => !trip.deleted);
+  });
+
   // getter：完成的山峰數量
   const completedCount = computed(() => {
     return completedPeakIds.value.size;
   });
 
   const completedPeakIds = computed(() => {
-    return new Set(trips.value.flatMap((trip) => trip.peakIds));
-  });
-
-  const recentTrips = computed(() => {
-    return [...trips.value]
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .slice(0, 5);
+    return new Set(activeTrips.value.flatMap((trip) => trip.peakIds));
   });
 
   function loadTrips(): Trip[] {
@@ -38,6 +37,8 @@ export const useTripStore = defineStore("trip", () => {
       date,
       peakIds,
       note,
+      updatedAt: Date.now(),
+      deleted: false,
     });
   }
 
@@ -50,12 +51,27 @@ export const useTripStore = defineStore("trip", () => {
     const index = trips.value.findIndex((trip) => trip.id === id);
 
     if (index !== -1) {
-      trips.value[index] = { ...trips.value[index], date, peakIds, note };
+      trips.value[index] = {
+        ...trips.value[index],
+        date,
+        peakIds,
+        note,
+        updatedAt: Date.now(),
+        deleted: false,
+      };
     }
   }
 
   function deleteTrip(id: string) {
-    trips.value = trips.value.filter((trip) => trip.id != id);
+    const index = trips.value.findIndex((trip) => trip.id === id);
+
+    if (index !== -1) {
+      trips.value[index] = {
+        ...trips.value[index],
+        updatedAt: Date.now(),
+        deleted: true,
+      };
+    }
   }
 
   watch(
@@ -68,9 +84,9 @@ export const useTripStore = defineStore("trip", () => {
 
   return {
     trips,
+    activeTrips,
     completedCount,
     completedPeakIds,
-    recentTrips,
     addTrip,
     updateTrip,
     deleteTrip,
