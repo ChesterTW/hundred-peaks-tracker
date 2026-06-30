@@ -48,24 +48,30 @@ export const useTripStore = defineStore("trip", () => {
   );
 
   async function handleLogin(uid: string) {
-    // 1. migration（防呆）：必須在訂閱「覆蓋 trips」之前先抓本機資料
     const localTrips = [...trips.value];
 
-    try {
-      const cloud = await fetchAllTrips(uid);
-      const merged = mergeTrips(localTrips, cloud);
-      await Promise.all(merged.map((t) => upsertTrip(uid, t)));
-
-      // 只有在同步成功後，才可以清空本地資料。
-      localStorage.removeItem(STORAGE_KEY);
-    } catch (e) {
-      console.error("[tripStore] migration 失敗，保留 localStorage 待重試", e);
-    }
-
-    // 2. 訂閱：之後 trips 一律從雲端 onSnapshot 覆蓋
+    // 1. 訂閱雲端資料，覆蓋 trips.value。
     unsubscribe = subscribeTrips(uid, (cloudTrips) => {
       trips.value = cloudTrips;
     });
+
+    // 2. migration：將 localStorage 的資料與雲端資料合併，並寫回雲端
+    // 若 localStorage 沒有資料，則跳過 migration。
+    if (localTrips.length > 0) {
+      try {
+        const cloud = await fetchAllTrips(uid);
+        const merged = mergeTrips(localTrips, cloud);
+        await Promise.all(merged.map((t) => upsertTrip(uid, t)));
+
+        // 只有在同步成功後，才可以清空本地資料。
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (e) {
+        console.error(
+          "[tripStore] migration 失敗，保留 localStorage 待重試",
+          e,
+        );
+      }
+    }
   }
 
   async function handleLogout() {
