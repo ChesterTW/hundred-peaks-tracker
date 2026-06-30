@@ -31,8 +31,15 @@ const dailyList = computed(() => {
     min: daily.temperature_2m_min[index],
     max: daily.temperature_2m_max[index],
     rain: daily.precipitation_probability_max[index],
+    sunrise: dateToLabel(daily.sunrise[index]),
+    sunset: dateToLabel(daily.sunset[index]),
   }));
 });
+
+function dateToLabel(date: string): string {
+  const d = new Date(date);
+  return `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
+}
 </script>
 
 <template>
@@ -70,6 +77,11 @@ const dailyList = computed(() => {
       <div class="flex-1">
         <p class="text-sm font-medium text-gray-900">{{ day.label }}</p>
         <p class="text-xs text-gray-500">{{ day.weather.label }}</p>
+      </div>
+
+      <div>
+        <p class="text-xs text-yellow-500">日出：{{ day.sunrise }}</p>
+        <p class="text-xs text-orange-500">日落：{{ day.sunset }}</p>
       </div>
 
       <div class="text-right">
