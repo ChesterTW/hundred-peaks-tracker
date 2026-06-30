@@ -126,7 +126,7 @@ watch(showPeakName, (newVal) => {
   }
 });
 
-watch(filteredPeaks, () => {
+watch([filteredPeaks, completedPeakIds], () => {
   drawmarkers();
 });
 
