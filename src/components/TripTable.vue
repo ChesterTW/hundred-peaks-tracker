@@ -5,10 +5,13 @@ import { usePeakNames } from "../composables/usePeakNames";
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 import type { Trip } from "../types";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "../stores/authStore";
+import { storeToRefs } from "pinia";
 
 const store = useTripStore();
 const { deleteTrip } = store;
 const { peakNames } = usePeakNames();
+const { isAuthReady } = storeToRefs(useAuthStore());
 
 const router = useRouter();
 
@@ -113,9 +116,11 @@ function goToEditTrip(id: string) {
         <tr v-if="filteredTrips.length === 0">
           <td colspan="4" class="px-4 py-8 text-center text-gray-400">
             {{
-              trips.length === 0
-                ? "還沒有任何行程紀錄"
-                : "沒有符合條件的行程紀錄"
+              !isAuthReady
+                ? "驗證中..."
+                : trips.length === 0
+                  ? "還沒有任何行程紀錄"
+                  : "沒有符合條件的行程紀錄"
             }}
           </td>
         </tr>

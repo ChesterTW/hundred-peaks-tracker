@@ -5,7 +5,7 @@ import TripTable from "../components/TripTable.vue";
 import { useAuthStore } from "../stores/authStore";
 
 const authStore = useAuthStore();
-const { user } = storeToRefs(authStore);
+const { user, isAuthReady } = storeToRefs(authStore);
 const store = useTripStore();
 const { activeTrips } = storeToRefs(store);
 </script>
@@ -20,8 +20,12 @@ const { activeTrips } = storeToRefs(store);
         <span>已登入：{{ user.email }}</span>
         <button @click="authStore.logout()">登出</button>
       </template>
+      <template v-else-if="!isAuthReady">
+        <span>驗證中...</span>
+      </template>
       <template v-else>
-        <button @click="authStore.login()">Google 登入</button>
+        <span>未登入</span>
+        <button @click="authStore.login()">登入</button>
       </template>
     </div>
 

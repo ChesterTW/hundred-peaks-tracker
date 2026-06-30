@@ -11,9 +11,11 @@ import { auth } from "../firebase";
 
 export const useAuthStore = defineStore("auth", () => {
   const user = ref<User | null>(null);
+  const isAuthReady = ref(false);
 
   onAuthStateChanged(auth, (u) => {
     user.value = u;
+    isAuthReady.value = true;
   });
 
   async function login() {
@@ -24,5 +26,5 @@ export const useAuthStore = defineStore("auth", () => {
     await signOut(auth);
   }
 
-  return { user, login, logout };
+  return { user, isAuthReady, login, logout };
 });
