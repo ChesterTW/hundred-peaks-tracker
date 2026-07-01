@@ -8,7 +8,7 @@ const props = defineProps<{
   peak: Peak | undefined;
 }>();
 
-const { weather, loading, error, fetchWeather } = useWeather(
+const { weather, airQuality, loading, error, fetchWeather } = useWeather(
   () => props.peak?.lat,
   () => props.peak?.lng,
 );
@@ -30,9 +30,22 @@ const dailyList = computed(() => {
     weather: getWeatherInfo(daily.weather_code[index]),
     min: daily.temperature_2m_min[index],
     max: daily.temperature_2m_max[index],
-    rain: daily.precipitation_probability_max[index],
+    rain: daily.precipitation_sum[index],
     sunrise: dateToLabel(daily.sunrise[index]),
     sunset: dateToLabel(daily.sunset[index]),
+  }));
+});
+
+const hourlyList = computed(() => {
+  const hourly = weather.value?.hourly;
+  if (!hourly) return [];
+
+  return hourly.time.map((time: string, index: number) => ({
+    time,
+    label: dateToLabel(time),
+    weather: getWeatherInfo(hourly.weather_code[index]),
+    temp: hourly.temperature_2m[index],
+    rain: hourly.precipitation[index],
   }));
 });
 
@@ -40,6 +53,45 @@ function dateToLabel(date: string): string {
   const d = new Date(date);
   return `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
 }
+
+// US AQI 分級
+function aqiLevel(aqi: number): { label: string; color: string } {
+  if (aqi <= 50) return { label: "良好", color: "text-green-600" };
+  if (aqi <= 100) return { label: "普通", color: "text-yellow-600" };
+  if (aqi <= 150) return { label: "敏感族群不健康", color: "text-orange-600" };
+  return { label: "不健康", color: "text-red-600" };
+}
+
+// 紫外線分級
+function uvLevel(uv: number): { label: string; color: string } {
+  if (uv <= 2) return { label: "低量級", color: "text-green-600" };
+  if (uv <= 7) return { label: "中量級", color: "text-yellow-600" };
+  if (uv >= 8) return { label: "高量級", color: "text-orange-600" };
+  return { label: "過量級", color: "text-red-600" };
+}
+
+// 今日彙總：混合 daily[0]（今天）、current（即時）與空氣品質 API
+const summary = computed(() => {
+  const daily = weather.value?.daily;
+  const current = weather.value?.current;
+  if (!daily || !current) return null;
+
+  const aqi = airQuality.value?.current.us_aqi ?? null;
+  return {
+    rain: daily.precipitation_sum[0],
+    sunrise: dateToLabel(daily.sunrise[0]),
+    sunset: dateToLabel(daily.sunset[0]),
+    humidity: current.relative_humidity_2m,
+    pressure: current.surface_pressure,
+    aqi,
+    aqiInfo: aqi != null ? aqiLevel(aqi) : null,
+    uvIndex: airQuality.value?.current.uv_index ?? null,
+    uvInfo:
+      airQuality.value?.current.uv_index != null
+        ? uvLevel(airQuality.value.current.uv_index)
+        : null,
+  };
+});
 </script>
 
 <template>
@@ -67,29 +119,104 @@ function dateToLabel(date: string): string {
 
   <!-- 天氣列表 -->
   <div v-else-if="weather" class="space-y-2">
+    <!-- 今日彙總 -->
     <div
-      v-for="day in dailyList"
+      v-if="summary"
+      class="grid grid-cols-3 gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100"
+    >
+      <div>
+        <p class="text-xs text-gray-500">降水</p>
+        <p class="text-sm font-semibold text-gray-900">{{ summary.rain }} mm</p>
+      </div>
+      <div>
+        <p class="text-xs text-gray-500">濕度</p>
+        <p class="text-sm font-semibold text-gray-900">
+          {{ summary.humidity }}%
+        </p>
+      </div>
+      <div>
+        <p class="text-xs text-gray-500">氣壓</p>
+        <p class="text-sm font-semibold text-gray-900">
+          {{ Math.round(summary.pressure) }} hPa
+        </p>
+      </div>
+      <div>
+        <p class="text-xs text-yellow-500">日出</p>
+        <p class="text-sm font-semibold text-gray-900">{{ summary.sunrise }}</p>
+      </div>
+      <div>
+        <p class="text-xs text-orange-500">日落</p>
+        <p class="text-sm font-semibold text-gray-900">{{ summary.sunset }}</p>
+      </div>
+      <div>
+        <p class="text-xs text-gray-500">空氣品質</p>
+        <p
+          v-if="summary.aqiInfo"
+          class="text-sm font-semibold"
+          :class="summary.aqiInfo.color"
+        >
+          {{ summary.aqi }} {{ summary.aqiInfo.label }}
+        </p>
+        <p v-else class="text-sm font-semibold text-gray-400">—</p>
+      </div>
+      <div>
+        <p class="text-xs text-gray-500">紫外線指數</p>
+        <p
+          v-if="summary.uvInfo"
+          class="text-sm font-semibold"
+          :class="summary.uvInfo.color"
+        >
+          {{ summary.uvIndex }} {{ summary.uvInfo.label }}
+        </p>
+        <p v-else class="text-sm font-semibold text-gray-400">—</p>
+      </div>
+    </div>
+
+    <!-- 未來 24 小時 -->
+    <div
+      class="flex gap-2 overflow-x-auto rounded-2xl bg-white p-3 shadow-sm ring-1 ring-gray-100"
+    >
+      <div
+        v-for="(hour, index) in hourlyList"
+        :key="hour.time"
+        class="flex shrink-0 flex-col items-center gap-1 px-2"
+      >
+        <span class="text-xs text-gray-500">{{
+          index === 0 ? "現在" : hour.label
+        }}</span>
+        <span class="text-2xl leading-none">{{ hour.weather.icon }}</span>
+        <span class="text-sm font-semibold text-gray-900">
+          {{ Math.round(hour.temp) }}°
+        </span>
+        <span class="text-xs text-sky-500">💧{{ hour.rain }}mm</span>
+      </div>
+    </div>
+
+    <!-- 未來三天 -->
+    <div
+      v-for="(day, index) in dailyList"
       :key="day.date"
       class="flex items-center gap-3 rounded-2xl bg-white p-3 shadow-sm ring-1 ring-gray-100"
     >
       <span class="text-3xl leading-none">{{ day.weather.icon }}</span>
 
       <div class="flex-1">
-        <p class="text-sm font-medium text-gray-900">{{ day.label }}</p>
+        <p class="text-sm font-medium text-gray-900">
+          {{ index === 0 ? "今天" : day.label }}
+        </p>
         <p class="text-xs text-gray-500">{{ day.weather.label }}</p>
-      </div>
-
-      <div>
-        <p class="text-xs text-yellow-500">日出：{{ day.sunrise }}</p>
-        <p class="text-xs text-orange-500">日落：{{ day.sunset }}</p>
       </div>
 
       <div class="text-right">
         <p class="text-sm font-semibold text-gray-900">
           {{ Math.round(day.min) }}° ～ {{ Math.round(day.max) }}°
         </p>
-        <p class="text-xs text-sky-500">💧 {{ day.rain }}%</p>
+        <p class="text-xs text-sky-500">💧 {{ day.rain }}mm</p>
       </div>
+    </div>
+
+    <div>
+      <p class="text-xs text-gray-500">天氣模型：JMA Seamless</p>
     </div>
   </div>
 </template>

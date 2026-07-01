@@ -41,7 +41,7 @@ const peak = computed(() => peaks.find((p) => p.id === props.peakId));
 
     <!-- 天氣區塊 -->
     <section class="space-y-2">
-      <h2 class="px-1 text-sm font-semibold text-gray-700">未來三天天氣</h2>
+      <h2 class="px-1 text-sm font-semibold text-gray-700">天氣預報</h2>
       <WeatherCard :peak="peak"></WeatherCard>
     </section>
   </div>
