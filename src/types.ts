@@ -8,6 +8,10 @@ export interface Peak {
   lng: number; // 經度
   aliases?: string[];
   difficulty: string; // 分級（難度）
+  rating: {
+    physical: number; // 體能等級
+    risk: number; // 風險等級
+  };
 }
 
 // 登山行程
