@@ -10,6 +10,7 @@ export const peaks: Peak[] = [
     lng: 120.957274,
     difficulty: "A",
     rating: { physical: 2, risk: 2 },
+    range: "玉山山脈",
   },
   {
     id: 2,
@@ -20,6 +21,7 @@ export const peaks: Peak[] = [
     lng: 121.231754,
     difficulty: "A",
     rating: { physical: 2, risk: 2 },
+    range: "雪山山脈",
   },
   {
     id: 3,
@@ -30,6 +32,7 @@ export const peaks: Peak[] = [
     lng: 120.965668,
     difficulty: "C+",
     rating: { physical: 3, risk: 2 },
+    range: "玉山山脈",
   },
   {
     id: 4,
@@ -40,6 +43,7 @@ export const peaks: Peak[] = [
     lng: 120.958784,
     difficulty: "C+",
     rating: { physical: 3, risk: 2 },
+    range: "玉山山脈",
   },
   {
     id: 5,
@@ -50,6 +54,7 @@ export const peaks: Peak[] = [
     lng: 120.959672,
     difficulty: "B",
     rating: { physical: 3, risk: 2 },
+    range: "玉山山脈",
   },
   {
     id: 6,
@@ -60,6 +65,7 @@ export const peaks: Peak[] = [
     lng: 121.05744,
     difficulty: "B",
     rating: { physical: 3, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 7,
@@ -70,6 +76,7 @@ export const peaks: Peak[] = [
     lng: 121.067236,
     difficulty: "C+",
     rating: { physical: 4, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 8,
@@ -80,6 +87,7 @@ export const peaks: Peak[] = [
     lng: 121.439359,
     difficulty: "B",
     rating: { physical: 3, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 9,
@@ -90,6 +98,7 @@ export const peaks: Peak[] = [
     lng: 120.963411,
     difficulty: "C",
     rating: { physical: 3, risk: 2 },
+    range: "玉山山脈",
   },
   {
     id: 10,
@@ -100,6 +109,7 @@ export const peaks: Peak[] = [
     lng: 121.240396,
     difficulty: "C+",
     rating: { physical: 3, risk: 2 },
+    range: "雪山山脈",
   },
   {
     id: 11,
@@ -110,6 +120,7 @@ export const peaks: Peak[] = [
     lng: 121.416203,
     difficulty: "C+",
     rating: { physical: 3, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 12,
@@ -120,6 +131,7 @@ export const peaks: Peak[] = [
     lng: 120.911717,
     difficulty: "C",
     rating: { physical: 3, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 13,
@@ -130,6 +142,7 @@ export const peaks: Peak[] = [
     lng: 121.038618,
     difficulty: "B",
     rating: { physical: 3, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 14,
@@ -140,6 +153,7 @@ export const peaks: Peak[] = [
     lng: 121.450661,
     difficulty: "B",
     rating: { physical: 3, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 15,
@@ -150,6 +164,7 @@ export const peaks: Peak[] = [
     lng: 121.092082,
     difficulty: "C+",
     rating: { physical: 5, risk: 4 },
+    range: "中央山脈",
   },
   {
     id: 16,
@@ -160,6 +175,7 @@ export const peaks: Peak[] = [
     lng: 121.334539,
     difficulty: "B",
     rating: { physical: 2, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 17,
@@ -170,6 +186,7 @@ export const peaks: Peak[] = [
     lng: 120.992423,
     difficulty: "A",
     rating: { physical: 2, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 18,
@@ -180,6 +197,7 @@ export const peaks: Peak[] = [
     lng: 121.200492,
     difficulty: "B",
     rating: { physical: 3, risk: 2 },
+    range: "雪山山脈",
   },
   {
     id: 19,
@@ -190,6 +208,7 @@ export const peaks: Peak[] = [
     lng: 120.975757,
     difficulty: "C",
     rating: { physical: 4, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 20,
@@ -200,6 +219,7 @@ export const peaks: Peak[] = [
     lng: 121.117171,
     difficulty: "C+",
     rating: { physical: 4, risk: 4 },
+    range: "中央山脈",
   },
   {
     id: 21,
@@ -210,6 +230,7 @@ export const peaks: Peak[] = [
     lng: 121.323234,
     difficulty: "B",
     rating: { physical: 2, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 22,
@@ -220,6 +241,7 @@ export const peaks: Peak[] = [
     lng: 121.437171,
     difficulty: "B",
     rating: { physical: 3, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 23,
@@ -230,6 +252,7 @@ export const peaks: Peak[] = [
     lng: 121.121182,
     difficulty: "C",
     rating: { physical: 3, risk: 3 },
+    range: "雪山山脈",
   },
   {
     id: 24,
@@ -240,6 +263,7 @@ export const peaks: Peak[] = [
     lng: 121.266816,
     difficulty: "B",
     rating: { physical: 3, risk: 2 },
+    range: "雪山山脈",
   },
   {
     id: 25,
@@ -250,6 +274,7 @@ export const peaks: Peak[] = [
     lng: 120.934205,
     difficulty: "A",
     rating: { physical: 3, risk: 2 },
+    range: "玉山山脈",
   },
   {
     id: 26,
@@ -260,6 +285,7 @@ export const peaks: Peak[] = [
     lng: 121.140723,
     difficulty: "C",
     rating: { physical: 3, risk: 3 },
+    range: "雪山山脈",
   },
   {
     id: 27,
@@ -270,6 +296,7 @@ export const peaks: Peak[] = [
     lng: 121.434582,
     difficulty: "C",
     rating: { physical: 3, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 28,
@@ -280,6 +307,7 @@ export const peaks: Peak[] = [
     lng: 121.028671,
     difficulty: "A",
     rating: { physical: 2, risk: 1 },
+    range: "中央山脈",
   },
   {
     id: 29,
@@ -290,6 +318,7 @@ export const peaks: Peak[] = [
     lng: 121.258031,
     difficulty: "A",
     rating: { physical: 4, risk: 2 },
+    range: "雪山山脈",
   },
   {
     id: 30,
@@ -300,6 +329,7 @@ export const peaks: Peak[] = [
     lng: 121.081564,
     difficulty: "C+",
     rating: { physical: 5, risk: 4 },
+    range: "中央山脈",
   },
   {
     id: 31,
@@ -310,6 +340,7 @@ export const peaks: Peak[] = [
     lng: 121.384663,
     difficulty: "C+",
     rating: { physical: 3, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 32,
@@ -320,6 +351,7 @@ export const peaks: Peak[] = [
     lng: 121.43782,
     difficulty: "C",
     rating: { physical: 3, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 33,
@@ -330,6 +362,7 @@ export const peaks: Peak[] = [
     lng: 121.173967,
     difficulty: "C+",
     rating: { physical: 4, risk: 4 },
+    range: "中央山脈",
   },
   {
     id: 34,
@@ -340,6 +373,7 @@ export const peaks: Peak[] = [
     lng: 121.281587,
     difficulty: "A",
     rating: { physical: 1, risk: 1 },
+    range: "中央山脈",
   },
   {
     id: 35,
@@ -350,6 +384,7 @@ export const peaks: Peak[] = [
     lng: 121.281033,
     difficulty: "A",
     rating: { physical: 1, risk: 1 },
+    range: "中央山脈",
   },
   {
     id: 36,
@@ -360,6 +395,7 @@ export const peaks: Peak[] = [
     lng: 121.252049,
     difficulty: "B",
     rating: { physical: 4, risk: 2 },
+    range: "雪山山脈",
   },
   {
     id: 37,
@@ -370,6 +406,7 @@ export const peaks: Peak[] = [
     lng: 121.271166,
     difficulty: "A",
     rating: { physical: 1, risk: 1 },
+    range: "中央山脈",
   },
   {
     id: 38,
@@ -380,6 +417,7 @@ export const peaks: Peak[] = [
     lng: 120.92491,
     difficulty: "C",
     rating: { physical: 3, risk: 2 },
+    range: "玉山山脈",
   },
   {
     id: 39,
@@ -390,6 +428,7 @@ export const peaks: Peak[] = [
     lng: 121.347162,
     difficulty: "A",
     rating: { physical: 4, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 40,
@@ -400,6 +439,7 @@ export const peaks: Peak[] = [
     lng: 121.115822,
     difficulty: "C",
     rating: { physical: 4, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 41,
@@ -410,6 +450,7 @@ export const peaks: Peak[] = [
     lng: 121.010532,
     difficulty: "C",
     rating: { physical: 4, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 42,
@@ -420,6 +461,7 @@ export const peaks: Peak[] = [
     lng: 121.279809,
     difficulty: "A",
     rating: { physical: 3, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 43,
@@ -430,6 +472,7 @@ export const peaks: Peak[] = [
     lng: 121.278083,
     difficulty: "C",
     rating: { physical: 3, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 44,
@@ -440,6 +483,7 @@ export const peaks: Peak[] = [
     lng: 121.108962,
     difficulty: "B",
     rating: { physical: 2, risk: 2 },
+    range: "雪山山脈",
   },
   {
     id: 45,
@@ -450,6 +494,7 @@ export const peaks: Peak[] = [
     lng: 121.127384,
     difficulty: "C",
     rating: { physical: 4, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 46,
@@ -460,6 +505,7 @@ export const peaks: Peak[] = [
     lng: 121.009592,
     difficulty: "A",
     rating: { physical: 3, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 47,
@@ -470,6 +516,7 @@ export const peaks: Peak[] = [
     lng: 121.213543,
     difficulty: "C",
     rating: { physical: 4, risk: 4 },
+    range: "中央山脈",
   },
   {
     id: 48,
@@ -480,6 +527,7 @@ export const peaks: Peak[] = [
     lng: 121.304898,
     difficulty: "A",
     rating: { physical: 3, risk: 1 },
+    range: "雪山山脈",
   },
   {
     id: 49,
@@ -490,6 +538,7 @@ export const peaks: Peak[] = [
     lng: 121.187996,
     difficulty: "B",
     rating: { physical: 3, risk: 2 },
+    range: "雪山山脈",
   },
   {
     id: 50,
@@ -500,6 +549,7 @@ export const peaks: Peak[] = [
     lng: 121.175055,
     difficulty: "C",
     rating: { physical: 3, risk: 2 },
+    range: "雪山山脈",
   },
   {
     id: 51,
@@ -510,6 +560,7 @@ export const peaks: Peak[] = [
     lng: 121.28814,
     difficulty: "A",
     rating: { physical: 3, risk: 1 },
+    range: "雪山山脈",
   },
   {
     id: 52,
@@ -520,6 +571,7 @@ export const peaks: Peak[] = [
     lng: 121.243603,
     difficulty: "A",
     rating: { physical: 4, risk: 1 },
+    range: "雪山山脈",
   },
   {
     id: 53,
@@ -530,6 +582,7 @@ export const peaks: Peak[] = [
     lng: 120.874204,
     difficulty: "C",
     rating: { physical: 3, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 54,
@@ -540,6 +593,7 @@ export const peaks: Peak[] = [
     lng: 121.251324,
     difficulty: "A",
     rating: { physical: 3, risk: 1 },
+    range: "雪山山脈",
   },
   {
     id: 55,
@@ -550,6 +604,7 @@ export const peaks: Peak[] = [
     lng: 121.420976,
     difficulty: "C",
     rating: { physical: 2, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 56,
@@ -560,6 +615,7 @@ export const peaks: Peak[] = [
     lng: 121.138989,
     difficulty: "C",
     rating: { physical: 4, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 57,
@@ -570,6 +626,7 @@ export const peaks: Peak[] = [
     lng: 120.99808,
     difficulty: "C",
     rating: { physical: 4, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 58,
@@ -580,6 +637,7 @@ export const peaks: Peak[] = [
     lng: 121.19605,
     difficulty: "C",
     rating: { physical: 4, risk: 4 },
+    range: "中央山脈",
   },
   {
     id: 59,
@@ -590,6 +648,7 @@ export const peaks: Peak[] = [
     lng: 120.962368,
     difficulty: "A",
     rating: { physical: 1, risk: 1 },
+    range: "玉山山脈",
   },
   {
     id: 60,
@@ -600,6 +659,7 @@ export const peaks: Peak[] = [
     lng: 121.195221,
     difficulty: "C",
     rating: { physical: 4, risk: 4 },
+    range: "中央山脈",
   },
   {
     id: 61,
@@ -610,6 +670,7 @@ export const peaks: Peak[] = [
     lng: 121.351647,
     difficulty: "B",
     rating: { physical: 3, risk: 1 },
+    range: "中央山脈",
   },
   {
     id: 62,
@@ -620,6 +681,7 @@ export const peaks: Peak[] = [
     lng: 121.260253,
     difficulty: "C",
     rating: { physical: 3, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 63,
@@ -630,6 +692,7 @@ export const peaks: Peak[] = [
     lng: 121.185522,
     difficulty: "C",
     rating: { physical: 4, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 64,
@@ -640,6 +703,7 @@ export const peaks: Peak[] = [
     lng: 121.170202,
     difficulty: "C",
     rating: { physical: 3, risk: 2 },
+    range: "雪山山脈",
   },
   {
     id: 65,
@@ -650,6 +714,7 @@ export const peaks: Peak[] = [
     lng: 121.153265,
     difficulty: "C+",
     rating: { physical: 4, risk: 4 },
+    range: "中央山脈",
   },
   {
     id: 66,
@@ -660,6 +725,7 @@ export const peaks: Peak[] = [
     lng: 120.87612,
     difficulty: "C",
     rating: { physical: 3, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 67,
@@ -670,6 +736,7 @@ export const peaks: Peak[] = [
     lng: 121.342934,
     difficulty: "B",
     rating: { physical: 3, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 68,
@@ -680,6 +747,7 @@ export const peaks: Peak[] = [
     lng: 121.05432,
     difficulty: "C+",
     rating: { physical: 5, risk: 4 },
+    range: "中央山脈",
   },
   {
     id: 69,
@@ -690,6 +758,7 @@ export const peaks: Peak[] = [
     lng: 121.160214,
     difficulty: "C",
     rating: { physical: 4, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 70,
@@ -700,6 +769,7 @@ export const peaks: Peak[] = [
     lng: 121.284587,
     difficulty: "A",
     rating: { physical: 1, risk: 1 },
+    range: "中央山脈",
   },
   {
     id: 71,
@@ -710,6 +780,7 @@ export const peaks: Peak[] = [
     lng: 120.917662,
     difficulty: "A",
     rating: { physical: 2, risk: 2 },
+    range: "玉山山脈",
   },
   {
     id: 72,
@@ -720,6 +791,7 @@ export const peaks: Peak[] = [
     lng: 120.94222,
     difficulty: "A",
     rating: { physical: 1, risk: 1 },
+    range: "中央山脈",
   },
   {
     id: 73,
@@ -730,6 +802,7 @@ export const peaks: Peak[] = [
     lng: 121.485633,
     difficulty: "C",
     rating: { physical: 3, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 74,
@@ -740,6 +813,7 @@ export const peaks: Peak[] = [
     lng: 121.01322,
     difficulty: "C",
     rating: { physical: 4, risk: 4 },
+    range: "中央山脈",
   },
   {
     id: 75,
@@ -750,6 +824,7 @@ export const peaks: Peak[] = [
     lng: 121.272073,
     difficulty: "A",
     rating: { physical: 2, risk: 1 },
+    range: "雪山山脈",
   },
   {
     id: 76,
@@ -760,6 +835,7 @@ export const peaks: Peak[] = [
     lng: 121.285918,
     difficulty: "A",
     rating: { physical: 3, risk: 1 },
+    range: "中央山脈",
   },
   {
     id: 77,
@@ -770,6 +846,7 @@ export const peaks: Peak[] = [
     lng: 120.959457,
     difficulty: "A",
     rating: { physical: 1, risk: 1 },
+    range: "中央山脈",
   },
   {
     id: 78,
@@ -780,6 +857,7 @@ export const peaks: Peak[] = [
     lng: 120.911328,
     difficulty: "C",
     rating: { physical: 3, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 79,
@@ -790,6 +868,7 @@ export const peaks: Peak[] = [
     lng: 121.078059,
     difficulty: "B",
     rating: { physical: 3, risk: 3 },
+    range: "雪山山脈",
   },
   {
     id: 80,
@@ -800,6 +879,7 @@ export const peaks: Peak[] = [
     lng: 121.309867,
     difficulty: "A",
     rating: { physical: 3, risk: 1 },
+    range: "中央山脈",
   },
   {
     id: 81,
@@ -810,6 +890,7 @@ export const peaks: Peak[] = [
     lng: 121.389819,
     difficulty: "C",
     rating: { physical: 3, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 82,
@@ -820,6 +901,7 @@ export const peaks: Peak[] = [
     lng: 121.244525,
     difficulty: "B",
     rating: { physical: 2, risk: 1 },
+    range: "中央山脈",
   },
   {
     id: 83,
@@ -830,6 +912,7 @@ export const peaks: Peak[] = [
     lng: 121.417448,
     difficulty: "B",
     rating: { physical: 3, risk: 1 },
+    range: "中央山脈",
   },
   {
     id: 84,
@@ -840,6 +923,7 @@ export const peaks: Peak[] = [
     lng: 121.321288,
     difficulty: "A",
     rating: { physical: 3, risk: 1 },
+    range: "雪山山脈",
   },
   {
     id: 85,
@@ -850,6 +934,7 @@ export const peaks: Peak[] = [
     lng: 120.900042,
     difficulty: "A",
     rating: { physical: 1, risk: 1 },
+    range: "中央山脈",
   },
   {
     id: 86,
@@ -860,6 +945,7 @@ export const peaks: Peak[] = [
     lng: 121.216197,
     difficulty: "A",
     rating: { physical: 4, risk: 1 },
+    range: "雪山山脈",
   },
   {
     id: 87,
@@ -870,6 +956,7 @@ export const peaks: Peak[] = [
     lng: 121.274785,
     difficulty: "C",
     rating: { physical: 3, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 88,
@@ -880,6 +967,7 @@ export const peaks: Peak[] = [
     lng: 121.388298,
     difficulty: "C",
     rating: { physical: 2, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 89,
@@ -890,6 +978,7 @@ export const peaks: Peak[] = [
     lng: 121.466602,
     difficulty: "C",
     rating: { physical: 2, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 90,
@@ -900,6 +989,7 @@ export const peaks: Peak[] = [
     lng: 120.76141,
     difficulty: "A",
     rating: { physical: 2, risk: 1 },
+    range: "中央山脈",
   },
   {
     id: 91,
@@ -910,6 +1000,7 @@ export const peaks: Peak[] = [
     lng: 120.947166,
     difficulty: "A",
     rating: { physical: 3, risk: 1 },
+    range: "玉山山脈",
   },
   {
     id: 92,
@@ -920,6 +1011,7 @@ export const peaks: Peak[] = [
     lng: 121.445703,
     difficulty: "C",
     rating: { physical: 2, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 93,
@@ -930,6 +1022,7 @@ export const peaks: Peak[] = [
     lng: 121.026793,
     difficulty: "C",
     rating: { physical: 4, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 94,
@@ -940,6 +1033,7 @@ export const peaks: Peak[] = [
     lng: 121.271952,
     difficulty: "C",
     rating: { physical: 3, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 95,
@@ -950,6 +1044,7 @@ export const peaks: Peak[] = [
     lng: 121.266118,
     difficulty: "C",
     rating: { physical: 3, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 96,
@@ -960,6 +1055,7 @@ export const peaks: Peak[] = [
     lng: 121.379765,
     difficulty: "A",
     rating: { physical: 2, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 97,
@@ -970,6 +1066,7 @@ export const peaks: Peak[] = [
     lng: 121.032528,
     difficulty: "C",
     rating: { physical: 4, risk: 3 },
+    range: "中央山脈",
   },
   {
     id: 98,
@@ -980,6 +1077,7 @@ export const peaks: Peak[] = [
     lng: 121.0787,
     difficulty: "C",
     rating: { physical: 4, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 99,
@@ -990,6 +1088,7 @@ export const peaks: Peak[] = [
     lng: 121.239549,
     difficulty: "B",
     rating: { physical: 5, risk: 2 },
+    range: "中央山脈",
   },
   {
     id: 100,
@@ -1000,5 +1099,6 @@ export const peaks: Peak[] = [
     lng: 120.988479,
     difficulty: "C",
     rating: { physical: 3, risk: 2 },
+    range: "玉山山脈",
   },
 ];

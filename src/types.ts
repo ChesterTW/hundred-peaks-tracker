@@ -4,6 +4,7 @@ export interface Peak {
   name: string;
   elevation: number;
   region: string;
+  range: string; // 山脈
   lat: number; // 緯度
   lng: number; // 經度
   aliases?: string[];
