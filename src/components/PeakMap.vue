@@ -9,8 +9,11 @@ import { useMapFocus } from "../composables/useMapFocus";
 import router from "../router";
 import iconUrl from "../assets/location-pin.png";
 import trails from "../data/trails.json";
-import type { BaseLayer } from "../types";
+import type { BaseLayer, VisibilityState } from "../types";
 import { baseLayers } from "../data/baseLayers";
+import { Layers, Filter } from "@lucide/vue";
+import MapDisplayPanel from "./home/MapDisplayPanel.vue";
+import MapVisibilityPanel from "./home/MapVisibilityPanel.vue";
 
 // 2. 常數 / 靜態物件（不會變的：HIDE_THRESHOLD_PX、pinIcon、trailLayer、markerGroup）
 const HIDE_THRESHOLD_PX = 40; // 螢幕像素門檻，用於 decluttering，避免 marker 重疊。
@@ -80,20 +83,26 @@ const {
 } = usePeakFilter();
 const { focusedPeakId, hoveredPeakId, focusedTrailId } = useMapFocus();
 
-// 4. 模板 ref（mapEl、filterEl）+ map 實例
+// 4. 模板 ref + map 實例
 let map: L.Map;
-const filterEl = ref<HTMLElement>();
 const mapEl = ref<HTMLElement>();
+const bottomControlsEl = ref<HTMLElement>();
 let currentTileLayer: L.TileLayer;
 
 // 5. reactive 狀態（ref）
 const openCompletion = ref(false);
-const showTrails = ref(true);
-const showPeakName = ref(true);
 const openDifficulty = ref(false);
 const openLayer = ref(false);
 const zoomLevel = ref(0);
-const currentLayer = ref<BaseLayer>(baseLayers[0]); // 預設圖層為 CARTO Light Map
+const currentLayer = ref<BaseLayer>(baseLayers[0]);
+const visibility = ref<VisibilityState>({
+  completedMarkers: true,
+  incompleteMarkers: true,
+  peakNames: false,
+  trails: false,
+  trailNames: false,
+});
+const activePanel = ref<"layer" | "visibility" | null>(null);
 
 // 6. computed（衍生狀態）
 const completionLabel = computed(() => {
@@ -106,25 +115,34 @@ const difficultyLabel = computed(() =>
 );
 
 // 7. watch（副作用）
-watch(showTrails, (newVal) => {
-  if (newVal) {
-    trailLayer.addTo(map);
-  } else {
-    map.removeLayer(trailLayer);
-  }
-});
+watch(
+  () => visibility.value.trails,
+  (newVal) => {
+    if (newVal) {
+      trailLayer.addTo(map);
+    } else {
+      map.removeLayer(trailLayer);
+    }
+  },
+);
 
-watch(showPeakName, (newVal) => {
-  if (newVal) {
-    markerGroup.eachLayer((layer: any) => {
-      layer.openTooltip();
-    });
-  } else {
-    markerGroup.eachLayer((layer: any) => {
-      layer.closeTooltip();
-    });
-  }
-});
+watch(
+  () => visibility.value.trailNames,
+  (newVal) => {
+    map.getContainer().classList.toggle("hide-trail-labels", !newVal);
+  },
+);
+
+watch(
+  () => [
+    visibility.value.completedMarkers,
+    visibility.value.incompleteMarkers,
+    visibility.value.peakNames,
+  ],
+  () => {
+    drawmarkers();
+  },
+);
 
 watch([filteredPeaks, completedPeakIds], () => {
   drawmarkers();
@@ -172,34 +190,25 @@ onMounted(() => {
     maxBounds: taiwanBounds,
     maxBoundsViscosity: 1.0,
     minZoom: 7,
+    zoomControl: false,
   }).setView([23.8, 121], 10); // 中心放台灣
-
-  map.zoomControl.setPosition("bottomright");
 
   applyBaseLayer(currentLayer.value);
 
-  // // 加 OSM 圖磚當底圖
-  // L.tileLayer(
-  //   // "https://wmts.nlsc.gov.tw/wmts/PHOTO2/default/EPSG:3857/{z}/{y}/{x}", // 衛星圖（台灣官方國土測繪中心所拍攝的航照，山區解析度比 Esri 更高）
-  //   // "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", // 衛星圖（Esri World Imagery）
-  //   // "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", // OSM Standard Map
-  //   "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // CARTO Light Map
-  //   {
-  //     attribution: "© OpenStreetMap | © CARTO",
-  //   },
-  // ).addTo(map);
-
-  L.control.scale({ imperial: false, position: "bottomright" }).addTo(map);
-
-  trailLayer.addTo(map);
+  if (visibility.value.trails) {
+    trailLayer.addTo(map);
+  }
   map.on("zoomend", updateTrailLabels);
+  map.on("click", () => {
+    activePanel.value = null;
+  });
 
   markerGroup.addTo(map);
   drawmarkers();
 
-  if (filterEl.value) {
-    L.DomEvent.disableClickPropagation(filterEl.value);
-    L.DomEvent.disableScrollPropagation(filterEl.value);
+  if (bottomControlsEl.value) {
+    L.DomEvent.disableClickPropagation(bottomControlsEl.value);
+    L.DomEvent.disableScrollPropagation(bottomControlsEl.value);
   }
 });
 
@@ -250,6 +259,9 @@ function drawmarkers() {
 
     const done = completedPeakIds.value.has(peak.id);
 
+    if (done && !visibility.value.completedMarkers) return;
+    if (!done && !visibility.value.incompleteMarkers) return;
+
     L.marker([peak.lat, peak.lng], {
       icon: L.divIcon({
         className: "custom-peak-icon",
@@ -268,7 +280,7 @@ function drawmarkers() {
       }),
     })
       .bindTooltip(peak.name, {
-        permanent: true,
+        permanent: visibility.value.peakNames,
         direction: "right",
         className: "peak-label",
       })
@@ -311,125 +323,51 @@ function applyBaseLayer(layer: BaseLayer) {
     maxZoom: layer.maxZoom || 19,
   }).addTo(map);
 }
+
+function handleLayerChange(id: string) {
+  const found = baseLayers.find((l) => l.id === id);
+  if (found) currentLayer.value = found;
+}
 </script>
 
 <template>
   <div class="relative">
     <div ref="mapEl" class="h-screen w-full"></div>
-    <div ref="filterEl" class="absolute top-4 left-4 z-1000 flex gap-2">
+
+    <!-- 底圖切換 + 顯示控制 -->
+    <div
+      ref="bottomControlsEl"
+      class="absolute flex flex-col gap-6 right-7 bottom-7 z-1000"
+    >
       <div class="relative">
         <button
-          @click="openCompletion = !openCompletion"
-          class="hover:bg-gray-100 active:bg-gray-200 transition-colors bg-white shadow rounded px-3 py-2 text-sm"
+          @click="activePanel = activePanel === 'layer' ? null : 'layer'"
+          class="hover:bg-gray-100 active:bg-gray-200 transition-colors bg-white shadow rounded-lg text-sm"
         >
-          完成狀態：{{ completionLabel }}
+          <Layers class="m-3 text-neutral-700" :size="24" />
         </button>
-
-        <div
-          v-if="openCompletion"
-          class="absolute mt-1 bg-white shadow rounded p-1 text-sm"
-        >
-          <button
-            class="hover:bg-gray-100 active:bg-gray-100 block w-full text-left px-2 py-1"
-            :class="{ 'bg-green-100': completion === 'all' }"
-            @click="handleCompletionClick('all')"
-          >
-            全部
-          </button>
-          <button
-            class="hover:bg-gray-100 active:bg-gray-100 block w-full text-left px-2 py-1"
-            :class="{ 'bg-green-100': completion === 'completed' }"
-            @click="handleCompletionClick('completed')"
-          >
-            已登頂
-          </button>
-          <button
-            class="hover:bg-gray-100 active:bg-gray-100 block w-full text-left px-2 py-1"
-            :class="{ 'bg-green-100': completion === 'incomplete' }"
-            @click="handleCompletionClick('incomplete')"
-          >
-            未登頂
-          </button>
-        </div>
+        <MapDisplayPanel
+          v-if="activePanel === 'layer'"
+          :modelValue="currentLayer.id"
+          @update:modelValue="handleLayerChange"
+          class="absolute bottom-0 right-full mr-6"
+        />
       </div>
-
       <div class="relative">
         <button
-          @click="openDifficulty = !openDifficulty"
-          class="hover:bg-gray-100 active:bg-gray-200 transition-colors bg-white shadow rounded px-3 py-2 text-sm"
+          @click="
+            activePanel = activePanel === 'visibility' ? null : 'visibility'
+          "
+          class="hover:bg-gray-100 active:bg-gray-200 transition-colors bg-white shadow rounded-lg text-sm"
         >
-          難度：{{ difficultyLabel }}
+          <Filter class="m-3 text-neutral-700" :size="24" />
         </button>
-
-        <div
-          v-if="openDifficulty"
-          class="absolute mt-1 bg-white shadow rounded p-1 text-sm"
-        >
-          <button
-            class="hover:bg-gray-100 active:bg-gray-100 block w-full text-left px-2 py-1"
-            :class="{ 'bg-green-100': difficulties.length === 0 }"
-            @click="difficulties = []"
-          >
-            全部
-          </button>
-
-          <button
-            v-for="level in difficultyLevels"
-            :key="level"
-            class="hover:bg-gray-100 active:bg-gray-100 block w-full text-left px-2 py-1"
-            :class="{ 'bg-green-100': difficulties.includes(level) }"
-            @click="toggleDifficulty(level)"
-          >
-            {{ difficulties.includes(level) ? "✓" : "　" }} 難度 {{ level }}
-          </button>
-        </div>
-      </div>
-
-      <button
-        @click="showTrails = !showTrails"
-        class="hover:bg-gray-100 active:bg-gray-200 transition-colors bg-white shadow rounded px-3 py-2 text-sm"
-      >
-        步道：{{ showTrails ? "顯示中" : "隱藏" }}
-      </button>
-
-      <button
-        @click="showPeakName = !showPeakName"
-        class="hover:bg-gray-100 active:bg-gray-200 transition-colors bg-white shadow rounded px-3 py-2 text-sm"
-      >
-        山峰名稱：{{ showPeakName ? "顯示中" : "隱藏" }}
-      </button>
-
-      <p class="bg-white shadow rounded px-3 py-2 text-sm">
-        縮放等級：{{ zoomLevel }}
-      </p>
-
-      <div class="relative">
-        <!-- 按鈕：顯示目前圖層名稱 -->
-        <button
-          @click="openLayer = !openLayer"
-          class="hover:bg-gray-100 active:bg-gray-200 transition-colors bg-white shadow rounded px-3 py-2 text-sm"
-        >
-          圖層：{{ currentLayer.name }}
-        </button>
-
-        <div
-          v-if="openLayer"
-          class="absolute mt-1 bg-white shadow rounded p-1 text-sm"
-        >
-          <button
-            v-for="layer in baseLayers"
-            :key="layer.id"
-            class="hover:bg-gray-100 active:bg-gray-100 block w-full text-left px-2 py-1"
-            :class="{ 'bg-green-100': currentLayer.id === layer.id }"
-            @click="
-              applyBaseLayer(layer);
-              openLayer = false;
-              currentLayer = layer;
-            "
-          >
-            {{ layer.name }}
-          </button>
-        </div>
+        <MapVisibilityPanel
+          v-if="activePanel === 'visibility'"
+          :modelValue="visibility"
+          @update:modelValue="visibility = $event"
+          class="absolute bottom-0 right-full mr-6"
+        />
       </div>
     </div>
   </div>
@@ -466,6 +404,10 @@ function applyBaseLayer(layer: BaseLayer) {
 }
 .show-minor .trail-label--minor {
   display: block;
+}
+
+.hide-trail-labels .trail-label {
+  display: none !important;
 }
 
 .custom-peak-icon {
