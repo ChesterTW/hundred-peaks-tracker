@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import {
   GoogleAuthProvider,
@@ -12,6 +12,7 @@ import { auth } from "../firebase";
 export const useAuthStore = defineStore("auth", () => {
   const user = ref<User | null>(null);
   const isAuthReady = ref(false);
+  const isLoggedIn = computed(() => isAuthReady.value && !!user.value);
 
   onAuthStateChanged(auth, (u) => {
     user.value = u;
@@ -26,5 +27,5 @@ export const useAuthStore = defineStore("auth", () => {
     await signOut(auth);
   }
 
-  return { user, isAuthReady, login, logout };
+  return { user, isAuthReady, login, logout, isLoggedIn };
 });
