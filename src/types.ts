@@ -31,6 +31,15 @@ export interface WeatherInfo {
   icon: string; // emoji
 }
 
+// 地圖顯示狀態
+export interface VisibilityState {
+  completedMarkers: boolean;
+  incompleteMarkers: boolean;
+  peakNames: boolean;
+  trails: boolean;
+  trailNames: boolean;
+}
+
 // 地圖圖層
 export interface BaseLayer {
   id: string; // 'carto' | 'osm' | 'esri' | 'nlsc-photo'
