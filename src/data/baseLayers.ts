@@ -5,7 +5,7 @@ export const baseLayers: BaseLayer[] = [
     id: "carto",
     name: "CARTO Light Map",
     url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    attribution: "© OpenStreetMap | © CARTO",
+    attribution: "© OpenStreetMap © CARTO",
     maxZoom: 20,
   },
   {
