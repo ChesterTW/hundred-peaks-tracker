@@ -1,34 +1,22 @@
 <script setup lang="ts">
 import type { Component } from "vue";
 import { ref } from "vue";
-import {
-  Home,
-  Mountain,
-  ClipboardList,
-  User,
-  LogInIcon,
-  LogOutIcon,
-} from "@lucide/vue";
-import { useRoute } from "vue-router";
+import { Home, Mountain, ClipboardList, User } from "@lucide/vue";
 import { useAuthStore } from "../stores/authStore";
 import { storeToRefs } from "pinia";
+import UserMenu from "./home/UserMenu.vue";
 
-const route = useRoute();
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
 
-const navItems: { icon: Component; to: string; name: string }[] = [
+type NavItem = { icon: Component; to: string; name: string };
+const navItems: NavItem[] = [
   { icon: Home, to: "/home", name: "home" },
   { icon: Mountain, to: "/peaks", name: "peaks" },
   { icon: ClipboardList, to: "/trips", name: "trips" },
 ];
 
-const authStore = useAuthStore();
-const { user, isAuthReady } = storeToRefs(authStore);
-
-const isOpen = ref(false);
-
-function isActive(name: string): boolean {
-  return !!name && route.name === name;
-}
+const isUserMenuOpen = ref(false);
 </script>
 
 <template>
@@ -48,12 +36,8 @@ function isActive(name: string): boolean {
           v-for="item in navItems"
           :key="item.to"
           :to="item.to"
-          class="flex items-center justify-center w-12 h-12 rounded-lg transition-colors duration-200"
-          :class="
-            isActive(item.name)
-              ? 'bg-primary-500 text-white'
-              : 'text-neutral-700'
-          "
+          class="flex items-center justify-center w-12 h-12 rounded-lg transition-colors duration-200 text-neutral-700"
+          active-class="bg-primary-500 text-white"
         >
           <component :is="item.icon" :size="24" />
         </router-link>
@@ -64,7 +48,7 @@ function isActive(name: string): boolean {
     <div class="relative">
       <div
         class="w-12 h-12 rounded-full shrink-0 overflow-hidden bg-neutral-300 cursor-pointer flex items-center justify-center"
-        @click="isOpen = !isOpen"
+        @click="isUserMenuOpen = !isUserMenuOpen"
       >
         <img
           v-if="user?.photoURL"
@@ -74,63 +58,8 @@ function isActive(name: string): boolean {
         <User v-else class="text-white" :size="24" />
       </div>
 
-      <!-- 懸浮視窗 -->
-      <div
-        v-if="isOpen"
-        class="absolute left-0 bottom-full mb-2 w-48 shadow-lg rounded-lg overflow-hidden"
-      >
-        <div class="p-1 bg-white rounded-lg">
-          <!-- 會員資訊 -->
-          <div class="px-3 py-2 rounded-lg gap-2">
-            <div v-if="isAuthReady && user" class="flex items-center gap-2">
-              <img
-                v-if="user.photoURL"
-                :src="user.photoURL"
-                class="w-6 h-6 rounded-full object-cover"
-              />
-              <div class="min-w-0">
-                <p class="text-sm font-medium text-neutral-700 truncate">
-                  {{ user.displayName ?? "使用者" }}
-                </p>
-                <p class="text-sm text-neutral-400 truncate">
-                  {{ user.email ?? "使用者" }}
-                </p>
-              </div>
-            </div>
-            <div v-else class="flex items-center gap-2">
-              <div
-                class="w-6 h-6 rounded-full bg-neutral-300 flex items-center justify-center"
-              >
-                <User class="text-white" :size="12" />
-              </div>
-
-              <p class="text-sm font-medium text-neutral-700">訪客</p>
-            </div>
-          </div>
-
-          <!-- 登入 / 登出按鈕 -->
-          <div
-            class="px-3 py-2 hover:bg-neutral-100 rounded-lg cursor-pointer text-sm font-medium"
-          >
-            <div
-              v-if="isAuthReady && user"
-              @click="authStore.logout()"
-              class="flex items-center gap-2"
-            >
-              <LogOutIcon :size="16" />
-              <p>登出</p>
-            </div>
-            <div
-              v-else
-              @click="authStore.login()"
-              class="flex items-center gap-2"
-            >
-              <LogInIcon v-if="!user" :size="16" />
-              <p>登入</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- 會員選單 -->
+      <user-menu v-if="isUserMenuOpen"></user-menu>
     </div>
   </aside>
 </template>
