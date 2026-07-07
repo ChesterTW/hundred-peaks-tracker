@@ -73,7 +73,7 @@ const completedInGroup = computed(
 
     <!-- 目前組別 -->
     <div
-      class="bg-neutral-50 flex items-center justify-between px-3 py-2 rounded-[10px]"
+      class="bg-white flex items-center justify-between px-3 py-2 rounded-md"
     >
       <div class="flex flex-col">
         <span class="text-xs text-neutral-400">目前組別</span>
