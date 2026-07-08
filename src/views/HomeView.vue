@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import PeakMap from "../components/PeakMap.vue";
 import StatCard from "../components/home/StatCard.vue";
 import RecentTripsCard from "../components/home/RecentTripsCard.vue";
@@ -6,8 +7,10 @@ import RecommendCard from "../components/home/RecommendCard.vue";
 import PeakDetailDrawer from "../components/PeakDetailDrawer.vue";
 import TrailDetailDrawer from "../components/TrailDetailDrawer.vue";
 import { useMapFocus } from "../composables/useMapFocus";
+import AddTripModal from "../components/addTrip/AddTripModal.vue";
 
 const { focusedPeakId, focusedTrailId } = useMapFocus();
+const isAddTripModalOpen = ref(false);
 </script>
 
 <template>
@@ -22,7 +25,7 @@ const { focusedPeakId, focusedTrailId } = useMapFocus();
 
     <!-- 左下：最近行程 Card -->
     <div class="absolute bottom-7 left-7 z-1500">
-      <RecentTripsCard />
+      <RecentTripsCard @openAddTripModal="isAddTripModalOpen = true" />
     </div>
 
     <!-- 右上：下一座百岳 Card -->
@@ -42,6 +45,11 @@ const { focusedPeakId, focusedTrailId } = useMapFocus();
       v-if="focusedTrailId !== null"
       :trailId="focusedTrailId"
       @close="focusedTrailId = null"
+    />
+
+    <AddTripModal
+      :open="isAddTripModalOpen"
+      @update:open="isAddTripModalOpen = $event"
     />
   </div>
 </template>

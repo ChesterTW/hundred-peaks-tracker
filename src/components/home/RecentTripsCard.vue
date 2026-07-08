@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
 import { useTripStore } from "../../stores/tripStore";
 import { peaks } from "../../data/peaks";
 
-const router = useRouter();
+const emit = defineEmits(["openAddTripModal"]);
 const { activeTrips } = storeToRefs(useTripStore());
 
 const recentTrips = computed(() =>
@@ -50,7 +49,7 @@ function formatDate(date: string): string {
 
     <button
       class="w-full h-10 bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
-      @click="router.push('/add')"
+      @click="emit('openAddTripModal')"
     >
       新增行程
     </button>
