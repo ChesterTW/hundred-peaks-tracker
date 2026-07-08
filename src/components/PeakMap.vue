@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // 1. imports
-import { onMounted, onUnmounted, ref, watch, computed } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 import L from "leaflet";
 import { storeToRefs } from "pinia";
 import { useTripStore } from "../stores/tripStore";
@@ -74,13 +74,7 @@ const trailLayer = L.geoJSON(trails as any, {
 // 3. store / composable
 const store = useTripStore();
 const { completedPeakIds } = storeToRefs(store);
-const {
-  completion,
-  difficulties,
-  filteredPeaks,
-  difficultyLevels,
-  toggleDifficulty,
-} = usePeakFilter();
+const { filteredPeaks } = usePeakFilter();
 const { focusedPeakId, hoveredPeakId, focusedTrailId } = useMapFocus();
 
 // 4. 模板 ref + map 實例
@@ -90,9 +84,6 @@ const bottomControlsEl = ref<HTMLElement>();
 let currentTileLayer: L.TileLayer;
 
 // 5. reactive 狀態（ref）
-const openCompletion = ref(false);
-const openDifficulty = ref(false);
-const openLayer = ref(false);
 const zoomLevel = ref(0);
 const currentLayer = ref<BaseLayer>(baseLayers[0]);
 const visibility = ref<VisibilityState>({
@@ -103,16 +94,6 @@ const visibility = ref<VisibilityState>({
   trailNames: false,
 });
 const activePanel = ref<"layer" | "visibility" | null>(null);
-
-// 6. computed（衍生狀態）
-const completionLabel = computed(() => {
-  if (completion.value === "completed") return "已登頂";
-  if (completion.value === "incomplete") return "未登頂";
-  return "全部";
-});
-const difficultyLabel = computed(() =>
-  difficulties.value.length === 0 ? "全部" : difficulties.value.join("、"),
-);
 
 // 7. watch（副作用）
 watch(
@@ -289,18 +270,6 @@ function drawmarkers() {
       })
       .addTo(markerGroup);
   });
-}
-
-function handleCompletionClick(input: string) {
-  openCompletion.value = !openCompletion.value;
-
-  if (input === "all") {
-    completion.value = "all";
-  } else if (input === "completed") {
-    completion.value = "completed";
-  } else {
-    completion.value = "incomplete";
-  }
 }
 
 function updateTrailLabels() {
