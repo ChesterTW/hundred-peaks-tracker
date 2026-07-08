@@ -8,6 +8,7 @@ import {
   upsertTrip,
   subscribeTrips,
 } from "../tripSync";
+import { peaks } from "../data/peaks";
 
 export const useTripStore = defineStore("trip", () => {
   const STORAGE_KEY = "hundred-peaks-trips";
@@ -157,6 +158,11 @@ export const useTripStore = defineStore("trip", () => {
     });
   }
 
+  function getPeakName(peakId: number) {
+    const peak = peaks.find((p) => p.id === peakId);
+    return peak ? peak.name : `未知山峰 #${peakId}`;
+  }
+
   watch(
     trips,
     () => {
@@ -174,5 +180,6 @@ export const useTripStore = defineStore("trip", () => {
     addTrip,
     updateTrip,
     deleteTrip,
+    getPeakName,
   };
 });
