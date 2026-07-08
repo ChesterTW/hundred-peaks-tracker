@@ -2,10 +2,12 @@
 import { ref, computed } from "vue";
 import type { Peak } from "../../types.ts";
 import { peaks } from "../../data/peaks";
-import { X, Calendar, ChevronDown, Search } from "@lucide/vue";
+import { X, Search } from "@lucide/vue";
 import PeakChip from "./PeakChip.vue";
 import PeakListItem from "./PeakListItem.vue";
 import { useTripStore } from "../../stores/tripStore";
+import TextInput from "../Input/TextInput.vue";
+import CalendarInput from "../Input/CalendarInput.vue";
 
 const store = useTripStore();
 
@@ -36,10 +38,6 @@ function close() {
   searchKeyword.value = "";
 
   emit("update:open", false);
-}
-
-function openDatePicker() {
-  dateInput.value?.showPicker();
 }
 
 function isSelected(peak: Peak) {
@@ -88,38 +86,16 @@ function handleAddTrip() {
         >
           <div class="flex flex-col gap-2">
             <p class="text-sm font-medium text-neutral-700">日期</p>
-            <div
-              class="border border-neutral-200 rounded-md h-10 px-3 flex items-center gap-3 cursor-pointer"
-              @click="openDatePicker"
-            >
-              <Calendar class="text-neutral-400 shrink-0" :size="16" />
-              <input
-                ref="dateInput"
-                type="date"
-                v-model="date"
-                class="flex-1 min-w-0 outline-none bg-transparent text-sm text-neutral-900 [&::-webkit-calendar-picker-indicator]:hidden cursor-pointer"
-              />
-              <ChevronDown class="text-neutral-400 shrink-0" :size="16" />
-            </div>
+            <CalendarInput v-model="date"></CalendarInput>
           </div>
           <div class="flex flex-col gap-2">
             <p class="text-sm font-medium text-neutral-700">選擇山峰</p>
-            <div
-              class="border border-neutral-200 focus-within:border-primary-500 rounded-md h-10 px-3 flex items-center gap-3"
-            >
-              <Search class="text-neutral-400 shrink-0" :size="16" />
-              <input
-                v-model="searchKeyword"
-                placeholder="搜尋山名..."
-                class="placeholder:font-normal flex-1 min-w-0 outline-none bg-transparent text-sm text-neutral-900"
-              />
-              <X
-                v-if="searchKeyword"
-                class="text-neutral-400 shrink-0 cursor-pointer"
-                :size="18"
-                @click="searchKeyword = ''"
-              />
-            </div>
+
+            <TextInput
+              :icon="Search"
+              v-model="searchKeyword"
+              :placeholder="'搜尋山名...'"
+            />
 
             <div
               v-if="selectedPeaks.length > 0"
@@ -149,21 +125,10 @@ function handleAddTrip() {
           </div>
           <div class="flex flex-col gap-2">
             <p class="text-sm font-medium text-neutral-700">備註（選填）</p>
-            <div
-              class="border border-neutral-200 focus-within:border-primary-500 rounded-md h-10 px-3 flex items-center gap-3"
-            >
-              <input
-                v-model="note"
-                placeholder="例如：單攻、369 山屋、天氣晴…"
-                class="placeholder:font-normal flex-1 min-w-0 outline-none bg-transparent text-sm text-neutral-900 placeholder:text-neutral-400"
-              />
-              <X
-                v-if="note"
-                class="text-neutral-400 shrink-0 cursor-pointer"
-                :size="18"
-                @click="note = ''"
-              />
-            </div>
+            <TextInput
+              v-model="note"
+              :placeholder="'例如：單攻、369 山屋、天氣晴…'"
+            />
           </div>
         </div>
 
