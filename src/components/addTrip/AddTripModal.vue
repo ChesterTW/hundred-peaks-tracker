@@ -30,6 +30,11 @@ const isFormValid = computed(() => {
 });
 
 function close() {
+  date.value = new Date().toISOString().slice(0, 10);
+  note.value = "";
+  selectedPeaks.value = [];
+  searchKeyword.value = "";
+
   emit("update:open", false);
 }
 
