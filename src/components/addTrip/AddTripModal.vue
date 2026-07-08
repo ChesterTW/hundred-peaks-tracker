@@ -7,7 +7,7 @@ import PeakChip from "./PeakChip.vue";
 import PeakListItem from "./PeakListItem.vue";
 import { useTripStore } from "../../stores/tripStore";
 import TextInput from "../Input/TextInput.vue";
-import CalendarInput from "../Input/CalendarInput.vue";
+import DateInput from "../Input/DateInput.vue";
 
 const store = useTripStore();
 
@@ -20,7 +20,6 @@ const date = ref<string>(new Date().toISOString().slice(0, 10));
 const note = ref<string>("");
 const selectedPeaks = ref<Peak[]>([]);
 const searchKeyword = ref<string>("");
-const dateInput = ref<HTMLInputElement | null>(null);
 
 const filteredPeaks = computed(() => {
   if (!searchKeyword.value) return peaks;
@@ -86,7 +85,7 @@ function handleAddTrip() {
         >
           <div class="flex flex-col gap-2">
             <p class="text-sm font-medium text-neutral-700">日期</p>
-            <CalendarInput v-model="date"></CalendarInput>
+            <DateInput v-model="date"></DateInput>
           </div>
           <div class="flex flex-col gap-2">
             <p class="text-sm font-medium text-neutral-700">選擇山峰</p>
