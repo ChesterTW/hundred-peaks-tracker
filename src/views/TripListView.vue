@@ -27,7 +27,7 @@ const actions = [
   {
     name: "編輯",
     key: "edit",
-    action: (tripId: string) => {
+    action: () => {
       isAddTripModalOpen.value = true;
     },
   },
