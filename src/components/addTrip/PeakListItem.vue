@@ -15,7 +15,7 @@ const props = defineProps<{
   >
     <CheckBox :isSelected="props.isSelected" />
     <div class="flex flex-col gap-1">
-      <p class="text-sm font-medium text-neutral-900">
+      <p class="text-sm font-medium text-neutral-700">
         {{ props.peak.name }}
       </p>
       <div class="flex items-center gap-2">

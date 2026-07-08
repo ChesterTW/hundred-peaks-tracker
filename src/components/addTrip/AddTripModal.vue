@@ -74,7 +74,7 @@ function handleAddTrip() {
     >
       <div class="bg-white rounded-2xl w-150 max-h-[90vh] flex flex-col">
         <div class="flex items-center px-6 py-4">
-          <p class="text-xl font-md">新增行程</p>
+          <p class="text-xl font-md text-neutral-700">新增行程</p>
           <div
             class="bg-neutral-100 w-fit h-fit rounded-md hover:bg-neutral-200 active:bg-neutral-300 cursor-pointer ml-auto"
             @click="close"
