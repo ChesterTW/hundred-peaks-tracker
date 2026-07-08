@@ -25,6 +25,10 @@ const filteredPeaks = computed(() => {
   return peaks.filter((peak) => peak.name.includes(searchKeyword.value));
 });
 
+const isFormValid = computed(() => {
+  return date.value && selectedPeaks.value.length > 0;
+});
+
 function close() {
   emit("update:open", false);
 }
@@ -167,8 +171,13 @@ function handleAddTrip() {
               <p class="text-neutral-700 text-sm mx-4 my-2">取消</p>
             </div>
             <div
-              class="bg-primary-500 hover:bg-primary-600 active:bg-primary-700 rounded-md w-fit h-fit cursor-pointer"
-              @click="handleAddTrip()"
+              class="rounded-md w-fit h-fit cursor-pointer"
+              :class="
+                isFormValid
+                  ? 'bg-primary-500 hover:bg-primary-600 active:bg-primary-700'
+                  : 'bg-neutral-300 cursor-not-allowed'
+              "
+              @click="isFormValid && handleAddTrip()"
             >
               <p class="text-white text-sm mx-4 my-2">儲存</p>
             </div>
