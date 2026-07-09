@@ -135,8 +135,8 @@ watch(focusedPeakId, (newId) => {
 
   if (peak) {
     map.flyTo([peak.lat, peak.lng]);
-    drawmarkers();
   }
+  drawmarkers();
 });
 
 watch(hoveredPeakId, () => {
