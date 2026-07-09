@@ -8,7 +8,7 @@ import PeakDetailView from "../views/PeakDetailView.vue";
 import { useMapFocus } from "../composables/useMapFocus";
 import TripModal from "../components/tripModal/TripModal.vue";
 
-const { focusedPeakId, focusedTrailId } = useMapFocus();
+const { focusedPeakId } = useMapFocus();
 const isTripModalOpen = ref(false);
 
 const RECOMMEND_CARD_OPEN_KEY = "hundred-peaks-recommend-card-open";
