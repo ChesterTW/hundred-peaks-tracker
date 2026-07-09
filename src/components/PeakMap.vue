@@ -70,7 +70,7 @@ const trailLayer = L.geoJSON(trails as any, {
 const store = useTripStore();
 const { completedPeakIds } = storeToRefs(store);
 const { filteredPeaks } = usePeakFilter();
-const { focusedPeakId, hoveredPeakId, focusedTrailId } = useMapFocus();
+const { focusedPeakId, hoveredPeakId } = useMapFocus();
 
 // 4. 模板 ref + map 實例
 let map: L.Map;
@@ -132,16 +132,6 @@ watch(hoveredPeakId, () => {
   drawmarkers();
 });
 
-watch(focusedTrailId, (newId) => {
-  trailLayer.eachLayer((layer: any) => {
-    const id = layer.feature.id;
-    if (id === newId) {
-      layer.setStyle({ color: "#f97316", weight: 4, opacity: 1 });
-    } else {
-      trailLayer.resetStyle(layer);
-    }
-  });
-});
 watch(currentLayer, (newLayer) => {
   applyBaseLayer(newLayer);
 });
