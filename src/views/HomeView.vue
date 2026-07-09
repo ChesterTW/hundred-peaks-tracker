@@ -4,7 +4,7 @@ import { Compass } from "@lucide/vue";
 import PeakMap from "../components/PeakMap.vue";
 import StatCard from "../components/home/StatCard.vue";
 import RecommendCard from "../components/home/RecommendCard.vue";
-import PeakDetailDrawer from "../components/PeakDetailDrawer.vue";
+import PeakDetailView from "../views/PeakDetailView.vue";
 import { useMapFocus } from "../composables/useMapFocus";
 import TripModal from "../components/tripModal/TripModal.vue";
 
@@ -48,7 +48,7 @@ watch(isRecommendCardOpen, (open) => {
     </div>
 
     <!-- 山峰詳細資訊 Drawer -->
-    <PeakDetailDrawer
+    <PeakDetailView
       v-if="focusedPeakId !== null"
       :peakId="focusedPeakId"
       @close="focusedPeakId = null"
