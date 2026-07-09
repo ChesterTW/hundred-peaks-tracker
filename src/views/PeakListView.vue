@@ -1,16 +1,25 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { Search } from "@lucide/vue";
 import TextInput from "../components/Input/TextInput.vue";
 import { peaks } from "../data/peaks.ts";
 import Chip from "../components/peakList/Chip.vue";
+import DifficultyMatrixPopover from "../components/peakList/DifficultyMatrixPopover.vue";
 import { useTripStore } from "../stores/tripStore";
 import { storeToRefs } from "pinia";
+import { ChevronDown } from "@lucide/vue";
 
 const store = useTripStore();
 const { completedPeakIds } = storeToRefs(store);
 
 const searchKeyword = ref<string>("");
+
+const isDifficultyPopoverOpen = ref(false);
+const selectedDifficulty = ref<{ physical: number; risk: number } | null>(
+  null,
+);
+const difficultyFilterRef = ref<HTMLElement | null>(null);
+
 const filteredPeaks = computed(() => {
   let result = peaks;
 
@@ -24,7 +33,42 @@ const filteredPeaks = computed(() => {
     result = result.filter((peak) => !completedPeakIds.value.has(peak.id));
   }
 
+  if (selectedDifficulty.value) {
+    const { physical, risk } = selectedDifficulty.value;
+    result = result.filter(
+      (peak) => peak.rating.physical === physical && peak.rating.risk === risk,
+    );
+  }
+
   return result;
+});
+
+function handleSelectDifficulty(physical: number, risk: number) {
+  selectedDifficulty.value = { physical, risk };
+  isDifficultyPopoverOpen.value = false;
+}
+
+function handleClearDifficulty() {
+  selectedDifficulty.value = null;
+  isDifficultyPopoverOpen.value = false;
+}
+
+function handleClickOutside(event: MouseEvent) {
+  if (
+    isDifficultyPopoverOpen.value &&
+    difficultyFilterRef.value &&
+    !difficultyFilterRef.value.contains(event.target as Node)
+  ) {
+    isDifficultyPopoverOpen.value = false;
+  }
+}
+
+onMounted(() => {
+  window.addEventListener("mousedown", handleClickOutside);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("mousedown", handleClickOutside);
 });
 
 const tableHeaders = [
@@ -61,6 +105,36 @@ function rowBorderClass(index: number) {
             @click="selectedChip = chip.text"
           />
         </template>
+        <div ref="difficultyFilterRef" class="relative">
+          <button
+            type="button"
+            class="flex gap-1 items-center rounded-md border pl-3 pr-2 py-1 cursor-pointer hover:bg-neutral-100 active:bg-neutral-200 transition-colors"
+            :class="
+              selectedDifficulty
+                ? 'border-primary-500'
+                : 'border-neutral-300'
+            "
+            @click="isDifficultyPopoverOpen = !isDifficultyPopoverOpen"
+          >
+            <p class="text-neutral-700">
+              {{
+                selectedDifficulty
+                  ? `體能 Lv.${selectedDifficulty.physical}・風險 Lv.${selectedDifficulty.risk}`
+                  : "難度"
+              }}
+            </p>
+            <ChevronDown class="text-neutral-700" :size="16" />
+          </button>
+
+          <DifficultyMatrixPopover
+            v-if="isDifficultyPopoverOpen"
+            class="absolute top-full mt-2 left-0 z-20"
+            :peaks="peaks"
+            :selected="selectedDifficulty"
+            @select="handleSelectDifficulty"
+            @clear="handleClearDifficulty"
+          />
+        </div>
       </div>
     </div>
 
