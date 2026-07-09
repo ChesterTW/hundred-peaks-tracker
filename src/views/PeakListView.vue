@@ -135,7 +135,7 @@ function rowBorderClass(index: number) {
     </div>
 
     <div
-      class="grid grid-cols-[auto_auto_1fr_auto_auto_1fr] grid-rows-[auto_1fr] gap-x-6 px-8 border border-neutral-200 rounded-lg flex-1 overflow-hidden"
+      class="grid grid-cols-[auto_auto_1fr_1fr_1fr_1fr] grid-rows-[auto_1fr] gap-x-6 px-8 border border-neutral-200 rounded-lg flex-1 overflow-hidden"
     >
       <div
         class="col-span-6 row-start-1 grid grid-cols-subgrid items-center bg-neutral-100 -mx-8 px-8"
