@@ -47,11 +47,6 @@ const currentGroup = computed(
     ) ?? groups.value[groups.value.length - 1],
 );
 
-const nextGroup = computed(() => {
-  const idx = groups.value.indexOf(currentGroup.value);
-  return groups.value[idx + 1] ?? null;
-});
-
 const unfinishedPeaks = computed(() =>
   currentGroup.value.peaks.filter((p) => !completedPeakIds.value.has(p.id)),
 );
