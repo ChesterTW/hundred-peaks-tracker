@@ -20,17 +20,17 @@ const isTripModalOpen = ref(false);
 
     <template v-if="focusedPeakId === null">
       <!-- 左上：百岳完登進度 Card -->
-      <div class="absolute top-7 left-7 z-1500">
+      <div class="absolute top-3 left-3 z-1500">
         <StatCard />
       </div>
 
       <!-- 左下：最近行程 Card -->
-      <div class="absolute bottom-7 left-7 z-1500">
+      <div class="absolute bottom-3 left-3 z-1500">
         <RecentTripsCard @openAddTripModal="isTripModalOpen = true" />
       </div>
 
       <!-- 右上：下一座百岳 Card -->
-      <div class="absolute top-7 right-7 z-1500">
+      <div class="absolute top-3 right-3 z-1500">
         <RecommendCard />
       </div>
     </template>

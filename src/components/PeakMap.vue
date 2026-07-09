@@ -135,8 +135,8 @@ watch(focusedPeakId, (newId) => {
 
   if (peak) {
     map.flyTo([peak.lat, peak.lng]);
+    drawmarkers();
   }
-  drawmarkers();
 });
 
 watch(hoveredPeakId, () => {
@@ -173,6 +173,7 @@ onMounted(() => {
     maxBoundsViscosity: 1.0,
     minZoom: 7,
     zoomControl: false,
+    attributionControl: false,
   }).setView([23.8, 121], 10); // 中心放台灣
 
   applyBaseLayer(currentLayer.value);
@@ -303,7 +304,7 @@ function handleLayerChange(id: string) {
     <!-- 底圖切換 + 顯示控制 -->
     <div
       ref="bottomControlsEl"
-      class="absolute flex flex-col gap-3 right-7 bottom-7 z-1000"
+      class="absolute flex flex-col gap-1 right-3 bottom-3 z-2000"
     >
       <div class="relative">
         <button
@@ -316,7 +317,7 @@ function handleLayerChange(id: string) {
           v-if="activePanel === 'layer'"
           :modelValue="currentLayer.id"
           @update:modelValue="handleLayerChange"
-          class="absolute bottom-0 right-full mr-6"
+          class="absolute bottom-0 right-full mr-3"
         />
       </div>
       <div class="relative">
@@ -332,7 +333,7 @@ function handleLayerChange(id: string) {
           v-if="activePanel === 'visibility'"
           :modelValue="visibility"
           @update:modelValue="visibility = $event"
-          class="absolute bottom-0 right-full mr-6"
+          class="absolute bottom-0 right-full mr-3"
         />
       </div>
     </div>
