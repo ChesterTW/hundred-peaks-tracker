@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { Calendar, ChevronDown } from "@lucide/vue";
+import { Calendar, ChevronDown, X } from "@lucide/vue";
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 
 const dateRange = ref<string[] | null>(null);
 const emit = defineEmits(["openDatePicker"]);
+
+const datePickerRef = ref<InstanceType<typeof VueDatePicker>>();
 
 const dateRangeDisplay = computed(() => {
   if (!dateRange.value || !dateRange.value[0] || !dateRange.value[1]) {
@@ -12,9 +14,19 @@ const dateRangeDisplay = computed(() => {
   }
   return `${dateRange.value[0]} ~ ${dateRange.value[1]}`;
 });
+
+const isDateRangeSelected = computed(() => {
+  return dateRange.value && dateRange.value.length === 2;
+});
+
+const clearDateRange = (event: Event) => {
+  event.stopPropagation();
+  datePickerRef.value?.clearValue();
+};
 </script>
 <template>
   <VueDatePicker
+    ref="datePickerRef"
     v-model="dateRange"
     range
     model-type="yyyy-MM-dd"
@@ -27,10 +39,20 @@ const dateRangeDisplay = computed(() => {
         <Calendar class="text-neutral-400 shrink-0" :size="16" />
         <span
           class="flex-1 min-w-0 text-sm"
-          :class="dateRange?.values ? 'text-neutral-700' : 'text-neutral-400'"
+          :class="isDateRangeSelected ? 'text-neutral-700' : 'text-neutral-400'"
           >{{ dateRangeDisplay }}</span
         >
-        <ChevronDown class="text-neutral-400 shrink-0" :size="16" />
+        <ChevronDown
+          v-if="!isDateRangeSelected"
+          class="text-neutral-400 shrink-0"
+          :size="16"
+        />
+        <X
+          v-if="isDateRangeSelected"
+          class="text-neutral-400 shrink-0"
+          :size="16"
+          @click="clearDateRange"
+        />
       </div>
     </template>
   </VueDatePicker>
