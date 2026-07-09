@@ -4,6 +4,9 @@ import { storeToRefs } from "pinia";
 import { ChevronRight } from "@lucide/vue";
 import { useTripStore } from "../../stores/tripStore";
 import { peaks } from "../../data/peaks";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const { completedPeakIds } = storeToRefs(useTripStore());
 
@@ -64,6 +67,7 @@ const completedInGroup = computed(
       <p class="text-base font-medium text-neutral-900">下一座百岳</p>
       <button
         class="text-xs text-neutral-400 underline hover:text-neutral-700 transition-colors cursor-pointer"
+        @click="router.push('/peaks')"
       >
         查看全部
       </button>
