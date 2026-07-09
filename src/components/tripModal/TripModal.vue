@@ -7,7 +7,7 @@ import PeakChip from "./PeakChip.vue";
 import PeakListItem from "./PeakListItem.vue";
 import { useTripStore } from "../../stores/tripStore.ts";
 import TextInput from "../Input/TextInput.vue";
-import DateInput from "../Input/CalendarInput.vue";
+import DateInput from "../Input/DateInput.vue";
 
 const store = useTripStore();
 
