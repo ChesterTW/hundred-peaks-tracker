@@ -3,6 +3,12 @@ import { computed, ref } from "vue";
 import { Search } from "@lucide/vue";
 import TextInput from "../components/Input/TextInput.vue";
 import { peaks } from "../data/peaks.ts";
+import Chip from "../components/peakList/Chip.vue";
+import { useTripStore } from "../stores/tripStore";
+import { storeToRefs } from "pinia";
+
+const store = useTripStore();
+const { completedPeakIds } = storeToRefs(store);
 
 const searchKeyword = ref<string>("");
 const filteredPeaks = computed(() => {
@@ -10,6 +16,12 @@ const filteredPeaks = computed(() => {
 
   if (searchKeyword.value) {
     result = result.filter((peak) => peak.name.includes(searchKeyword.value));
+  }
+
+  if (selectedChip.value === "已登頂") {
+    result = result.filter((peak) => completedPeakIds.value.has(peak.id));
+  } else if (selectedChip.value === "未登頂") {
+    result = result.filter((peak) => !completedPeakIds.value.has(peak.id));
   }
 
   return result;
@@ -23,6 +35,10 @@ const tableHeaders = [
   { name: "山脈", key: "range" },
   { name: "難度", key: "rating" },
 ];
+
+const chips = [{ text: "全部" }, { text: "已登頂" }, { text: "未登頂" }];
+
+const selectedChip = ref<string>(chips[0].text);
 
 function rowBorderClass(index: number) {
   return index === peaks.length - 1 ? "" : "border-b border-neutral-100";
@@ -39,6 +55,13 @@ function rowBorderClass(index: number) {
           v-model="searchKeyword"
           :placeholder="'搜尋山名...'"
         ></TextInput>
+        <template v-for="chip in chips" :key="chip.text">
+          <Chip
+            :text="chip.text"
+            :isSelected="selectedChip === chip.text"
+            @click="selectedChip = chip.text"
+          />
+        </template>
       </div>
     </div>
 
