@@ -102,12 +102,7 @@ watch(
   },
 );
 
-watch(
-  () => visibility.value.trailNames,
-  (newVal) => {
-    map.getContainer().classList.toggle("hide-trail-labels", !newVal);
-  },
-);
+watch(() => visibility.value.trailNames, updateTrailNamesVisibility);
 
 watch(
   () => [
@@ -176,6 +171,10 @@ onMounted(() => {
     trailLayer.addTo(map);
   }
   map.on("zoomend", updateTrailLabels);
+
+  updateTrailLabels();
+  updateTrailNamesVisibility();
+
   map.on("click", () => {
     activePanel.value = null;
   });
@@ -262,6 +261,12 @@ function drawmarkers() {
       })
       .addTo(markerGroup);
   });
+}
+
+function updateTrailNamesVisibility() {
+  map
+    .getContainer()
+    .classList.toggle("hide-trail-labels", !visibility.value.trailNames);
 }
 
 function updateTrailLabels() {
