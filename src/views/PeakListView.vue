@@ -37,7 +37,6 @@ const tableHeaders = [
 ];
 
 const chips = [{ text: "全部" }, { text: "已登頂" }, { text: "未登頂" }];
-
 const selectedChip = ref<string>(chips[0].text);
 
 function rowBorderClass(index: number) {
@@ -84,14 +83,23 @@ function rowBorderClass(index: number) {
         class="col-span-6 row-start-2 grid grid-cols-subgrid gap-x-6 items-center content-start overflow-y-auto min-h-0 -mr-8"
       >
         <template v-for="(peak, index) in filteredPeaks" :key="peak.id">
+          <div>
+            <div
+              v-if="completedPeakIds.has(peak.id)"
+              class="bg-[#E5F0E5] px-3 py-1 rounded-full"
+            >
+              <p class="text-success text-xs font-medium">已登頂</p>
+            </div>
+            <div
+              v-else
+              class="bg-white px-3 py-1 rounded-full border border-neutral-300"
+            >
+              <p class="text-neutral-400 text-xs font-medium">未登頂</p>
+            </div>
+          </div>
+
           <p
-            class="py-4 text-neutral-700 font-medium text-sm"
-            :class="rowBorderClass(index)"
-          >
-            {{ peak.id }}
-          </p>
-          <p
-            class="py-4 text-neutral-700 font-medium text-sm"
+            class="py-4 text-neutral-400 font-medium text-sm"
             :class="rowBorderClass(index)"
           >
             {{ peak.id }}
@@ -103,23 +111,26 @@ function rowBorderClass(index: number) {
             {{ peak.name }}
           </p>
           <p
-            class="py-4 text-neutral-400 text-sm"
+            class="py-4 text-neutral-700 text-sm"
             :class="rowBorderClass(index)"
           >
             {{ peak.elevation }} m
           </p>
           <p
-            class="py-4 text-neutral-400 text-sm"
+            class="py-4 text-neutral-700 text-sm"
             :class="rowBorderClass(index)"
           >
             {{ peak.range }}
           </p>
-          <p
-            class="py-4 text-neutral-400 text-sm"
-            :class="rowBorderClass(index)"
-          >
-            {{ peak.rating }}
-          </p>
+          <div>
+            <div class="bg-neutral-100 rounded-full px-3 py-1 w-fit h-fit">
+              <p class="text-neutral-700 text-xs">
+                體能 Lv.{{ peak.rating.physical }}・風險 Lv.{{
+                  peak.rating.risk
+                }}
+              </p>
+            </div>
+          </div>
         </template>
       </div>
     </div>
