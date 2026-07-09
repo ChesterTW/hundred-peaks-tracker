@@ -15,9 +15,7 @@ const { completedPeakIds } = storeToRefs(store);
 const searchKeyword = ref<string>("");
 
 const isDifficultyPopoverOpen = ref(false);
-const selectedDifficulty = ref<{ physical: number; risk: number } | null>(
-  null,
-);
+const selectedDifficulty = ref<{ physical: number; risk: number } | null>(null);
 const difficultyFilterRef = ref<HTMLElement | null>(null);
 
 const filteredPeaks = computed(() => {
@@ -110,13 +108,11 @@ function rowBorderClass(index: number) {
             type="button"
             class="flex gap-1 items-center rounded-md border pl-3 pr-2 py-1 cursor-pointer hover:bg-neutral-100 active:bg-neutral-200 transition-colors"
             :class="
-              selectedDifficulty
-                ? 'border-primary-500'
-                : 'border-neutral-300'
+              selectedDifficulty ? 'border-primary-500' : 'border-neutral-300'
             "
             @click="isDifficultyPopoverOpen = !isDifficultyPopoverOpen"
           >
-            <p class="text-neutral-700">
+            <p class="text-neutral-700 text-sm">
               {{
                 selectedDifficulty
                   ? `體能 Lv.${selectedDifficulty.physical}・風險 Lv.${selectedDifficulty.risk}`

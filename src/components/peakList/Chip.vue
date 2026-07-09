@@ -16,7 +16,7 @@ const props = defineProps<{
   >
     <p
       :class="isSelected ? 'text-white' : 'text-neutral-700'"
-      class="transition-colors"
+      class="transition-colors text-sm"
     >
       {{ props.text }}
     </p>
