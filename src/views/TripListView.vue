@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { Search } from "@lucide/vue";
 import TextInput from "../components/Input/TextInput.vue";
 import DateRangeInput from "../components/Input/DateRangeInput.vue";
@@ -13,6 +13,24 @@ const { getPeakName, deleteTrip } = useTripStore();
 
 const searchKeyword = ref<string>("");
 const dateRange = ref<string[] | null>(null);
+const filteredTrips = computed(() => {
+  let trips = activeTrips.value;
+
+  if (searchKeyword.value) {
+    trips = trips.filter((trip) =>
+      trip.peakIds.some((id) => getPeakName(id).includes(searchKeyword.value)),
+    );
+  }
+
+  if (dateRange.value && dateRange.value.length === 2) {
+    const [startDate, endDate] = dateRange.value;
+    trips = trips.filter(
+      (trip) => trip.date >= startDate && trip.date <= endDate,
+    );
+  }
+
+  return trips;
+});
 
 const isTripModalOpen = ref(false);
 const editTripId = ref<string | null>(null);
@@ -41,7 +59,7 @@ const actions = [
 ];
 
 function rowBorderClass(index: number) {
-  return index === activeTrips.value.length - 1
+  return index === filteredTrips.value.length - 1
     ? ""
     : "border-b border-neutral-100";
 }
@@ -61,7 +79,7 @@ function rowBorderClass(index: number) {
         <DateRangeInput v-model="dateRange" />
 
         <p class="text-xs text-neutral-400">
-          共 {{ activeTrips.length }} 筆行程
+          共 {{ filteredTrips.length }} 筆行程
         </p>
       </div>
       <div
@@ -83,7 +101,7 @@ function rowBorderClass(index: number) {
         <p>{{ header.name }}</p>
       </div>
 
-      <template v-for="(trip, index) in activeTrips" :key="trip.id">
+      <template v-for="(trip, index) in filteredTrips" :key="trip.id">
         <p class="py-4" :class="rowBorderClass(index)">{{ trip.date }}</p>
         <p class="py-4" :class="rowBorderClass(index)">
           {{ trip.peakIds.map((id) => getPeakName(id)).join("、") }}
