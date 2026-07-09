@@ -7,22 +7,23 @@ import { useTripStore } from "../stores/tripStore";
 import { usePeakFilter } from "../composables/usePeakFilter";
 import { useMapFocus } from "../composables/useMapFocus";
 import router from "../router";
-import iconUrl from "../assets/location-pin.png";
 import trails from "../data/trails.json";
 import type { BaseLayer, VisibilityState } from "../types";
 import { baseLayers } from "../data/baseLayers";
+import { peakIconHtml } from "../utils/peakIcon";
 import { Layers, Filter } from "@lucide/vue";
 import MapDisplayPanel from "./home/MapDisplayPanel.vue";
 import MapVisibilityPanel from "./home/MapVisibilityPanel.vue";
 
-// 2. 常數 / 靜態物件（不會變的：HIDE_THRESHOLD_PX、pinIcon、trailLayer、markerGroup）
+// 2. 常數 / 靜態物件（不會變的：HIDE_THRESHOLD_PX、selectedIcon、trailLayer、markerGroup）
 const HIDE_THRESHOLD_PX = 40; // 螢幕像素門檻，用於 decluttering，避免 marker 重疊。
 const markerGroup = L.layerGroup();
-const pinIcon = L.icon({
-  iconUrl,
-  iconSize: [32, 32],
-  iconAnchor: [16, 32], // 釘尖對準座標
-  tooltipAnchor: [0, -32], // y: -32，讓 tooltip 從圖釘頂端往上長，避免遮住圖釘
+const selectedIcon = L.divIcon({
+  className: "custom-peak-icon",
+  iconSize: [24, 24],
+  iconAnchor: [12, 21],
+  tooltipAnchor: [12, -10], // tooltip 從三角形右側長出來
+  html: peakIconHtml("var(--color-primary-500)"),
 });
 const trailLayer = L.geoJSON(trails as any, {
   style: {
@@ -218,8 +219,12 @@ function drawmarkers() {
   filteredPeaks.value.forEach((peak) => {
     // 用戶所 hover 的山峰
     if (peak.id === hoveredPeakId.value || peak.id === focusedPeakId.value) {
-      L.marker([peak.lat, peak.lng], { icon: pinIcon })
-        .bindTooltip(peak.name, { permanent: true, direction: "top" })
+      L.marker([peak.lat, peak.lng], { icon: selectedIcon })
+        .bindTooltip(peak.name, {
+          permanent: true,
+          direction: "right",
+          className: "peak-label",
+        })
         .on("click", () => {
           router.push({ name: "peak-detail", params: { id: peak.id } });
         })
@@ -249,15 +254,7 @@ function drawmarkers() {
         iconSize: [24, 24],
         iconAnchor: [12, 21],
         tooltipAnchor: [12, -10], // tooltip 從三角形右側長出來
-        html: `<svg width="24" height="24" viewBox="0 0 24 24">
-                  <polygon
-                    points="12,3 22,21 2,21"
-                    fill="${done ? "#16a34a" : "#9ca3af"}"
-                    stroke="#ffffff"
-                    stroke-width="2"
-                    stroke-linejoin="round"
-                  />
-                </svg>`,
+        html: peakIconHtml(done ? "#16a34a" : "#9ca3af"),
       }),
     })
       .bindTooltip(peak.name, {
