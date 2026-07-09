@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { Search } from "@lucide/vue";
 import TextInput from "../components/Input/TextInput.vue";
 import DateRangeInput from "../components/Input/DateRangeInput.vue";
-import AddTripModal from "../components/addTrip/AddTripModal.vue";
+import TripModal from "../components/tripModal/TripModal.vue";
 import { useTripStore } from "../stores/tripStore";
 import { storeToRefs } from "pinia";
 
@@ -14,7 +14,8 @@ const { getPeakName, deleteTrip } = useTripStore();
 const searchKeyword = ref<string>("");
 const dateRange = ref<string[] | null>(null);
 
-const isAddTripModalOpen = ref(false);
+const isTripModalOpen = ref(false);
+const editTripId = ref<string | null>(null);
 
 const tableHeaders = [
   { name: "日期", key: "date" },
@@ -27,8 +28,9 @@ const actions = [
   {
     name: "編輯",
     key: "edit",
-    action: () => {
-      isAddTripModalOpen.value = true;
+    action: (tripId: string) => {
+      editTripId.value = tripId;
+      isTripModalOpen.value = true;
     },
   },
   {
@@ -64,7 +66,7 @@ function rowBorderClass(index: number) {
       </div>
       <div
         class="bg-primary-500 hover:bg-primary-600 active:bg-primary-700 rounded-md w-fit h-fit cursor-pointer ml-auto"
-        @click="isAddTripModalOpen = true"
+        @click="isTripModalOpen = true"
       >
         <p class="text-white text-sm mx-4 my-2">新增行程</p>
       </div>
@@ -103,8 +105,10 @@ function rowBorderClass(index: number) {
     </div>
   </div>
 
-  <AddTripModal
-    :open="isAddTripModalOpen"
-    @update:open="isAddTripModalOpen = $event"
+  <TripModal
+    v-if="isTripModalOpen"
+    :tripId="editTripId !== null ? editTripId : undefined"
+    :open="isTripModalOpen"
+    @update:open="isTripModalOpen = $event"
   />
 </template>

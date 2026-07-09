@@ -158,6 +158,10 @@ export const useTripStore = defineStore("trip", () => {
     });
   }
 
+  function getTripById(id: string): Trip | undefined {
+    return trips.value.find((trip) => trip.id === id);
+  }
+
   function getPeakName(peakId: number) {
     const peak = peaks.find((p) => p.id === peakId);
     return peak ? peak.name : `未知山峰 #${peakId}`;
@@ -181,5 +185,6 @@ export const useTripStore = defineStore("trip", () => {
     updateTrip,
     deleteTrip,
     getPeakName,
+    getTripById,
   };
 });

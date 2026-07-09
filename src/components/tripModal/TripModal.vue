@@ -1,17 +1,26 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import type { Peak } from "../../types.ts";
-import { peaks } from "../../data/peaks";
+import { peaks } from "../../data/peaks.ts";
 import { X, Search } from "@lucide/vue";
 import PeakChip from "./PeakChip.vue";
 import PeakListItem from "./PeakListItem.vue";
-import { useTripStore } from "../../stores/tripStore";
+import { useTripStore } from "../../stores/tripStore.ts";
 import TextInput from "../Input/TextInput.vue";
-import DateInput from "../Input/DateInput.vue";
+import DateInput from "../Input/CalendarInput.vue";
 
 const store = useTripStore();
 
-const props = defineProps<{ open: boolean }>();
+// const props = defineProps<{ open: boolean }>();
+const props = withDefaults(
+  defineProps<{
+    open: boolean;
+    tripId?: string | null;
+  }>(),
+  {
+    tripId: null,
+  },
+);
 const emit = defineEmits<{
   "update:open": [boolean];
 }>();
@@ -29,6 +38,8 @@ const filteredPeaks = computed(() => {
 const isFormValid = computed(() => {
   return date.value && selectedPeaks.value.length > 0;
 });
+
+const isEditMode = computed(() => props.tripId !== null);
 
 function close() {
   date.value = new Date().toISOString().slice(0, 10);
@@ -52,15 +63,40 @@ function togglePeak(peak: Peak) {
   }
 }
 
-function handleAddTrip() {
-  console.log("Adding trip with date:", date.value);
-  store.addTrip(
-    date.value,
-    selectedPeaks.value.map((p) => p.id),
-    note.value,
-  );
+function handleSaveTrip() {
+  if (isEditMode.value) {
+    store.updateTrip(
+      props.tripId!,
+      date.value,
+      selectedPeaks.value.map((p) => p.id),
+      note.value,
+    );
+  } else {
+    store.addTrip(
+      date.value,
+      selectedPeaks.value.map((p) => p.id),
+      note.value,
+    );
+  }
   close();
 }
+
+function loadTripData() {
+  if (isEditMode.value) {
+    const trip = store.getTripById(props.tripId!);
+    if (trip) {
+      date.value = trip.date;
+      note.value = trip?.note ?? "";
+      selectedPeaks.value = peaks.filter((peak) =>
+        trip.peakIds.includes(peak.id),
+      );
+    }
+  }
+}
+
+onMounted(() => {
+  loadTripData();
+});
 </script>
 
 <template>
@@ -71,7 +107,9 @@ function handleAddTrip() {
     >
       <div class="bg-white rounded-2xl w-150 max-h-[90vh] flex flex-col">
         <div class="flex items-center px-6 py-4">
-          <p class="text-xl font-md text-neutral-700">新增行程</p>
+          <p class="text-xl font-md text-neutral-700">
+            {{ isEditMode ? "編輯行程" : "新增行程" }}
+          </p>
           <div
             class="bg-neutral-100 w-fit h-fit rounded-md hover:bg-neutral-200 active:bg-neutral-300 cursor-pointer ml-auto"
             @click="close"
@@ -146,7 +184,7 @@ function handleAddTrip() {
                   ? 'bg-primary-500 hover:bg-primary-600 active:bg-primary-700'
                   : 'bg-neutral-300 cursor-not-allowed'
               "
-              @click="isFormValid && handleAddTrip()"
+              @click="isFormValid && handleSaveTrip()"
             >
               <p class="text-white text-sm mx-4 my-2">儲存</p>
             </div>
