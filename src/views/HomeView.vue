@@ -5,7 +5,6 @@ import PeakMap from "../components/PeakMap.vue";
 import StatCard from "../components/home/StatCard.vue";
 import RecommendCard from "../components/home/RecommendCard.vue";
 import PeakDetailDrawer from "../components/PeakDetailDrawer.vue";
-import TrailDetailDrawer from "../components/TrailDetailDrawer.vue";
 import { useMapFocus } from "../composables/useMapFocus";
 import TripModal from "../components/tripModal/TripModal.vue";
 
@@ -53,13 +52,6 @@ watch(isRecommendCardOpen, (open) => {
       v-if="focusedPeakId !== null"
       :peakId="focusedPeakId"
       @close="focusedPeakId = null"
-    />
-
-    <!-- 路線詳細資訊 Drawer -->
-    <TrailDetailDrawer
-      v-if="focusedTrailId !== null"
-      :trailId="focusedTrailId"
-      @close="focusedTrailId = null"
     />
 
     <TripModal
