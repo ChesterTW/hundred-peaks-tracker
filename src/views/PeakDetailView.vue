@@ -5,7 +5,9 @@ import { ExternalLink } from "@lucide/vue";
 import { peaks } from "../data/peaks";
 import { useTripStore } from "../stores/tripStore";
 import WeatherCard from "../components/WeatherCard.vue";
+import { X } from "@lucide/vue";
 
+const emit = defineEmits<{ close: [] }>();
 const props = defineProps<{
   peakId: number;
 }>();
@@ -43,16 +45,32 @@ const links = computed(() => {
   <div v-if="peak" class="space-y-6">
     <!-- 山峰標題資訊 -->
     <div class="flex flex-col items-start gap-3">
-      <div class="flex items-end gap-3">
-        <h1 class="text-4xl leading-11 font-bold text-neutral-700">
+      <div class="flex items-center w-full gap-3">
+        <h1 class="w-full text-3xl leading-11 font-bold text-neutral-700">
           {{ peak.name }}
         </h1>
-        <span
-          v-if="completedPeakIds.has(peak.id)"
-          class="rounded-full bg-[#e5f0e5] px-3 py-1 text-xs font-medium text-success"
+
+        <div
+          class="w-fit h-fit bg-neutral-100 rounded-md hover:bg-neutral-200 active:bg-neutral-300 cursor-pointer"
+          @click="emit('close')"
         >
-          已登頂
-        </span>
+          <X class="text-neutral-700 m-2" :size="16"></X>
+        </div>
+      </div>
+
+      <div class="flex items-end gap-3">
+        <div
+          v-if="completedPeakIds.has(peak.id)"
+          class="bg-[#E5F0E5] px-3 py-1 rounded-full"
+        >
+          <p class="text-success text-xs font-medium">已登頂</p>
+        </div>
+        <div
+          v-else
+          class="bg-white px-3 py-1 rounded-full border border-neutral-300"
+        >
+          <p class="text-neutral-400 text-xs font-medium">未登頂</p>
+        </div>
         <span
           class="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-700"
         >
@@ -71,20 +89,21 @@ const links = computed(() => {
       <p v-if="lastSummitDate" class="text-xs text-neutral-400">
         最近登頂：{{ lastSummitDate }}
       </p>
+    </div>
 
-      <div class="flex flex-wrap gap-2.5">
-        <a
-          v-for="link in links"
-          :key="link.label"
-          :href="link.href"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-3 py-2 text-xs text-info"
-        >
-          {{ link.label }}
-          <ExternalLink :size="16" />
-        </a>
-      </div>
+    <!-- 連結區塊 -->
+    <div class="flex flex-wrap gap-2.5">
+      <a
+        v-for="link in links"
+        :key="link.label"
+        :href="link.href"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-2 py-1 text-xs text-info hover:bg-neutral-100 active:bg-neutral-200"
+      >
+        {{ link.label }}
+        <ExternalLink :size="12" />
+      </a>
     </div>
 
     <!-- 天氣區塊 -->
