@@ -91,10 +91,10 @@ function rowBorderClass(index: number) {
     </div>
 
     <div
-      class="grid grid-cols-[auto_4fr_1fr_auto] gap-x-6 items-center px-8 border border-neutral-200 rounded-lg flex-1 content-start overflow-y-auto"
+      class="grid grid-cols-[auto_4fr_1fr_1fr] grid-rows-[auto_1fr] gap-x-6 px-8 border border-neutral-200 rounded-lg flex-1 overflow-hidden"
     >
       <div
-        class="col-span-4 grid grid-cols-subgrid sticky top-0 bg-neutral-100 -mx-8 px-8"
+        class="col-span-4 row-start-1 grid grid-cols-subgrid items-center bg-neutral-100 -mx-8 px-8"
       >
         <div
           v-for="header in tableHeaders"
@@ -105,33 +105,40 @@ function rowBorderClass(index: number) {
         </div>
       </div>
 
-      <template v-for="(trip, index) in filteredTrips" :key="trip.id">
-        <p
-          class="py-4 text-neutral-700 font-medium text-sm"
-          :class="rowBorderClass(index)"
-        >
-          {{ trip.date }}
-        </p>
-        <p
-          class="py-4 text-neutral-700 font-medium text-sm"
-          :class="rowBorderClass(index)"
-        >
-          {{ trip.peakIds.map((id) => getPeakName(id)).join("、") }}
-        </p>
-        <p class="py-4 text-neutral-400 text-sm" :class="rowBorderClass(index)">
-          {{ trip.note === "" ? "-" : trip.note }}
-        </p>
-        <div class="flex gap-3 py-4 text-sm" :class="rowBorderClass(index)">
+      <div
+        class="col-span-4 row-start-2 grid grid-cols-subgrid gap-x-6 items-center content-start overflow-y-auto min-h-0 -mr-8"
+      >
+        <template v-for="(trip, index) in filteredTrips" :key="trip.id">
           <p
-            v-for="action in actions"
-            :key="action.name"
-            class="text-primary-500 hover:text-primary-600 active:text-primary-700 cursor-pointer"
-            @click="action.action(trip.id)"
+            class="py-4 text-neutral-700 font-medium text-sm"
+            :class="rowBorderClass(index)"
           >
-            {{ action.name }}
+            {{ trip.date }}
           </p>
-        </div>
-      </template>
+          <p
+            class="py-4 text-neutral-700 font-medium text-sm"
+            :class="rowBorderClass(index)"
+          >
+            {{ trip.peakIds.map((id) => getPeakName(id)).join("、") }}
+          </p>
+          <p
+            class="py-4 text-neutral-400 text-sm"
+            :class="rowBorderClass(index)"
+          >
+            {{ trip.note === "" ? "-" : trip.note }}
+          </p>
+          <div class="flex gap-3 py-4 text-sm" :class="rowBorderClass(index)">
+            <p
+              v-for="action in actions"
+              :key="action.name"
+              class="text-primary-500 hover:text-primary-600 active:text-primary-700 cursor-pointer"
+              @click="action.action(trip.id)"
+            >
+              {{ action.name }}
+            </p>
+          </div>
+        </template>
+      </div>
     </div>
   </div>
 
