@@ -20,6 +20,7 @@ interface WeatherResponse {
   current: {
     relative_humidity_2m: number;
     surface_pressure: number;
+    wind_speed_10m: number;
   };
 }
 
@@ -53,14 +54,14 @@ export function useWeather(
       const weatherUrl =
         `https://api.open-meteo.com/v1/forecast` +
         `?latitude=${latVal}&longitude=${lngVal}` +
-        // 每日彙總（三天）
+        // 每日彙總（10 天）
         `&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code,sunrise,sunset` +
         // 逐小時（未來 24 小時）
         `&hourly=temperature_2m,precipitation,weather_code` +
         // 即時彙總（今日）
-        `&current=relative_humidity_2m,surface_pressure` +
+        `&current=relative_humidity_2m,surface_pressure,wind_speed_10m` +
         `&models=jma_seamless` +
-        `&timezone=Asia/Taipei&forecast_days=3&forecast_hours=24`;
+        `&timezone=Asia/Taipei&forecast_days=10&forecast_hours=24`;
 
       // 空氣品質與紫外線強度的 API
       // 注意：這不是使用 JMA SEAMLESS，而是使用 Open-Meteo 的 Air Quality API。

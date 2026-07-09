@@ -167,6 +167,18 @@ export const useTripStore = defineStore("trip", () => {
     return peak ? peak.name : `未知山峰 #${peakId}`;
   }
 
+  function getLastSummitDate(peakId: number): string | null {
+    const dates = activeTrips.value
+      .filter((trip) => trip.peakIds.includes(peakId))
+      .map((trip) => trip.date)
+      .sort();
+
+    const latest = dates.at(-1);
+    if (!latest) return null;
+
+    return latest.replaceAll("-", "・");
+  }
+
   watch(
     trips,
     () => {
@@ -186,5 +198,6 @@ export const useTripStore = defineStore("trip", () => {
     deleteTrip,
     getPeakName,
     getTripById,
+    getLastSummitDate,
   };
 });

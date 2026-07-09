@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { Info, Clock, Calendar } from "@lucide/vue";
 import { useWeather } from "../composables/useWeather";
 import type { Peak } from "../types";
 import { getWeatherInfo } from "../data/weatherCode";
@@ -83,6 +84,7 @@ const summary = computed(() => {
     sunset: dateToLabel(daily.sunset[0]),
     humidity: current.relative_humidity_2m,
     pressure: current.surface_pressure,
+    windSpeed: current.wind_speed_10m,
     aqi,
     aqiInfo: aqi != null ? aqiLevel(aqi) : null,
     uvIndex: airQuality.value?.current.uv_index ?? null,
@@ -118,105 +120,126 @@ const summary = computed(() => {
   </div>
 
   <!-- 天氣列表 -->
-  <div v-else-if="weather" class="space-y-2">
-    <!-- 今日彙總 -->
-    <div
-      v-if="summary"
-      class="grid grid-cols-3 gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100"
-    >
-      <div>
-        <p class="text-xs text-gray-500">降水</p>
-        <p class="text-sm font-semibold text-gray-900">{{ summary.rain }} mm</p>
+  <div v-else-if="weather" class="space-y-3">
+    <!-- 今日天氣 -->
+    <div v-if="summary" class="space-y-3 rounded-lg bg-neutral-50 p-4">
+      <div class="flex items-center gap-1">
+        <Info :size="16" class="text-neutral-900" />
+        <p class="text-xs font-medium text-neutral-900">今日天氣</p>
       </div>
-      <div>
-        <p class="text-xs text-gray-500">濕度</p>
-        <p class="text-sm font-semibold text-gray-900">
-          {{ summary.humidity }}%
-        </p>
+      <div class="grid grid-cols-3 gap-x-3 gap-y-4">
+        <div>
+          <p class="text-xs text-neutral-400">降水</p>
+          <p class="text-base font-medium text-neutral-900">
+            {{ summary.rain }} mm
+          </p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral-400">濕度</p>
+          <p class="text-base font-medium text-neutral-900">
+            {{ summary.humidity }}%
+          </p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral-400">氣壓</p>
+          <p class="text-base font-medium text-neutral-900">
+            {{ Math.round(summary.pressure) }} hPa
+          </p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral-400">日出</p>
+          <p class="text-base font-medium text-warning">
+            {{ summary.sunrise }}
+          </p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral-400">日落</p>
+          <p class="text-base font-medium text-warning">
+            {{ summary.sunset }}
+          </p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral-400">空氣品質</p>
+          <p
+            v-if="summary.aqiInfo"
+            class="text-base font-medium"
+            :class="summary.aqiInfo.color"
+          >
+            {{ summary.aqi }} {{ summary.aqiInfo.label }}
+          </p>
+          <p v-else class="text-base font-medium text-neutral-400">—</p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral-400">紫外線</p>
+          <p
+            v-if="summary.uvInfo"
+            class="text-base font-medium"
+            :class="summary.uvInfo.color"
+          >
+            {{ summary.uvIndex }} {{ summary.uvInfo.label }}
+          </p>
+          <p v-else class="text-base font-medium text-neutral-400">—</p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral-400">風速</p>
+          <p class="text-base font-medium text-neutral-900">
+            {{ Math.round(summary.windSpeed) }} km/h
+          </p>
+        </div>
       </div>
-      <div>
-        <p class="text-xs text-gray-500">氣壓</p>
-        <p class="text-sm font-semibold text-gray-900">
-          {{ Math.round(summary.pressure) }} hPa
-        </p>
+    </div>
+
+    <!-- 每小時天氣預報 -->
+    <div class="space-y-3 rounded-lg bg-neutral-50 p-4">
+      <div class="flex items-center gap-1">
+        <Clock :size="16" class="text-neutral-900" />
+        <p class="text-xs font-medium text-neutral-900">每小時天氣預報</p>
       </div>
-      <div>
-        <p class="text-xs text-yellow-500">日出</p>
-        <p class="text-sm font-semibold text-gray-900">{{ summary.sunrise }}</p>
-      </div>
-      <div>
-        <p class="text-xs text-orange-500">日落</p>
-        <p class="text-sm font-semibold text-gray-900">{{ summary.sunset }}</p>
-      </div>
-      <div>
-        <p class="text-xs text-gray-500">空氣品質</p>
-        <p
-          v-if="summary.aqiInfo"
-          class="text-sm font-semibold"
-          :class="summary.aqiInfo.color"
+      <div class="flex gap-4 overflow-x-auto">
+        <div
+          v-for="(hour, index) in hourlyList"
+          :key="hour.time"
+          class="flex shrink-0 flex-col items-center gap-2"
         >
-          {{ summary.aqi }} {{ summary.aqiInfo.label }}
-        </p>
-        <p v-else class="text-sm font-semibold text-gray-400">—</p>
+          <span class="text-xs text-neutral-900">
+            {{ Math.round(hour.temp) }}°
+          </span>
+          <span class="text-2xl leading-none">{{ hour.weather.icon }}</span>
+          <span class="h-4 text-xs text-info">{{
+            hour.rain > 0 ? hour.rain : ""
+          }}</span>
+          <span class="text-xs text-neutral-400">{{
+            index === 0 ? "現在" : hour.label
+          }}</span>
+        </div>
       </div>
-      <div>
-        <p class="text-xs text-gray-500">紫外線指數</p>
-        <p
-          v-if="summary.uvInfo"
-          class="text-sm font-semibold"
-          :class="summary.uvInfo.color"
+    </div>
+
+    <!-- 未來 10 天的天氣預報 -->
+    <div class="space-y-3 rounded-lg bg-neutral-50 p-4">
+      <div class="flex items-center gap-1">
+        <Calendar :size="16" class="text-neutral-900" />
+        <p class="text-xs font-medium text-neutral-900">未來 10 天的天氣預報</p>
+      </div>
+      <div class="flex gap-1 overflow-x-auto">
+        <div
+          v-for="(day, index) in dailyList"
+          :key="day.date"
+          class="flex shrink-0 flex-col items-center gap-2 rounded-full px-2 py-3"
         >
-          {{ summary.uvIndex }} {{ summary.uvInfo.label }}
-        </p>
-        <p v-else class="text-sm font-semibold text-gray-400">—</p>
+          <div class="text-center text-xs leading-4">
+            <p class="text-neutral-900">{{ Math.round(day.max) }}°</p>
+            <p class="text-neutral-400">{{ Math.round(day.min) }}°</p>
+          </div>
+          <span class="text-2xl leading-none">{{ day.weather.icon }}</span>
+          <span class="h-4 text-xs text-info">{{
+            day.rain > 0 ? day.rain : ""
+          }}</span>
+          <p class="text-center text-xs text-neutral-400">
+            {{ index === 0 ? "今天" : day.label }}
+          </p>
+        </div>
       </div>
-    </div>
-
-    <!-- 未來 24 小時 -->
-    <div
-      class="flex gap-2 overflow-x-auto rounded-2xl bg-white p-3 shadow-sm ring-1 ring-gray-100"
-    >
-      <div
-        v-for="(hour, index) in hourlyList"
-        :key="hour.time"
-        class="flex shrink-0 flex-col items-center gap-1 px-2"
-      >
-        <span class="text-xs text-gray-500">{{
-          index === 0 ? "現在" : hour.label
-        }}</span>
-        <span class="text-2xl leading-none">{{ hour.weather.icon }}</span>
-        <span class="text-sm font-semibold text-gray-900">
-          {{ Math.round(hour.temp) }}°
-        </span>
-        <span class="text-xs text-sky-500">💧{{ hour.rain }}mm</span>
-      </div>
-    </div>
-
-    <!-- 未來三天 -->
-    <div
-      v-for="(day, index) in dailyList"
-      :key="day.date"
-      class="flex items-center gap-3 rounded-2xl bg-white p-3 shadow-sm ring-1 ring-gray-100"
-    >
-      <span class="text-3xl leading-none">{{ day.weather.icon }}</span>
-
-      <div class="flex-1">
-        <p class="text-sm font-medium text-gray-900">
-          {{ index === 0 ? "今天" : day.label }}
-        </p>
-        <p class="text-xs text-gray-500">{{ day.weather.label }}</p>
-      </div>
-
-      <div class="text-right">
-        <p class="text-sm font-semibold text-gray-900">
-          {{ Math.round(day.min) }}° ～ {{ Math.round(day.max) }}°
-        </p>
-        <p class="text-xs text-sky-500">💧 {{ day.rain }}mm</p>
-      </div>
-    </div>
-
-    <div>
-      <p class="text-xs text-gray-500">天氣模型：JMA Seamless</p>
     </div>
   </div>
 </template>
