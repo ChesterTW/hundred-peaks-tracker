@@ -57,18 +57,18 @@ function dateToLabel(date: string): string {
 
 // US AQI 分級
 function aqiLevel(aqi: number): { label: string; color: string } {
-  if (aqi <= 50) return { label: "良好", color: "text-green-600" };
-  if (aqi <= 100) return { label: "普通", color: "text-yellow-600" };
-  if (aqi <= 150) return { label: "敏感族群不健康", color: "text-orange-600" };
-  return { label: "不健康", color: "text-red-600" };
+  if (aqi <= 50) return { label: "良好", color: "text-success" };
+  if (aqi <= 100) return { label: "普通", color: "text-warning" };
+  if (aqi <= 150) return { label: "敏感族群不健康", color: "text-danger" };
+  return { label: "不健康", color: "text-danger" };
 }
 
 // 紫外線分級
 function uvLevel(uv: number): { label: string; color: string } {
-  if (uv <= 2) return { label: "低量級", color: "text-green-600" };
-  if (uv <= 7) return { label: "中量級", color: "text-yellow-600" };
-  if (uv >= 8) return { label: "高量級", color: "text-orange-600" };
-  return { label: "過量級", color: "text-red-600" };
+  if (uv <= 2) return { label: "低量級", color: "text-success" };
+  if (uv <= 7) return { label: "中量級", color: "text-warning" };
+  if (uv >= 8) return { label: "高量級", color: "text-danger" };
+  return { label: "過量級", color: "text-danger" };
 }
 
 // 今日彙總：混合 daily[0]（今天）、current（即時）與空氣品質 API
@@ -199,7 +199,7 @@ const summary = computed(() => {
         <div
           v-for="(hour, index) in hourlyList"
           :key="hour.time"
-          class="flex shrink-0 flex-col items-center gap-2"
+          class="flex shrink-0 flex-col items-center gap-2 pb-3"
         >
           <span class="text-xs text-neutral-900">
             {{ Math.round(hour.temp) }}°
