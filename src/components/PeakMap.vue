@@ -30,6 +30,7 @@ const trailLayer = L.geoJSON(trails as any, {
     color: "#16a34a", // Taro Todo：綠線的綠色可以再調整，讓它更明顯一點。
     weight: 2,
     opacity: 0.6,
+    interactive: false,
   },
 
   // 過濾掉資料裡夾帶的 Marker
@@ -61,13 +62,6 @@ const trailLayer = L.geoJSON(trails as any, {
       permanent: true,
       direction: "center",
       className: `trail-label trail-label--${tier}`,
-    });
-
-    // 綁定點擊事件
-    layer.on("click", () => {
-      focusedTrailId.value = feature.id;
-      // todo: 記得刪 log
-      console.log("Clicked trail:", feature.id, feature.properties?.name);
     });
   },
 });
