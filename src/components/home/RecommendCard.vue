@@ -47,9 +47,7 @@ const nextGroup = computed(() => {
 });
 
 const unfinishedPeaks = computed(() =>
-  currentGroup.value.peaks
-    .filter((p) => !completedPeakIds.value.has(p.id))
-    .slice(0, 3),
+  currentGroup.value.peaks.filter((p) => !completedPeakIds.value.has(p.id)),
 );
 
 const completedInGroup = computed(
@@ -92,7 +90,7 @@ const completedInGroup = computed(
     <!-- 推薦山峰列表 -->
     <div class="flex flex-col gap-1">
       <div
-        v-for="peak in unfinishedPeaks"
+        v-for="peak in unfinishedPeaks.slice(0, 3)"
         :key="peak.id"
         class="flex items-center justify-between px-3 py-1"
       >
