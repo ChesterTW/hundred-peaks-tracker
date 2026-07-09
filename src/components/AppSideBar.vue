@@ -5,6 +5,7 @@ import { Home, Mountain, ClipboardList, User } from "@lucide/vue";
 import { useAuthStore } from "../stores/authStore";
 import { storeToRefs } from "pinia";
 import UserMenu from "./home/UserMenu.vue";
+import { useClickOutside } from "../composables/useClickOutside";
 
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
@@ -17,6 +18,11 @@ const navItems: NavItem[] = [
 ];
 
 const isUserMenuOpen = ref(false);
+const userMenuRef = ref<HTMLElement | null>(null);
+
+useClickOutside(userMenuRef, () => {
+  isUserMenuOpen.value = false;
+});
 </script>
 
 <template>
@@ -45,7 +51,7 @@ const isUserMenuOpen = ref(false);
     </div>
 
     <!-- 會員入口 -->
-    <div class="relative">
+    <div class="relative" ref="userMenuRef">
       <div
         class="w-12 h-12 rounded-full shrink-0 overflow-hidden bg-neutral-300 cursor-pointer flex items-center justify-center"
         @click="isUserMenuOpen = !isUserMenuOpen"
