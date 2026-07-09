@@ -5,11 +5,13 @@ import { ChevronRight, PanelRightClose } from "@lucide/vue";
 import { useTripStore } from "../../stores/tripStore";
 import { peaks } from "../../data/peaks";
 import { useRouter } from "vue-router";
+import { useMapFocus } from "../../composables/useMapFocus";
 
 const router = useRouter();
 const emit = defineEmits<{ close: [] }>();
 
 const { completedPeakIds } = storeToRefs(useTripStore());
+const { focusedPeakId } = useMapFocus();
 
 // 推薦順序：同風險等級先提升體能，再提升風險
 const GROUP_ORDER: [number, number][] = [
@@ -101,7 +103,8 @@ const completedInGroup = computed(
       <div
         v-for="peak in unfinishedPeaks.slice(0, 3)"
         :key="peak.id"
-        class="flex items-center justify-between px-3 py-1"
+        class="flex items-center justify-between px-3 py-1 rounded-lg hover:bg-neutral-200 active:bg-neutral-300 transition-colors cursor-pointer"
+        @click="focusedPeakId = peak.id"
       >
         <div class="flex flex-col gap-1">
           <p class="text-sm font-medium text-neutral-900">{{ peak.name }}</p>
@@ -113,10 +116,8 @@ const completedInGroup = computed(
             >
           </div>
         </div>
-        <button
-          class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-neutral-100 transition-colors cursor-pointer"
-        >
-          <ChevronRight :size="16" class="text-neutral-400" />
+        <button class="flex items-center justify-center rounded-full">
+          <ChevronRight :size="16" class="m-2 text-neutral-400" />
         </button>
       </div>
     </div>

@@ -31,22 +31,22 @@ watch(isRecommendCardOpen, (open) => {
       <div class="absolute top-3 left-3 z-1500">
         <StatCard @openAddTripModal="isTripModalOpen = true" />
       </div>
-
-      <!-- 右上：下一座百岳 Card -->
-      <div class="absolute top-3 right-3 z-1500">
-        <RecommendCard
-          v-if="isRecommendCardOpen"
-          @close="isRecommendCardOpen = false"
-        />
-        <button
-          v-else
-          class="flex items-center justify-center backdrop-blur-md bg-white/75 border border-white/65 rounded-full shadow-xl hover:bg-white transition-colors cursor-pointer"
-          @click="isRecommendCardOpen = true"
-        >
-          <Compass class="text-neutral-700 m-3" :size="24" />
-        </button>
-      </div>
     </template>
+
+    <!-- 右上：下一座百岳 Card -->
+    <div class="absolute top-3 right-3 z-1500">
+      <RecommendCard
+        v-if="isRecommendCardOpen"
+        @close="isRecommendCardOpen = false"
+      />
+      <button
+        v-else
+        class="flex items-center justify-center backdrop-blur-md bg-white/75 border border-white/65 rounded-full shadow-xl hover:bg-white transition-colors cursor-pointer"
+        @click="isRecommendCardOpen = true"
+      >
+        <Compass class="text-neutral-700 m-3" :size="24" />
+      </button>
+    </div>
 
     <!-- 山峰詳細資訊 Drawer -->
     <PeakDetailDrawer
