@@ -48,16 +48,16 @@ const userLogInItems: UserLogInItem[] = [
       </div>
 
       <!-- 登入 / 登出按鈕 -->
-      <div
-        v-for="(item, index) in userLogInItems"
-        :key="index"
-        class="px-3 py-2 hover:bg-neutral-100 rounded-lg cursor-pointer text-sm font-medium"
-      >
-        <div @click="item.onclick">
+      <template v-for="(item, index) in userLogInItems" :key="index">
+        <div
+          v-if="index === 0 ? !isLoggedIn : isLoggedIn"
+          @click="item.onclick"
+          class="px-3 py-2 hover:bg-neutral-100 rounded-lg cursor-pointer text-sm font-medium"
+        >
           <component :is="item.icon" :size="16" class="inline-block mr-2" />
           <span>{{ item.name }}</span>
         </div>
-      </div>
+      </template>
     </div>
   </div>
 </template>
