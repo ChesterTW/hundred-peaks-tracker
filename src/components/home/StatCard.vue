@@ -4,6 +4,7 @@ import { storeToRefs } from "pinia";
 import { useTripStore } from "../../stores/tripStore";
 import { peaks } from "../../data/peaks";
 
+const emit = defineEmits(["openAddTripModal"]);
 const { completedCount, completedPeakIds } = storeToRefs(useTripStore());
 
 const rangeStats = computed(() => {
@@ -24,7 +25,7 @@ const rangeStats = computed(() => {
 
 <template>
   <div
-    class="backdrop-blur-md bg-white/75 border border-white/65 rounded-xl shadow-xl flex flex-col gap-4 w-80 px-5 py-4 overflow-hidden"
+    class="backdrop-blur-md bg-white/75 border border-white/65 rounded-xl shadow-xl flex flex-col gap-4 w-75 px-5 py-4 overflow-hidden"
   >
     <p class="text-xs font-medium text-neutral-400">百岳完登進度</p>
 
@@ -62,5 +63,14 @@ const rangeStats = computed(() => {
         </div>
       </div>
     </div>
+
+    <div class="h-px bg-neutral-200" />
+
+    <button
+      class="w-full h-10 bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
+      @click="emit('openAddTripModal')"
+    >
+      新增行程
+    </button>
   </div>
 </template>

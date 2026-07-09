@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { storeToRefs } from "pinia";
-import { ChevronRight } from "@lucide/vue";
+import { ChevronRight, PanelRightClose } from "@lucide/vue";
 import { useTripStore } from "../../stores/tripStore";
 import { peaks } from "../../data/peaks";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+const emit = defineEmits<{ close: [] }>();
 
 const { completedPeakIds } = storeToRefs(useTripStore());
 
@@ -65,12 +66,16 @@ const completedInGroup = computed(
     <!-- Header -->
     <div class="flex items-end justify-between">
       <p class="text-base font-medium text-neutral-900">下一座百岳</p>
-      <button
-        class="text-xs text-neutral-400 underline hover:text-neutral-700 transition-colors cursor-pointer"
-        @click="router.push('/peaks')"
-      >
-        查看全部
-      </button>
+
+      <!-- 收合 -->
+      <div class="flex justify-end -mt-1 -mr-1">
+        <button
+          class="flex items-center justify-center rounded-full hover:bg-neutral-200 active:bg-neutral-300 transition-colors cursor-pointer"
+          @click="emit('close')"
+        >
+          <PanelRightClose :size="16" class="m-2 text-neutral-400" />
+        </button>
+      </div>
     </div>
 
     <!-- 目前組別 -->
@@ -116,13 +121,11 @@ const completedInGroup = computed(
       </div>
     </div>
 
-    <div v-if="nextGroup" class="h-px bg-neutral-200" />
-
-    <!-- 解鎖提示 -->
-    <p v-if="nextGroup" class="text-xs text-neutral-400">
-      這組完成後 → 解鎖 體能 LV.{{ nextGroup.physical }} · 風險 LV.{{
-        nextGroup.risk
-      }}
-    </p>
+    <button
+      class="px-3 self-start text-xs text-neutral-400 underline hover:text-neutral-700 transition-colors cursor-pointer"
+      @click="router.push('/peaks')"
+    >
+      查看全部
+    </button>
   </div>
 </template>

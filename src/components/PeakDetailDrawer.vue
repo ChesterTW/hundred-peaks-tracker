@@ -8,7 +8,7 @@ const emit = defineEmits<{ close: [] }>();
 
 <template>
   <div
-    class="absolute inset-y-0 right-0 w-96 z-1100 bg-white shadow-xl overflow-y-auto p-4"
+    class="absolute inset-y-0 left-0 w-96 z-1100 bg-white shadow-xl overflow-y-auto p-4"
   >
     <CloseButton @close="emit('close')" />
 
