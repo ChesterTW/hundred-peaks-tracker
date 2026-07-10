@@ -169,7 +169,7 @@ onMounted(() => {
           </div>
         </div>
 
-        <div class="bg-neutral-50 rounded-md px-6 py-4">
+        <div class="bg-neutral-50 rounded-2xl px-6 py-4">
           <div class="w-fit h-fit flex gap-3 ml-auto">
             <div
               class="bg-white hover:bg-neutral-100 active:bg-neutral-200 border border-neutral-200 rounded-md w-fit h-fit cursor-pointer"

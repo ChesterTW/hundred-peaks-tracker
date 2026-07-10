@@ -95,24 +95,26 @@ const links = computed(() => {
       </div>
 
       <!-- 連結區塊 -->
-      <div class="flex flex-wrap gap-2.5">
+      <div class="flex flex-wrap gap-3">
         <a
           v-for="link in links"
           :key="link.label"
           :href="link.href"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-2 py-1 text-xs text-info hover:bg-neutral-100 active:bg-neutral-200"
+          class="flex items-center gap-1 text-xs text-neutral-400 underline"
         >
           {{ link.label }}
           <ExternalLink :size="12" />
         </a>
       </div>
 
+      <div class="w-full h-px bg-neutral-200"></div>
+
       <!-- 天氣區塊 -->
-      <section class="space-y-2">
+      <section class="space-y-3">
         <div class="flex items-baseline gap-2 px-1">
-          <h2 class="text-lg font-md text-gray-700">天氣預報</h2>
+          <h2 class="text-lg font-medium text-gray-700">天氣預報</h2>
           <span class="text-xs text-neutral-400">JMA Seamless 模型</span>
         </div>
         <WeatherCard :peak="peak"></WeatherCard>

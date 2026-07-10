@@ -16,7 +16,7 @@ const props = withDefaults(
 
 <template>
   <div
-    class="border border-neutral-200 focus-within:border-primary-500 rounded-md h-10 px-3 flex items-center gap-3"
+    class="border border-neutral-200 hover:border-neutral-300 focus-within:hover:border-primary-500 focus-within:border-primary-500 focus-within:ring-3 focus-within:ring-primary-500/20 rounded-md h-10 px-3 flex items-center gap-3"
   >
     <component
       :is="icon"

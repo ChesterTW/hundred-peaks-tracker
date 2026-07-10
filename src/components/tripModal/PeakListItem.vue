@@ -10,7 +10,7 @@ const props = defineProps<{
 
 <template>
   <div
-    class="flex items-center gap-3 p-3 w-full"
+    class="flex items-center gap-3 p-3 w-full hover:bg-neutral-50 active:bg-neutral-100"
     :class="props.isSelected ? 'bg-primary-50' : 'bg-white'"
   >
     <CheckBox :isSelected="props.isSelected" />

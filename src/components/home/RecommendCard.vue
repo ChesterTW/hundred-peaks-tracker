@@ -62,7 +62,7 @@ const completedInGroup = computed(
   >
     <!-- Header -->
     <div class="flex items-end justify-between">
-      <p class="text-base font-medium text-neutral-900">下一座百岳</p>
+      <p class="text-base font-medium text-neutral-700">下一座百岳</p>
 
       <!-- 收合 -->
       <div class="flex justify-end -mt-1 -mr-1">
@@ -102,7 +102,7 @@ const completedInGroup = computed(
         @click="focusedPeakId = peak.id"
       >
         <div class="flex flex-col gap-1">
-          <p class="text-sm font-medium text-neutral-900">{{ peak.name }}</p>
+          <p class="text-sm font-medium text-neutral-700">{{ peak.name }}</p>
           <div class="flex items-center gap-2">
             <span class="text-xs text-neutral-400">{{ peak.range }}</span>
             <div class="w-px h-3 bg-neutral-400" />

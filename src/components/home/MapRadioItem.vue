@@ -9,7 +9,7 @@ defineEmits<{ "update:modelValue": [value: boolean] }>();
 
 <template>
   <label
-    class="flex items-center gap-3 px-5 py-2.5 cursor-pointer hover:bg-gray-100 active:bg-gray-200 transition-colors"
+    class="flex items-center gap-3 px-6 py-3 cursor-pointer hover:bg-gray-100 active:bg-gray-200 transition-colors"
   >
     <input
       type="radio"
