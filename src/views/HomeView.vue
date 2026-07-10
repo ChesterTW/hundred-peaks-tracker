@@ -40,7 +40,7 @@ watch(isRecommendCardOpen, (open) => {
       />
       <button
         v-else
-        class="flex items-center justify-center shadow bg-white rounded-full shadow-xl hover:bg-neutral-100 active:bg-neutral-200 transition-colors cursor-pointer"
+        class="flex items-center justify-center bg-white rounded-full shadow hover:bg-neutral-100 active:bg-neutral-200 transition-colors cursor-pointer"
         @click="isRecommendCardOpen = true"
       >
         <Compass class="text-neutral-700 m-3" :size="24" />
