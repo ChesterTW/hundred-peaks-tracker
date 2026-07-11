@@ -59,16 +59,19 @@ function dateToLabel(date: string): string {
 function aqiLevel(aqi: number): { label: string; color: string } {
   if (aqi <= 50) return { label: "良好", color: "text-success" };
   if (aqi <= 100) return { label: "普通", color: "text-warning" };
-  if (aqi <= 150) return { label: "敏感族群不健康", color: "text-danger" };
-  return { label: "不健康", color: "text-danger" };
+  if (aqi <= 150) return { label: "敏感族群不健康", color: "text-warning" };
+  if (aqi <= 200) return { label: "對所有族群不良", color: "text-danger" };
+  if (aqi <= 300) return { label: "非常不良", color: "text-danger" };
+  return { label: "有害", color: "text-danger" };
 }
 
 // 紫外線分級
 function uvLevel(uv: number): { label: string; color: string } {
   if (uv <= 2) return { label: "低量級", color: "text-success" };
-  if (uv <= 7) return { label: "中量級", color: "text-warning" };
-  if (uv >= 8) return { label: "高量級", color: "text-danger" };
-  return { label: "過量級", color: "text-danger" };
+  if (uv <= 5) return { label: "中量級", color: "text-warning" };
+  if (uv <= 7) return { label: "高量級", color: "text-danger" };
+  if (uv <= 10) return { label: "過量級", color: "text-danger" };
+  return { label: "危險級", color: "text-danger" };
 }
 
 // 今日彙總：混合 daily[0]（今天）、current（即時）與空氣品質 API
