@@ -201,16 +201,12 @@ function drawmarkers() {
     : null;
 
   filteredPeaks.value.forEach((peak) => {
-    // 用戶所 hover 的山峰
     if (peak.id === hoveredPeakId.value || peak.id === focusedPeakId.value) {
       L.marker([peak.lat, peak.lng], { icon: selectedIcon })
         .bindTooltip(peak.name, {
           permanent: true,
           direction: "right",
           className: "peak-label",
-        })
-        .on("click", () => {
-          router.push({ name: "peak-detail", params: { id: peak.id } });
         })
         .addTo(markerGroup);
       return;
