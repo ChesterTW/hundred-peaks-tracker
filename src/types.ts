@@ -21,8 +21,7 @@ export interface Trip {
   date: string; // YYYY-MM-DD
   peakIds: number[]; // 可以登多座 Peak
   note?: string;
-  updatedAt: number;
-  deleted?: boolean;
+  updatedAt: number; // 後端寫入的時間戳，前端唯讀
 }
 
 // 天氣資訊

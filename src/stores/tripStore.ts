@@ -3,25 +3,20 @@ import { defineStore } from "pinia";
 import type { Trip } from "../types";
 import { useAuthStore } from "./authStore";
 import {
-  mergeTrips,
   fetchAllTrips,
-  upsertTrip,
-  subscribeTrips,
+  createTrip as createTripRemote,
+  updateTripRemote,
+  deleteTripRemote,
 } from "../tripSync";
 import { peaks } from "../data/peaks";
 
 export const useTripStore = defineStore("trip", () => {
   const STORAGE_KEY = "hundred-peaks-trips";
 
-  let unsubscribe: (() => void) | null = null;
-
   // state：所有行程
   const trips = ref<Trip[]>(loadTrips());
 
-  // getter：未刪除的行程
-  const activeTrips = computed(() => {
-    return trips.value.filter((trip) => !trip.deleted);
-  });
+  const activeTrips = computed(() => trips.value);
 
   // getter：完成的山峰數量
   const completedCount = computed(() => {
@@ -29,7 +24,7 @@ export const useTripStore = defineStore("trip", () => {
   });
 
   const completedPeakIds = computed(() => {
-    return new Set(activeTrips.value.flatMap((trip) => trip.peakIds));
+    return new Set(trips.value.flatMap((trip) => trip.peakIds));
   });
 
   const authStore = useAuthStore();
@@ -38,71 +33,39 @@ export const useTripStore = defineStore("trip", () => {
     () => authStore.user,
     (user) => {
       if (user) {
-        // 登入：migration + subscribe
-        handleLogin(user.uid);
+        handleLogin();
       } else {
-        // 登出：unsubscribe + 重置
         handleLogout();
       }
     },
     { immediate: true },
   );
 
-  async function handleLogin(uid: string) {
+  async function handleLogin() {
+    // 把登入前在本機（訪客身份）新增、還沒上雲的行程搬上雲端
     const localTrips = [...trips.value];
-
-    // 1. 訂閱雲端資料，覆蓋 trips.value。
-    unsubscribe = subscribeTrips(uid, (cloudTrips) => {
-      trips.value = cloudTrips;
-    });
-
-    // 2. migration：將 localStorage 的資料與雲端資料合併，並寫回雲端
-    // 若 localStorage 沒有資料，則跳過 migration。
     if (localTrips.length > 0) {
       try {
-        const cloud = await fetchAllTrips(uid);
-        const merged = mergeTrips(localTrips, cloud);
-        await Promise.all(merged.map((t) => upsertTrip(uid, t)));
-
-        // 只有在同步成功後，才可以清空本地資料。
+        await Promise.all(
+          localTrips.map((trip) =>
+            createTripRemote({ date: trip.date, peakIds: trip.peakIds, note: trip.note }),
+          ),
+        );
         localStorage.removeItem(STORAGE_KEY);
       } catch (e) {
-        console.error(
-          "[tripStore] migration 失敗，保留 localStorage 待重試",
-          e,
-        );
+        console.error("[tripStore] 本機行程搬上雲端失敗，保留本機資料待重試", e);
       }
+    }
+
+    try {
+      trips.value = await fetchAllTrips();
+    } catch (e) {
+      console.error("[tripStore] 讀取雲端行程失敗", e);
     }
   }
 
-  async function handleLogout() {
-    // 1. 取消訂閱
-    if (unsubscribe) {
-      unsubscribe();
-      unsubscribe = null;
-    }
-
-    // 2. 清空前一位用戶的資料（避免下一位用戶登入時看到前一位的資料）
-    trips.value = [];
-  }
-
-  function persist(trip: Trip) {
-    const user = authStore.user;
-    if (user) {
-      // 登入：寫雲端，不碰 trips.value
-      upsertTrip(user.uid, trip).catch((e) => {
-        // todo：失敗時顯示 toast
-        console.error("[tripStore] 寫入雲端失敗", trip.id, e);
-      });
-    } else {
-      // 未登入：改 trips.value（watch 會寫進 localStorage）
-      const i = trips.value.findIndex((t) => t.id === trip.id);
-      if (i === -1) {
-        trips.value.push(trip);
-      } else {
-        trips.value[i] = trip;
-      }
-    }
+  function handleLogout() {
+    trips.value = loadTrips();
   }
 
   function loadTrips(): Trip[] {
@@ -115,47 +78,63 @@ export const useTripStore = defineStore("trip", () => {
     return JSON.parse(raw);
   }
 
-  function addTrip(date: string, peakIds: number[], note?: string) {
-    persist({
-      id: crypto.randomUUID(),
-      date,
-      peakIds,
-      note,
-      updatedAt: Date.now(),
-      deleted: false,
-    });
+  function persistLocal() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(trips.value));
   }
 
-  function updateTrip(
+  async function addTrip(date: string, peakIds: number[], note?: string) {
+    if (authStore.user) {
+      try {
+        const created = await createTripRemote({ date, peakIds, note });
+        trips.value.push(created);
+      } catch (e) {
+        console.error("[tripStore] 新增行程失敗", e);
+      }
+      return;
+    }
+
+    trips.value.push({ id: crypto.randomUUID(), date, peakIds, note, updatedAt: Date.now() });
+    persistLocal();
+  }
+
+  async function updateTrip(
     id: string,
     date: string,
     peakIds: number[],
     note?: string,
   ) {
-    const existing = trips.value.find((trip) => trip.id === id);
+    const index = trips.value.findIndex((trip) => trip.id === id);
+    if (index === -1) return;
 
-    if (!existing) return;
+    if (authStore.user) {
+      try {
+        trips.value[index] = await updateTripRemote(id, { date, peakIds, note });
+      } catch (e) {
+        console.error("[tripStore] 更新行程失敗", id, e);
+      }
+      return;
+    }
 
-    persist({
-      ...existing,
-      date,
-      peakIds,
-      note,
-      updatedAt: Date.now(),
-      deleted: false,
-    });
+    trips.value[index] = { ...trips.value[index], date, peakIds, note, updatedAt: Date.now() };
+    persistLocal();
   }
 
-  function deleteTrip(id: string) {
-    const existing = trips.value.find((trip) => trip.id === id);
+  async function deleteTrip(id: string) {
+    const index = trips.value.findIndex((trip) => trip.id === id);
+    if (index === -1) return;
 
-    if (!existing) return;
+    if (authStore.user) {
+      try {
+        await deleteTripRemote(id);
+        trips.value.splice(index, 1);
+      } catch (e) {
+        console.error("[tripStore] 刪除行程失敗", id, e);
+      }
+      return;
+    }
 
-    persist({
-      ...existing,
-      updatedAt: Date.now(),
-      deleted: true,
-    });
+    trips.value.splice(index, 1);
+    persistLocal();
   }
 
   function getTripById(id: string): Trip | undefined {
@@ -178,15 +157,6 @@ export const useTripStore = defineStore("trip", () => {
 
     return latest.replaceAll("-", "・");
   }
-
-  watch(
-    trips,
-    () => {
-      if (authStore.user) return; // 登入時不寫 localStorage
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(trips.value));
-    },
-    { deep: true },
-  );
 
   return {
     trips,

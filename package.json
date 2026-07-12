@@ -12,7 +12,6 @@
   "dependencies": {
     "@lucide/vue": "^1.23.0",
     "@vuepic/vue-datepicker": "^14.0.0",
-    "firebase": "^12.15.0",
     "leaflet": "^1.9.4",
     "pinia": "^3.0.4",
     "vue": "^3.5.34",
