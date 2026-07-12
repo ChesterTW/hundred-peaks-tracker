@@ -6,7 +6,6 @@ import { storeToRefs } from "pinia";
 import { useTripStore } from "../stores/tripStore";
 import { usePeakFilter } from "../composables/usePeakFilter";
 import { useMapFocus } from "../composables/useMapFocus";
-import router from "../router";
 import trails from "../data/trails.json";
 import type { BaseLayer, VisibilityState } from "../types";
 import { baseLayers } from "../data/baseLayers";
