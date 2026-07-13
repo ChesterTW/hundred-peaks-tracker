@@ -12,9 +12,9 @@ const { user } = storeToRefs(authStore);
 
 type NavItem = { icon: Component; to: string; name: string };
 const navItems: NavItem[] = [
-  { icon: Home, to: "/home", name: "home" },
-  { icon: Mountain, to: "/peaks", name: "peaks" },
-  { icon: ClipboardList, to: "/trips", name: "trips" },
+  { icon: Home, to: "/home", name: "首頁" },
+  { icon: Mountain, to: "/peaks", name: "百岳" },
+  { icon: ClipboardList, to: "/trips", name: "行程" },
 ];
 
 const isUserMenuOpen = ref(false);
@@ -44,6 +44,7 @@ useClickOutside(userMenuRef, () => {
           :to="item.to"
           class="flex items-center justify-center w-12 h-12 rounded-lg transition-colors duration-200 text-neutral-700"
           active-class="bg-primary-500 text-white"
+          :aria-label="item.name"
         >
           <component :is="item.icon" :size="24" />
         </router-link>
@@ -52,8 +53,11 @@ useClickOutside(userMenuRef, () => {
 
     <!-- 會員入口 -->
     <div class="relative" ref="userMenuRef">
-      <div
+      <button
+        type="button"
         class="w-12 h-12 rounded-full shrink-0 overflow-hidden bg-neutral-300 cursor-pointer flex items-center justify-center"
+        aria-label="會員選單"
+        :aria-expanded="isUserMenuOpen"
         @click="isUserMenuOpen = !isUserMenuOpen"
       >
         <img
@@ -62,7 +66,7 @@ useClickOutside(userMenuRef, () => {
           class="w-full h-full object-cover"
         />
         <User v-else class="text-white" :size="24" />
-      </div>
+      </button>
 
       <!-- 會員選單 -->
       <user-menu v-if="isUserMenuOpen"></user-menu>

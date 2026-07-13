@@ -49,14 +49,15 @@ onMounted(async () => {
       ></div>
 
       <!-- 已登入：登出按鈕 -->
-      <div
+      <button
         v-else
+        type="button"
+        class="w-full text-left px-3 py-2 hover:bg-neutral-100 rounded-lg cursor-pointer text-sm font-medium"
         @click="authStore.logout"
-        class="px-3 py-2 hover:bg-neutral-100 rounded-lg cursor-pointer text-sm font-medium"
       >
         <LogOutIcon :size="16" class="inline-block mr-2" />
         <span>登出</span>
-      </div>
+      </button>
     </div>
   </div>
 </template>

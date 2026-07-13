@@ -101,6 +101,8 @@ function handleSelect(physical: number, risk: number) {
           :disabled="getCount(physical, risk) === 0"
           class="aspect-square rounded-md flex items-center justify-center text-xs font-medium transition-colors"
           :class="cellClass(physical, risk)"
+          :aria-label="`體能 Lv.${physical}、風險 Lv.${risk}，共 ${getCount(physical, risk)} 座`"
+          :aria-pressed="isSelected(physical, risk)"
           @click="handleSelect(physical, risk)"
         >
           {{ getCount(physical, risk) }}

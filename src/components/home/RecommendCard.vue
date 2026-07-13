@@ -67,7 +67,9 @@ const completedInGroup = computed(
       <!-- 收合 -->
       <div class="flex justify-end -mt-1 -mr-1">
         <button
+          type="button"
           class="flex items-center justify-center rounded-full hover:bg-neutral-200 active:bg-neutral-300 transition-colors cursor-pointer"
+          aria-label="收合下一座百岳推薦卡片"
           @click="emit('close')"
         >
           <PanelRightClose :size="16" class="m-2 text-neutral-400" />
@@ -95,13 +97,15 @@ const completedInGroup = computed(
 
     <!-- 推薦山峰列表 -->
     <div class="flex flex-col gap-1">
-      <div
+      <button
         v-for="peak in unfinishedPeaks.slice(0, 3)"
         :key="peak.id"
-        class="flex items-center justify-between px-3 py-1 rounded-lg hover:bg-neutral-200 active:bg-neutral-300 transition-colors cursor-pointer"
+        type="button"
+        :aria-label="`在地圖上定位 ${peak.name}`"
+        class="w-full flex items-center justify-between px-3 py-1 rounded-lg hover:bg-neutral-200 active:bg-neutral-300 transition-colors cursor-pointer"
         @click="focusedPeakId = peak.id"
       >
-        <div class="flex flex-col gap-1">
+        <div class="flex flex-col items-start gap-1">
           <p class="text-sm font-medium text-neutral-700">{{ peak.name }}</p>
           <div class="flex items-center gap-2">
             <span class="text-xs text-neutral-400">{{ peak.range }}</span>
@@ -111,10 +115,13 @@ const completedInGroup = computed(
             >
           </div>
         </div>
-        <button class="flex items-center justify-center rounded-full">
+        <span
+          aria-hidden="true"
+          class="flex items-center justify-center rounded-full"
+        >
           <ChevronRight :size="16" class="m-2 text-neutral-400" />
-        </button>
-      </div>
+        </span>
+      </button>
     </div>
 
     <button

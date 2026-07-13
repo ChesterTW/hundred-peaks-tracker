@@ -6,13 +6,15 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div
+  <button
+    type="button"
     :class="
       isSelected
         ? 'bg-primary-500'
         : 'bg-white border border-neutral-300 transition-colors hover:bg-neutral-100 active:bg-neutral-200'
     "
     class="px-3 py-1 rounded-full cursor-pointer"
+    :aria-pressed="isSelected"
   >
     <p
       :class="isSelected ? 'text-white' : 'text-neutral-700'"
@@ -20,5 +22,5 @@ const props = defineProps<{
     >
       {{ props.text }}
     </p>
-  </div>
+  </button>
 </template>

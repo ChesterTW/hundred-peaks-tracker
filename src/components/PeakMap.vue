@@ -207,7 +207,9 @@ function drawmarkers() {
           direction: "right",
           className: "peak-label",
         })
-        .addTo(markerGroup);
+        .addTo(markerGroup)
+        .getElement()
+        ?.setAttribute("aria-label", peak.name);
       return;
     }
 
@@ -244,7 +246,9 @@ function drawmarkers() {
       .on("click", () => {
         focusedPeakId.value = peak.id;
       })
-      .addTo(markerGroup);
+      .addTo(markerGroup)
+      .getElement()
+      ?.setAttribute("aria-label", peak.name);
   });
 }
 
@@ -294,6 +298,9 @@ function handleLayerChange(id: string) {
         <button
           @click="activePanel = activePanel === 'layer' ? null : 'layer'"
           class="hover:bg-gray-100 active:bg-gray-200 transition-colors bg-white shadow rounded-lg text-sm"
+          type="button"
+          aria-label="切換底圖圖層"
+          :aria-expanded="activePanel === 'layer'"
         >
           <Layers class="m-3 text-neutral-700" :size="24" />
         </button>
@@ -310,6 +317,9 @@ function handleLayerChange(id: string) {
             activePanel = activePanel === 'visibility' ? null : 'visibility'
           "
           class="hover:bg-gray-100 active:bg-gray-200 transition-colors bg-white shadow rounded-lg text-sm"
+          type="button"
+          aria-label="切換山峰顯示篩選"
+          :aria-expanded="activePanel === 'visibility'"
         >
           <Filter class="m-3 text-neutral-700" :size="24" />
         </button>

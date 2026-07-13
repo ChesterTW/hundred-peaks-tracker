@@ -110,6 +110,7 @@ function rowBorderClass(index: number) {
             :class="
               selectedDifficulty ? 'border-primary-500' : 'border-neutral-300'
             "
+            :aria-expanded="isDifficultyPopoverOpen"
             @click="isDifficultyPopoverOpen = !isDifficultyPopoverOpen"
           >
             <p class="text-neutral-700 text-sm">

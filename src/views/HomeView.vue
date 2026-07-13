@@ -40,7 +40,9 @@ watch(isRecommendCardOpen, (open) => {
       />
       <button
         v-else
+        type="button"
         class="flex items-center justify-center bg-white rounded-full shadow hover:bg-neutral-100 active:bg-neutral-200 transition-colors cursor-pointer"
+        aria-label="開啟下一座百岳推薦卡片"
         @click="isRecommendCardOpen = true"
       >
         <Compass class="text-neutral-700 m-3" :size="24" />
