@@ -6,7 +6,6 @@ import { storeToRefs } from "pinia";
 import { useTripStore } from "../stores/tripStore";
 import { usePeakFilter } from "../composables/usePeakFilter";
 import { useMapFocus } from "../composables/useMapFocus";
-import trails from "../data/trails.json";
 import type { BaseLayer, VisibilityState } from "../types";
 import { baseLayers } from "../data/baseLayers";
 import { peakIconHtml } from "../utils/peakIcon";
@@ -14,7 +13,7 @@ import { Layers, Filter } from "@lucide/vue";
 import MapDisplayPanel from "./home/MapDisplayPanel.vue";
 import MapVisibilityPanel from "./home/MapVisibilityPanel.vue";
 
-// 2. 常數 / 靜態物件（不會變的：HIDE_THRESHOLD_PX、selectedIcon、trailLayer、markerGroup）
+// 2. 常數 / 靜態物件（不會變的：HIDE_THRESHOLD_PX、selectedIcon、markerGroup）
 const HIDE_THRESHOLD_PX = 40; // 螢幕像素門檻，用於 decluttering，避免 marker 重疊。
 const markerGroup = L.layerGroup();
 const selectedIcon = L.divIcon({
@@ -24,46 +23,62 @@ const selectedIcon = L.divIcon({
   tooltipAnchor: [12, -10], // tooltip 從三角形右側長出來
   html: peakIconHtml("var(--color-primary-500)"),
 });
-const trailLayer = L.geoJSON(trails as any, {
-  style: {
-    color: "#16a34a", // Taro Todo：綠線的綠色可以再調整，讓它更明顯一點。
-    weight: 2,
-    opacity: 0.6,
-    interactive: false,
-  },
 
-  // 過濾掉資料裡夾帶的 Marker
-  filter: (feature) => {
-    return (
-      feature.geometry.type === "LineString" ||
-      feature.geometry.type === "MultiLineString"
+// trails.json 有 23MB，改成使用者第一次打開「顯示路線」時才動態載入，
+// 並用 trailLayerPromise 快取結果，避免重複下載、重複解析。
+let trailLayer: L.GeoJSON | undefined;
+let trailLayerPromise: Promise<L.GeoJSON> | undefined;
+
+function loadTrailLayer(): Promise<L.GeoJSON> {
+  if (!trailLayerPromise) {
+    trailLayerPromise = import("../data/trails.json").then(
+      ({ default: trails }) => {
+        trailLayer = L.geoJSON(trails as any, {
+          style: {
+            color: "#16a34a", // Taro Todo：綠線的綠色可以再調整，讓它更明顯一點。
+            weight: 2,
+            opacity: 0.6,
+            interactive: false,
+          },
+
+          // 過濾掉資料裡夾帶的 Marker
+          filter: (feature) => {
+            return (
+              feature.geometry.type === "LineString" ||
+              feature.geometry.type === "MultiLineString"
+            );
+          },
+
+          // 綁定步道名稱 tooltip
+          onEachFeature: (feature: any, layer) => {
+            const name = feature.properties?.name;
+            if (!name) return;
+
+            const network = feature.properties?.network;
+            let tier = "minor"; // 預設重要性為「次要」
+
+            if (network === "iwn" || network === "nwn") {
+              // iwn / nwn 是「國家級」步道，重要性最高。
+              tier = "major";
+            } else if (network === "rwn") {
+              // rwn 是「區域級」步道，重要性中等。
+              tier = "mid";
+            }
+
+            // 綁定 tooltip
+            layer.bindTooltip(name, {
+              permanent: true,
+              direction: "center",
+              className: `trail-label trail-label--${tier}`,
+            });
+          },
+        });
+        return trailLayer;
+      },
     );
-  },
-
-  // 綁定步道名稱 tooltip
-  onEachFeature: (feature: any, layer) => {
-    const name = feature.properties?.name;
-    if (!name) return;
-
-    const network = feature.properties?.network;
-    let tier = "minor"; // 預設重要性為「次要」
-
-    if (network === "iwn" || network === "nwn") {
-      // iwn / nwn 是「國家級」步道，重要性最高。
-      tier = "major";
-    } else if (network === "rwn") {
-      // rwn 是「區域級」步道，重要性中等。
-      tier = "mid";
-    }
-
-    // 綁定 tooltip
-    layer.bindTooltip(name, {
-      permanent: true,
-      direction: "center",
-      className: `trail-label trail-label--${tier}`,
-    });
-  },
-});
+  }
+  return trailLayerPromise;
+}
 
 // 3. store / composable
 const store = useTripStore();
@@ -92,11 +107,15 @@ const activePanel = ref<"layer" | "visibility" | null>(null);
 // 7. watch（副作用）
 watch(
   () => visibility.value.trails,
-  (newVal) => {
+  async (newVal) => {
     if (newVal) {
-      trailLayer.addTo(map);
+      const layer = await loadTrailLayer();
+      // 載入期間使用者可能又關掉了，載完再檢查一次目前狀態才加到地圖上。
+      if (visibility.value.trails) {
+        layer.addTo(map);
+      }
     } else {
-      map.removeLayer(trailLayer);
+      trailLayer?.remove();
     }
   },
 );
@@ -157,7 +176,11 @@ onMounted(() => {
   applyBaseLayer(currentLayer.value);
 
   if (visibility.value.trails) {
-    trailLayer.addTo(map);
+    loadTrailLayer().then((layer) => {
+      if (visibility.value.trails) {
+        layer.addTo(map);
+      }
+    });
   }
   map.on("zoomend", updateTrailLabels);
 
