@@ -5,6 +5,8 @@ import AppSideBar from "./components/AppSideBar.vue";
 <template>
   <div class="flex h-screen overflow-hidden">
     <AppSideBar />
-    <router-view />
+    <main class="flex-1 overflow-hidden">
+      <router-view />
+    </main>
   </div>
 </template>
