@@ -1,6 +1,6 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-import { signInWithGoogle } from "../googleAuth";
+import { initGoogleSignIn } from "../googleAuth";
 import { loginWithGoogle, getJwt, setJwt, clearJwt, decodeJwt } from "../api";
 
 export interface AuthUser {
@@ -41,11 +41,15 @@ export const useAuthStore = defineStore("auth", () => {
   }
   isAuthReady.value = true;
 
-  async function login() {
-    const idToken = await signInWithGoogle();
+  async function handleCredential(idToken: string) {
     const { token } = await loginWithGoogle(idToken);
     setJwt(token);
     user.value = userFromJwt(token);
+  }
+
+  // 註冊 Google 登入完成後的回呼；實際登入按鈕由 renderGoogleButton 畫出來，點擊流程交給 Google 處理
+  function initGoogleButton() {
+    return initGoogleSignIn(handleCredential);
   }
 
   function logout() {
@@ -53,5 +57,5 @@ export const useAuthStore = defineStore("auth", () => {
     user.value = null;
   }
 
-  return { user, isAuthReady, login, logout, isLoggedIn };
+  return { user, isAuthReady, initGoogleButton, logout, isLoggedIn };
 });

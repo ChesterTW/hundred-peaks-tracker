@@ -1,32 +1,32 @@
 <script setup lang="ts">
-import type { Component } from "vue";
-import { User, LogInIcon, LogOutIcon } from "@lucide/vue";
+import { onMounted, ref } from "vue";
+import { LogOutIcon } from "@lucide/vue";
 import { useAuthStore } from "../../stores/authStore";
 import { storeToRefs } from "pinia";
+import { renderGoogleButton } from "../../googleAuth";
 
 const authStore = useAuthStore();
 const { user, isLoggedIn } = storeToRefs(authStore);
 
-type UserLogInItem = { icon: Component; onclick: () => void; name: string };
-const userLogInItems: UserLogInItem[] = [
-  { icon: LogInIcon, onclick: authStore.login, name: "登入" },
-  { icon: LogOutIcon, onclick: authStore.logout, name: "登出" },
-];
+const googleButtonContainer = ref<HTMLElement | null>(null);
+
+// 先註冊登入完成後的回呼，再把 Google 官方按鈕畫進容器；未登入時容器才會存在
+onMounted(async () => {
+  await authStore.initGoogleButton();
+  if (googleButtonContainer.value) {
+    renderGoogleButton(googleButtonContainer.value);
+  }
+});
 </script>
 
 <template>
   <div
-    class="absolute left-0 bottom-full mb-2 w-48 shadow-lg rounded-lg overflow-hidden"
+    class="absolute left-0 bottom-full mb-2 w-fit shadow-lg rounded-lg overflow-hidden"
   >
     <div class="p-1 bg-white rounded-lg">
       <!-- 會員資訊 -->
       <div class="px-3 py-2 rounded-lg gap-2">
         <div v-if="isLoggedIn" class="flex items-center gap-2">
-          <img
-            v-if="user?.photoURL"
-            :src="user?.photoURL"
-            class="w-6 h-6 rounded-full object-cover"
-          />
           <div class="min-w-0">
             <p class="text-sm font-medium text-neutral-700 truncate">
               {{ user?.displayName ?? "使用者" }}
@@ -37,27 +37,26 @@ const userLogInItems: UserLogInItem[] = [
           </div>
         </div>
         <div v-else class="flex items-center gap-2">
-          <div
-            class="w-6 h-6 rounded-full bg-neutral-300 flex items-center justify-center"
-          >
-            <User class="text-white" :size="12" />
-          </div>
-
-          <p class="text-sm font-medium text-neutral-700">訪客</p>
+          <p class="text-sm font-medium text-neutral-700">訪客身份</p>
         </div>
       </div>
 
-      <!-- 登入 / 登出按鈕 -->
-      <template v-for="(item, index) in userLogInItems" :key="index">
-        <div
-          v-if="index === 0 ? !isLoggedIn : isLoggedIn"
-          @click="item.onclick"
-          class="px-3 py-2 hover:bg-neutral-100 rounded-lg cursor-pointer text-sm font-medium"
-        >
-          <component :is="item.icon" :size="16" class="inline-block mr-2" />
-          <span>{{ item.name }}</span>
-        </div>
-      </template>
+      <!-- 未登入：顯示 Google 官方登入按鈕，點擊後的彈窗/帳號選擇都由 Google 處理 -->
+      <div
+        v-if="!isLoggedIn"
+        ref="googleButtonContainer"
+        class="px-1 py-1"
+      ></div>
+
+      <!-- 已登入：登出按鈕 -->
+      <div
+        v-else
+        @click="authStore.logout"
+        class="px-3 py-2 hover:bg-neutral-100 rounded-lg cursor-pointer text-sm font-medium"
+      >
+        <LogOutIcon :size="16" class="inline-block mr-2" />
+        <span>登出</span>
+      </div>
     </div>
   </div>
 </template>
