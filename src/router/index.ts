@@ -1,7 +1,4 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
-import PeakListView from "../views/PeakListView.vue";
-import TripListView from "../views/TripListView.vue";
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -9,15 +6,15 @@ const router = createRouter({
     { path: "/", redirect: "/home" },
     {
       path: "/home",
-      component: HomeView,
+      component: () => import("../views/HomeView.vue"),
     },
     {
       path: "/trips",
-      component: TripListView,
+      component: () => import("../views/TripListView.vue"),
     },
     {
       path: "/peaks",
-      component: PeakListView,
+      component: () => import("../views/PeakListView.vue"),
     },
   ],
 });
