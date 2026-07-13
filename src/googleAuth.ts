@@ -20,6 +20,7 @@ declare global {
           initialize(config: {
             client_id: string;
             callback: (response: GoogleCredentialResponse) => void;
+            use_fedcm_for_button?: boolean;
           }): void;
           renderButton(parent: HTMLElement, options: GoogleButtonOptions): void;
         };
@@ -60,6 +61,8 @@ export async function initGoogleSignIn(
   window.google!.accounts.id.initialize({
     client_id: CLIENT_ID,
     callback: (response) => onCredential(response.credential),
+    // 改用瀏覽器原生 FedCM API 取代第三方 Cookie 做登入狀態檢查
+    use_fedcm_for_button: true,
   });
   initialized = true;
 }
