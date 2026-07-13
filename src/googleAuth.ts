@@ -30,25 +30,31 @@ declare global {
 }
 
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+const GIS_SCRIPT_SRC = "https://accounts.google.com/gsi/client";
 
 let initialized = false;
+let gisScriptPromise: Promise<void> | null = null;
 
-// index.html 用 <script async defer> 載入 GIS SDK，可能還沒載完就被呼叫，這裡輪詢等它就緒
-function waitForGis(timeoutMs = 5000): Promise<void> {
+// 只在使用者實際要登入時才動態載入 GIS SDK，讓未登入訪客不用付出這段請求與執行成本。
+// 注意：使用者實際點開登入選單時，一樣會對 accounts.google.com 發出請求並夾帶第三方
+// Cookie，這點沒有改變；Lighthouse 的被動掃描只是剛好不會觸發到這條路徑。
+function waitForGis(): Promise<void> {
   if (window.google?.accounts?.id) return Promise.resolve();
+  if (gisScriptPromise) return gisScriptPromise;
 
-  return new Promise((resolve, reject) => {
-    const start = Date.now();
-    const timer = setInterval(() => {
-      if (window.google?.accounts?.id) {
-        clearInterval(timer);
-        resolve();
-      } else if (Date.now() - start > timeoutMs) {
-        clearInterval(timer);
-        reject(new Error("Google 登入元件載入逾時，請重新整理頁面再試一次"));
-      }
-    }, 50);
+  gisScriptPromise = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = GIS_SCRIPT_SRC;
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => {
+      gisScriptPromise = null;
+      reject(new Error("Google 登入元件載入失敗，請確認網路連線後再試一次"));
+    };
+    document.head.appendChild(script);
   });
+
+  return gisScriptPromise;
 }
 
 // 註冊「使用者完成登入」的回呼。不論使用者是點官方按鈕還是觸發 One Tap，最後都會呼叫這裡拿到 ID Token
