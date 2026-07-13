@@ -30,7 +30,10 @@ export function decodeJwt(token: string): JwtPayload {
     base64.length + ((4 - (base64.length % 4)) % 4),
     "=",
   );
-  return JSON.parse(atob(padded));
+  const binary = atob(padded);
+  const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+
+  return JSON.parse(new TextDecoder("utf-8").decode(bytes));
 }
 
 class ApiError extends Error {
