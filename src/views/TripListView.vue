@@ -4,6 +4,7 @@ import { Search } from "@lucide/vue";
 import TextInput from "../components/Input/TextInput.vue";
 import DateRangeInput from "../components/Input/DateRangeInput.vue";
 import TripModal from "../components/tripModal/TripModal.vue";
+import TripRow from "../components/tripList/TripRow.vue";
 import { useTripStore } from "../stores/tripStore";
 import { storeToRefs } from "pinia";
 
@@ -42,34 +43,17 @@ const tableHeaders = [
   { name: "操作", key: "actions" },
 ];
 
-const actions = [
-  {
-    name: "編輯",
-    key: "edit",
-    action: (tripId: string) => {
-      editTripId.value = tripId;
-      isTripModalOpen.value = true;
-    },
-  },
-  {
-    name: "刪除",
-    key: "delete",
-    action: (tripId: string) => deleteTrip(tripId),
-  },
-];
-
-function rowBorderClass(index: number) {
-  return index === filteredTrips.value.length - 1
-    ? ""
-    : "border-b border-neutral-100";
+function handleEdit(tripId: string) {
+  editTripId.value = tripId;
+  isTripModalOpen.value = true;
 }
 </script>
 
 <template>
-  <div class="flex flex-col gap-3 px-7 py-6 w-full h-full">
-    <div class="flex gap-6 items-center">
+  <div class="flex flex-col gap-3 px-4 md:px-7 py-6 w-full h-full">
+    <div class="flex flex-col md:flex-row gap-3 md:gap-6 md:items-center">
       <p class="text-2xl font-bold text-neutral-700">行程紀錄</p>
-      <div class="flex gap-3 items-center">
+      <div class="flex flex-wrap gap-3 items-center">
         <TextInput
           :icon="Search"
           v-model="searchKeyword"
@@ -83,7 +67,7 @@ function rowBorderClass(index: number) {
         </p>
       </div>
       <div
-        class="bg-primary-500 hover:bg-primary-600 active:bg-primary-700 rounded-md w-fit h-fit cursor-pointer ml-auto"
+        class="bg-primary-500 hover:bg-primary-600 active:bg-primary-700 rounded-md w-fit h-fit cursor-pointer md:ml-auto"
         @click="isTripModalOpen = true"
       >
         <p class="text-white text-sm mx-4 my-2">新增行程</p>
@@ -91,10 +75,10 @@ function rowBorderClass(index: number) {
     </div>
 
     <div
-      class="grid grid-cols-[auto_4fr_1fr_1fr] grid-rows-[auto_1fr] gap-x-6 px-8 border border-neutral-200 rounded-lg flex-1 overflow-hidden"
+      class="flex flex-col md:grid md:grid-cols-[auto_4fr_1fr_1fr] md:grid-rows-[auto_1fr] gap-y-3 md:gap-y-0 md:gap-x-6 md:px-8 md:border md:border-neutral-200 md:rounded-lg flex-1 overflow-hidden"
     >
       <div
-        class="col-span-4 row-start-1 grid grid-cols-subgrid items-center bg-neutral-100 -mx-8 px-8"
+        class="hidden md:col-span-4 md:row-start-1 md:grid md:grid-cols-subgrid items-center bg-neutral-100 -mx-8 px-8"
       >
         <div
           v-for="header in tableHeaders"
@@ -106,38 +90,17 @@ function rowBorderClass(index: number) {
       </div>
 
       <div
-        class="col-span-4 row-start-2 grid grid-cols-subgrid gap-x-6 items-center content-start overflow-y-auto min-h-0 -mr-8"
+        class="flex flex-col gap-3 pb-16 md:pb-0 md:col-span-4 md:row-start-2 md:grid md:grid-cols-subgrid md:gap-x-6 md:items-center md:content-start overflow-y-auto min-h-0 md:-mr-8"
       >
-        <template v-for="(trip, index) in filteredTrips" :key="trip.id">
-          <p
-            class="py-4 text-neutral-700 font-medium text-sm"
-            :class="rowBorderClass(index)"
-          >
-            {{ trip.date }}
-          </p>
-          <p
-            class="py-4 text-neutral-700 font-medium text-sm"
-            :class="rowBorderClass(index)"
-          >
-            {{ trip.peakIds.map((id) => getPeakName(id)).join("、") }}
-          </p>
-          <p
-            class="py-4 text-neutral-400 text-sm"
-            :class="rowBorderClass(index)"
-          >
-            {{ trip.note === "" ? "-" : trip.note }}
-          </p>
-          <div class="flex gap-3 py-4 text-sm" :class="rowBorderClass(index)">
-            <p
-              v-for="action in actions"
-              :key="action.name"
-              class="text-primary-500 hover:text-primary-600 active:text-primary-700 cursor-pointer"
-              @click="action.action(trip.id)"
-            >
-              {{ action.name }}
-            </p>
-          </div>
-        </template>
+        <TripRow
+          v-for="(trip, index) in filteredTrips"
+          :key="trip.id"
+          :trip="trip"
+          :peakNames="trip.peakIds.map((id) => getPeakName(id)).join('、')"
+          :isLast="index === filteredTrips.length - 1"
+          @edit="handleEdit(trip.id)"
+          @delete="deleteTrip(trip.id)"
+        />
       </div>
     </div>
   </div>
