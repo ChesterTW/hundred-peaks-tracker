@@ -18,7 +18,7 @@ const props = defineProps<{
 
   <!-- 手機版：BottomSheet -->
   <BottomSheet :open="true" @close="emit('close')">
-    <div class="p-6 max-h-[80vh] overflow-y-auto">
+    <div class="p-6 h-[80vh] overflow-y-auto">
       <PeakDetailContent :peakId="props.peakId" @close="emit('close')" />
     </div>
   </BottomSheet>
