@@ -35,6 +35,6 @@ useClickOutside(userMenuRef, () => {
     </button>
 
     <!-- 會員選單 -->
-    <user-menu v-if="isUserMenuOpen"></user-menu>
+    <UserMenu v-if="isUserMenuOpen"></UserMenu>
   </div>
 </template>

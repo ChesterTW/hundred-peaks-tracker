@@ -52,14 +52,18 @@ function handleEdit(tripId: string) {
 <template>
   <div class="flex flex-col gap-3 px-4 md:px-7 py-6 w-full h-full">
     <div class="flex flex-col md:flex-row gap-3 md:gap-6 md:items-center">
-      <p class="text-2xl font-bold text-neutral-700">行程紀錄</p>
-      <div class="flex flex-wrap gap-3 items-center">
-        <TextInput
-          :icon="Search"
-          v-model="searchKeyword"
-          :placeholder="'搜尋山名...'"
-        ></TextInput>
+      <!-- 桌面版 -->
+      <p class="hidden md:block text-2xl font-bold text-neutral-700">
+        行程紀錄
+      </p>
+      <TextInput
+        :icon="Search"
+        v-model="searchKeyword"
+        :placeholder="'搜尋山名...'"
+        class="w-full md:w-auto"
+      ></TextInput>
 
+      <div class="flex flex-wrap gap-3 items-center">
         <DateRangeInput v-model="dateRange" />
 
         <p class="text-xs text-neutral-400">
@@ -67,7 +71,7 @@ function handleEdit(tripId: string) {
         </p>
       </div>
       <div
-        class="bg-primary-500 hover:bg-primary-600 active:bg-primary-700 rounded-md w-fit h-fit cursor-pointer md:ml-auto"
+        class="bg-primary-500 hover:bg-primary-600 active:bg-primary-700 rounded-md w-full text-center md:w-fit h-fit cursor-pointer md:ml-auto"
         @click="isTripModalOpen = true"
       >
         <p class="text-white text-sm mx-4 my-2">新增行程</p>
