@@ -65,7 +65,7 @@ const completedInGroup = computed(
       <p class="text-base font-medium text-neutral-700">下一座百岳</p>
 
       <!-- 收合 -->
-      <div class="flex justify-end -mt-1 -mr-1">
+      <div class="hidden md:flex justify-end -mt-1 -mr-1">
         <button
           type="button"
           class="flex items-center justify-center rounded-full hover:bg-neutral-200 active:bg-neutral-300 transition-colors cursor-pointer"
