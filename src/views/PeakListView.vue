@@ -4,6 +4,7 @@ import { Search } from "@lucide/vue";
 import TextInput from "../components/Input/TextInput.vue";
 import { peaks } from "../data/peaks.ts";
 import Chip from "../components/peakList/Chip.vue";
+import PeakRow from "../components/peakList/PeakRow.vue";
 import DifficultyMatrixPopover from "../components/peakList/DifficultyMatrixPopover.vue";
 import { useTripStore } from "../stores/tripStore";
 import { storeToRefs } from "pinia";
@@ -80,17 +81,13 @@ const tableHeaders = [
 
 const chips = [{ text: "全部" }, { text: "已登頂" }, { text: "未登頂" }];
 const selectedChip = ref<string>(chips[0].text);
-
-function rowBorderClass(index: number) {
-  return index === peaks.length - 1 ? "" : "border-b border-neutral-100";
-}
 </script>
 
 <template>
-  <div class="flex flex-col gap-3 px-7 py-6 w-full h-full">
-    <div class="flex gap-6 items-center">
+  <div class="flex flex-col gap-3 px-4 md:px-7 py-6 w-full h-full">
+    <div class="flex flex-col md:flex-row gap-3 md:gap-6 md:items-center">
       <p class="text-2xl font-bold text-neutral-700">山峰清單</p>
-      <div class="flex gap-3 items-center">
+      <div class="flex flex-wrap gap-3 items-center">
         <TextInput
           :icon="Search"
           v-model="searchKeyword"
@@ -136,10 +133,10 @@ function rowBorderClass(index: number) {
     </div>
 
     <div
-      class="grid grid-cols-[auto_auto_1fr_1fr_1fr_1fr] grid-rows-[auto_1fr] gap-x-6 px-8 border border-neutral-200 rounded-lg flex-1 overflow-hidden"
+      class="flex flex-col md:grid md:grid-cols-[auto_auto_1fr_1fr_1fr_1fr] md:grid-rows-[auto_1fr] gap-y-3 md:gap-y-0 md:gap-x-6 md:px-8 md:border md:border-neutral-200 md:rounded-lg flex-1 overflow-hidden"
     >
       <div
-        class="col-span-6 row-start-1 grid grid-cols-subgrid items-center bg-neutral-100 -mx-8 px-8"
+        class="hidden md:col-span-6 md:row-start-1 md:grid md:grid-cols-subgrid items-center bg-neutral-100 -mx-8 px-8"
       >
         <div
           v-for="header in tableHeaders"
@@ -151,58 +148,15 @@ function rowBorderClass(index: number) {
       </div>
 
       <div
-        class="col-span-6 row-start-2 grid grid-cols-subgrid gap-x-6 items-center content-start overflow-y-auto min-h-0 -mr-8"
+        class="flex flex-col gap-3 pb-16 md:pb-0 md:col-span-6 md:row-start-2 md:grid md:grid-cols-subgrid md:gap-x-6 md:items-center md:content-start overflow-y-auto min-h-0 md:-mr-8"
       >
-        <template v-for="(peak, index) in filteredPeaks" :key="peak.id">
-          <div>
-            <div
-              v-if="completedPeakIds.has(peak.id)"
-              class="bg-[#E5F0E5] px-3 py-1 rounded-full"
-            >
-              <p class="text-success text-xs font-medium">已登頂</p>
-            </div>
-            <div
-              v-else
-              class="bg-white px-3 py-1 rounded-full border border-neutral-300"
-            >
-              <p class="text-neutral-400 text-xs font-medium">未登頂</p>
-            </div>
-          </div>
-
-          <p
-            class="py-4 text-neutral-400 font-medium text-sm"
-            :class="rowBorderClass(index)"
-          >
-            {{ peak.id }}
-          </p>
-          <p
-            class="py-4 text-neutral-700 font-medium text-sm"
-            :class="rowBorderClass(index)"
-          >
-            {{ peak.name }}
-          </p>
-          <p
-            class="py-4 text-neutral-700 text-sm"
-            :class="rowBorderClass(index)"
-          >
-            {{ peak.elevation }} m
-          </p>
-          <p
-            class="py-4 text-neutral-700 text-sm"
-            :class="rowBorderClass(index)"
-          >
-            {{ peak.range }}
-          </p>
-          <div>
-            <div class="bg-neutral-100 rounded-full px-3 py-1 w-fit h-fit">
-              <p class="text-neutral-700 text-xs">
-                體能 Lv.{{ peak.rating.physical }}・風險 Lv.{{
-                  peak.rating.risk
-                }}
-              </p>
-            </div>
-          </div>
-        </template>
+        <PeakRow
+          v-for="(peak, index) in filteredPeaks"
+          :key="peak.id"
+          :peak="peak"
+          :isCompleted="completedPeakIds.has(peak.id)"
+          :isLast="index === peaks.length - 1"
+        />
       </div>
     </div>
   </div>
