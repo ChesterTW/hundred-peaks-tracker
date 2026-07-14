@@ -73,7 +73,7 @@ useClickOutside(userMenuRef, () => {
     <div class="relative" ref="userMenuRef">
       <button
         type="button"
-        class="w-12 h-12 rounded-full shrink-0 overflow-hidden bg-neutral-300 cursor-pointer flex items-center justify-center"
+        class="w-12 h-12 rounded-full shrink-0 overflow-hidden bg-neutral-200 cursor-pointer flex items-center justify-center"
         aria-label="會員選單"
         :aria-expanded="isUserMenuOpen"
         @click="isUserMenuOpen = !isUserMenuOpen"
