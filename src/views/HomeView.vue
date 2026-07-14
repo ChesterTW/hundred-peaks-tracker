@@ -37,7 +37,7 @@ const isRecommendSheetOpen = ref(false);
 </script>
 
 <template>
-  <div class="relative flex-1 h-screen overflow-hidden">
+  <div class="relative flex-1 h-dvh overflow-hidden">
     <!-- 全螢幕地圖 -->
     <PeakMap />
 

@@ -310,7 +310,7 @@ function handleLayerChange(id: string) {
 
 <template>
   <div class="relative">
-    <div ref="mapEl" class="h-screen w-full"></div>
+    <div ref="mapEl" class="h-dvh w-full"></div>
 
     <!-- 底圖切換 + 顯示控制 -->
     <div

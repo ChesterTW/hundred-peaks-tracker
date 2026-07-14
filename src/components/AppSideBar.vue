@@ -45,7 +45,7 @@ useClickOutside(userMenuRef, () => {
 
   <!-- 桌面版：側邊欄 -->
   <aside
-    class="hidden md:flex flex-col items-center justify-between bg-white border-r border-neutral-200 w-20 px-4 py-5 h-screen shrink-0 z-2000"
+    class="hidden md:flex flex-col items-center justify-between bg-white border-r border-neutral-200 w-20 px-4 py-5 h-dvh shrink-0 z-2000"
   >
     <div class="flex flex-col items-center gap-5 w-full">
       <!-- Logo -->
