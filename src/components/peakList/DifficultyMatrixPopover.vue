@@ -68,7 +68,7 @@ function handleSelect(physical: number, risk: number) {
 
 <template>
   <div
-    class="w-80 bg-white rounded-lg border border-neutral-200 shadow-lg p-4 flex flex-col gap-3"
+    class="w-auto md:w-80 bg-white rounded-lg border border-neutral-200 shadow-lg p-4 flex flex-col gap-3"
   >
     <div class="flex items-center justify-between">
       <p class="text-sm font-medium text-neutral-700">難度篩選</p>

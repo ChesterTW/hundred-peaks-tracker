@@ -47,7 +47,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="filterRef" class="relative">
+  <div ref="filterRef" class="md:relative">
     <button
       type="button"
       class="flex gap-1 items-center rounded-md border pl-3 pr-2 py-1 cursor-pointer hover:bg-neutral-100 active:bg-neutral-200 transition-colors"
@@ -67,7 +67,7 @@ onUnmounted(() => {
 
     <DifficultyMatrixPopover
       v-if="isPopoverOpen"
-      class="absolute top-full mt-2 left-0 z-20"
+      class="absolute top-full mt-2 inset-x-0 md:inset-x-auto md:left-0 z-20"
       :peaks="props.peaks"
       :selected="props.selected"
       @select="handleSelect"

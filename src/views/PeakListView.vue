@@ -97,7 +97,7 @@ const selectedChip = ref<string>(chips[0].text);
           :placeholder="'搜尋山名...'"
           class="w-full"
         ></TextInput>
-        <div class="flex gap-3 w-full">
+        <div class="flex gap-3 w-full relative">
           <template v-for="chip in chips" :key="chip.text">
             <Chip
               :text="chip.text"
