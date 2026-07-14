@@ -48,12 +48,19 @@ export const useTripStore = defineStore("trip", () => {
       try {
         await Promise.all(
           localTrips.map((trip) =>
-            createTripRemote({ date: trip.date, peakIds: trip.peakIds, note: trip.note }),
+            createTripRemote({
+              date: trip.date,
+              peakIds: trip.peakIds,
+              note: trip.note,
+            }),
           ),
         );
         localStorage.removeItem(STORAGE_KEY);
       } catch (e) {
-        console.error("[tripStore] 本機行程搬上雲端失敗，保留本機資料待重試", e);
+        console.error(
+          "[tripStore] 本機行程搬上雲端失敗，保留本機資料待重試",
+          e,
+        );
       }
     }
 
@@ -93,7 +100,13 @@ export const useTripStore = defineStore("trip", () => {
       return;
     }
 
-    trips.value.push({ id: crypto.randomUUID(), date, peakIds, note, updatedAt: Date.now() });
+    trips.value.push({
+      id: crypto.randomUUID(),
+      date,
+      peakIds,
+      note,
+      updatedAt: Date.now(),
+    });
     persistLocal();
   }
 
@@ -108,14 +121,24 @@ export const useTripStore = defineStore("trip", () => {
 
     if (authStore.user) {
       try {
-        trips.value[index] = await updateTripRemote(id, { date, peakIds, note });
+        trips.value[index] = await updateTripRemote(id, {
+          date,
+          peakIds,
+          note,
+        });
       } catch (e) {
         console.error("[tripStore] 更新行程失敗", id, e);
       }
       return;
     }
 
-    trips.value[index] = { ...trips.value[index], date, peakIds, note, updatedAt: Date.now() };
+    trips.value[index] = {
+      ...trips.value[index],
+      date,
+      peakIds,
+      note,
+      updatedAt: Date.now(),
+    };
     persistLocal();
   }
 
@@ -152,10 +175,7 @@ export const useTripStore = defineStore("trip", () => {
       .map((trip) => trip.date)
       .sort();
 
-    const latest = dates.at(-1);
-    if (!latest) return null;
-
-    return latest.replaceAll("-", "・");
+    return dates.at(-1) ?? null;
   }
 
   return {
