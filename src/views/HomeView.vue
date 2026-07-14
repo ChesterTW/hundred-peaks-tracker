@@ -1,16 +1,28 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { Compass, Award } from "@lucide/vue";
+import { Compass, Award, User } from "@lucide/vue";
+import { storeToRefs } from "pinia";
 import PeakMap from "../components/PeakMap.vue";
 import StatCard from "../components/home/StatCard.vue";
 import RecommendCard from "../components/home/RecommendCard.vue";
+import UserMenu from "../components/home/UserMenu.vue";
 import PeakDetailView from "../views/PeakDetailView.vue";
 import { useMapFocus } from "../composables/useMapFocus";
+import { useAuthStore } from "../stores/authStore";
+import { useClickOutside } from "../composables/useClickOutside";
 import TripModal from "../components/tripModal/TripModal.vue";
 import BottomSheet from "../components/BottomSheet.vue";
 
 const { focusedPeakId } = useMapFocus();
 const isTripModalOpen = ref(false);
+
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
+const isUserMenuOpen = ref(false);
+const userMenuRef = ref<HTMLElement | null>(null);
+useClickOutside(userMenuRef, () => {
+  isUserMenuOpen.value = false;
+});
 
 const RECOMMEND_CARD_OPEN_KEY = "hundred-peaks-recommend-card-open";
 const isRecommendCardOpen = ref(
@@ -53,8 +65,27 @@ const isRecommendSheetOpen = ref(false);
       </button>
     </div>
 
-    <!-- 手機版：頂部兩顆圖示按鈕 -->
+    <!-- 手機版：頂部圖示按鈕（會員入口／完登進度／推薦） -->
     <div class="flex flex-col md:hidden absolute top-3 right-3 z-1500 gap-2">
+      <div class="relative" ref="userMenuRef">
+        <button
+          type="button"
+          class="w-12 h-12 rounded-full shrink-0 overflow-hidden bg-neutral-300 shadow cursor-pointer flex items-center justify-center"
+          aria-label="會員選單"
+          :aria-expanded="isUserMenuOpen"
+          @click="isUserMenuOpen = !isUserMenuOpen"
+        >
+          <img
+            v-if="user?.photoURL"
+            :src="user.photoURL"
+            class="w-full h-full object-cover"
+          />
+          <User v-else class="text-white" :size="24" />
+        </button>
+
+        <UserMenu v-if="isUserMenuOpen" placement="top-right" />
+      </div>
+
       <button
         type="button"
         class="flex items-center justify-center bg-white rounded-full shadow hover:bg-neutral-100 active:bg-neutral-200 transition-colors cursor-pointer"

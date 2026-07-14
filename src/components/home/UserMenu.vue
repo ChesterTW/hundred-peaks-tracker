@@ -1,9 +1,24 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { LogOutIcon } from "@lucide/vue";
 import { useAuthStore } from "../../stores/authStore";
 import { storeToRefs } from "pinia";
 import { renderGoogleButton } from "../../googleAuth";
+
+const props = withDefaults(
+  defineProps<{
+    placement?: "bottom-left" | "top-right";
+  }>(),
+  {
+    placement: "bottom-left",
+  },
+);
+
+const positionClass = computed(() =>
+  props.placement === "top-right"
+    ? "absolute right-0 top-full mt-2"
+    : "absolute left-0 bottom-full mb-2",
+);
 
 const authStore = useAuthStore();
 const { user, isLoggedIn } = storeToRefs(authStore);
@@ -20,9 +35,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div
-    class="absolute left-0 bottom-full mb-2 w-fit shadow-lg rounded-lg overflow-hidden"
-  >
+  <div :class="[positionClass, 'w-fit shadow-lg rounded-lg overflow-hidden']">
     <div class="p-1 bg-white rounded-lg">
       <!-- 會員資訊 -->
       <div class="px-3 py-2 rounded-lg gap-2">
