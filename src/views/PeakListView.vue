@@ -1,23 +1,20 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { Search } from "@lucide/vue";
 import TextInput from "../components/Input/TextInput.vue";
 import { peaks } from "../data/peaks.ts";
 import Chip from "../components/peakList/Chip.vue";
 import PeakRow from "../components/peakList/PeakRow.vue";
-import DifficultyMatrixPopover from "../components/peakList/DifficultyMatrixPopover.vue";
+import DifficultyFilterButton from "../components/peakList/DifficultyFilterButton.vue";
 import { useTripStore } from "../stores/tripStore";
 import { storeToRefs } from "pinia";
-import { ChevronDown } from "@lucide/vue";
 
 const store = useTripStore();
 const { completedPeakIds } = storeToRefs(store);
 
 const searchKeyword = ref<string>("");
 
-const isDifficultyPopoverOpen = ref(false);
 const selectedDifficulty = ref<{ physical: number; risk: number } | null>(null);
-const difficultyFilterRef = ref<HTMLElement | null>(null);
 
 const filteredPeaks = computed(() => {
   let result = peaks;
@@ -44,31 +41,11 @@ const filteredPeaks = computed(() => {
 
 function handleSelectDifficulty(physical: number, risk: number) {
   selectedDifficulty.value = { physical, risk };
-  isDifficultyPopoverOpen.value = false;
 }
 
 function handleClearDifficulty() {
   selectedDifficulty.value = null;
-  isDifficultyPopoverOpen.value = false;
 }
-
-function handleClickOutside(event: MouseEvent) {
-  if (
-    isDifficultyPopoverOpen.value &&
-    difficultyFilterRef.value &&
-    !difficultyFilterRef.value.contains(event.target as Node)
-  ) {
-    isDifficultyPopoverOpen.value = false;
-  }
-}
-
-onMounted(() => {
-  window.addEventListener("mousedown", handleClickOutside);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("mousedown", handleClickOutside);
-});
 
 const tableHeaders = [
   { name: "狀態", key: "status" },
@@ -86,8 +63,12 @@ const selectedChip = ref<string>(chips[0].text);
 <template>
   <div class="flex flex-col gap-3 px-4 md:px-7 py-6 w-full h-full">
     <div class="flex flex-col md:flex-row gap-3 md:gap-6 md:items-center">
-      <p class="text-2xl font-bold text-neutral-700">山峰清單</p>
-      <div class="flex flex-wrap gap-3 items-center">
+      <p class="hidden md:block text-2xl font-bold text-neutral-700">
+        山峰清單
+      </p>
+
+      <!-- 桌面版 -->
+      <div class="hidden md:flex gap-3 items-center">
         <TextInput
           :icon="Search"
           v-model="searchKeyword"
@@ -100,29 +81,31 @@ const selectedChip = ref<string>(chips[0].text);
             @click="selectedChip = chip.text"
           />
         </template>
-        <div ref="difficultyFilterRef" class="relative">
-          <button
-            type="button"
-            class="flex gap-1 items-center rounded-md border pl-3 pr-2 py-1 cursor-pointer hover:bg-neutral-100 active:bg-neutral-200 transition-colors"
-            :class="
-              selectedDifficulty ? 'border-primary-500' : 'border-neutral-300'
-            "
-            :aria-expanded="isDifficultyPopoverOpen"
-            @click="isDifficultyPopoverOpen = !isDifficultyPopoverOpen"
-          >
-            <p class="text-neutral-700 text-sm">
-              {{
-                selectedDifficulty
-                  ? `體能 Lv.${selectedDifficulty.physical}・風險 Lv.${selectedDifficulty.risk}`
-                  : "難度"
-              }}
-            </p>
-            <ChevronDown class="text-neutral-700" :size="16" />
-          </button>
+        <DifficultyFilterButton
+          :peaks="peaks"
+          :selected="selectedDifficulty"
+          @select="handleSelectDifficulty"
+          @clear="handleClearDifficulty"
+        />
+      </div>
 
-          <DifficultyMatrixPopover
-            v-if="isDifficultyPopoverOpen"
-            class="absolute top-full mt-2 left-0 z-20"
+      <!-- 手機版 -->
+      <div class="md:hidden flex flex-col gap-3 items-center">
+        <TextInput
+          :icon="Search"
+          v-model="searchKeyword"
+          :placeholder="'搜尋山名...'"
+          class="w-full"
+        ></TextInput>
+        <div class="flex gap-3 w-full">
+          <template v-for="chip in chips" :key="chip.text">
+            <Chip
+              :text="chip.text"
+              :isSelected="selectedChip === chip.text"
+              @click="selectedChip = chip.text"
+            />
+          </template>
+          <DifficultyFilterButton
             :peaks="peaks"
             :selected="selectedDifficulty"
             @select="handleSelectDifficulty"
