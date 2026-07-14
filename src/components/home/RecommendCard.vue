@@ -58,7 +58,7 @@ const completedInGroup = computed(
 
 <template>
   <div
-    class="backdrop-blur-md bg-white/75 border border-white/65 rounded-xl shadow-xl flex flex-col gap-3 w-full md:w-75 px-5 py-4 overflow-hidden"
+    class="backdrop-blur-md bg-white/75 border border-white/65 rounded-xl md:shadow-xl flex flex-col gap-3 w-full md:w-75 px-5 py-4 overflow-hidden"
   >
     <!-- Header -->
     <div class="flex items-end justify-between">
