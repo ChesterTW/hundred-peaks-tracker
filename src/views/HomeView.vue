@@ -75,18 +75,22 @@ const isRecommendSheetOpen = ref(false);
 
     <!-- 手機版：BottomSheet 內容 -->
     <BottomSheet :open="isStatSheetOpen" @close="isStatSheetOpen = false">
-      <StatCard
-        @openAddTripModal="
-          isStatSheetOpen = false;
-          isTripModalOpen = true;
-        "
-      />
+      <div class="p-4">
+        <StatCard
+          @openAddTripModal="
+            isStatSheetOpen = false;
+            isTripModalOpen = true;
+          "
+        />
+      </div>
     </BottomSheet>
     <BottomSheet
       :open="isRecommendSheetOpen"
       @close="isRecommendSheetOpen = false"
     >
-      <RecommendCard @close="isRecommendSheetOpen = false" />
+      <div class="p-4">
+        <RecommendCard @close="isRecommendSheetOpen = false" />
+      </div>
     </BottomSheet>
 
     <!-- 山峰詳細資訊 Drawer -->

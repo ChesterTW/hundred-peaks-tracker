@@ -25,7 +25,7 @@ const rangeStats = computed(() => {
 
 <template>
   <div
-    class="backdrop-blur-md bg-white/75 border border-white/65 rounded-xl shadow-xl flex flex-col gap-4 w-75 px-5 py-4 overflow-hidden"
+    class="backdrop-blur-md bg-white/75 border border-white/65 rounded-xl shadow-xl flex flex-col gap-4 w-full md:w-75 px-5 py-4 overflow-hidden"
   >
     <p class="text-xs font-medium text-neutral-400">百岳完登進度</p>
 
