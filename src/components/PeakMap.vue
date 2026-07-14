@@ -315,7 +315,7 @@ function handleLayerChange(id: string) {
     <!-- 底圖切換 + 顯示控制 -->
     <div
       ref="bottomControlsEl"
-      class="absolute flex flex-col gap-1 right-3 bottom-3 z-2000"
+      class="absolute flex flex-col gap-1 right-3 bottom-19 md:bottom-3 z-2000"
     >
       <div class="relative">
         <button
