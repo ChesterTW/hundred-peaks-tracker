@@ -1,11 +1,17 @@
 import type { BaseLayer } from "../types";
 
+// CARTO 自 2026/9/25 起點陣圖磚必須帶 key，本機與正式站使用不同的 key
+const CARTO_API_KEY = import.meta.env.VITE_CARTO_API_KEY;
+const cartoKeyQuery = CARTO_API_KEY
+  ? `?key=${encodeURIComponent(CARTO_API_KEY)}`
+  : "";
+
 export const baseLayers: BaseLayer[] = [
   {
     id: "carto",
     name: "CARTO Light Map",
-    url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    attribution: "© OpenStreetMap © CARTO",
+    url: `https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png${cartoKeyQuery}`,
+    attribution: "© OpenStreetMap contributors © CARTO",
     maxZoom: 20,
   },
   {
